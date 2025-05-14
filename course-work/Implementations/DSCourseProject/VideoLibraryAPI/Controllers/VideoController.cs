@@ -71,12 +71,7 @@ namespace VideoLibraryAPI.Controllers
         }
 
 
-        /// <summary>
-        /// Gets a list of all authors that the specified video has
-        /// </summary>
-        /// <param name="videoId" example="1">ID of the video</param>
-        /// <param name="model">JSON with filter and pager information for the author</param>
-        /// <returns></returns>
+        
         [HttpPost("get/author/{videoId}")]
         public IActionResult GetAuthors(int videoId, [FromBody] IndexIM<AuthorVideo, AuthorFilterIM> model)
         {

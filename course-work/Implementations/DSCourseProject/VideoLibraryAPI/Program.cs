@@ -70,12 +70,16 @@ namespace VideoLibraryAPI
             });
 
             var app = builder.Build();
-
+            app.UseStaticFiles();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c => 
+                {
+                    c.SwaggerEndpoint("/Swagger/OpenAPISpec.json", "Custom API");
+                    c.RoutePrefix = string.Empty;
+                });
             }
 
             app.UseHttpsRedirection();

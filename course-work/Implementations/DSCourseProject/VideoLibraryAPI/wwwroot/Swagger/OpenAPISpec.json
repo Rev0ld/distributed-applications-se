@@ -1,0 +1,1875 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "VideoLibrary API",
+    "description": "An ASP.NET Core Web API for managing videos in",
+
+    "version": "v1"
+  },
+  "tags": [
+    {
+      "name": "Authors",
+      "description": "Methods for working with the Authors table"
+    },
+    {
+      "name": "Copyrights",
+      "description": "Methods for working with the Copyrights table"
+    },
+    {
+      "name": "Formats",
+      "description": "Methods for working with the Formats table"
+    },
+    {
+      "name": "Genres",
+      "description": "Methods for working with the Genres table"
+    },
+    {
+      "name": "Tags",
+      "description": "Methods for working with the Tags table"
+    },
+    {
+      "name": "Video",
+      "description": "Methods for working with the Video table and the M2M tables connected to Videos"
+    }
+
+  ],
+  "paths": {
+    "/api/Authors/Get": {
+      "post": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Gets a list of Authors",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorsAuthorFilterIMIndexIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorsAuthorFilterIMIndexIM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Authors": {
+      "post": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Creates a new Author",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Authors/{authorId}": {
+      "put": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Updates a specified Author",
+        "parameters": [
+          {
+            "name": "authorId",
+            "description": "The id of the author to update",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Deletes a specified Author",
+        "parameters": [
+          {
+            "name": "authorId",
+            "description": "The id of the author to delete",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+
+    "/api/Copyrights/Get": {
+      "post": {
+        "tags": [
+          "Copyrights"
+        ],
+        "summary": "Gets a list of Copyrights",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CopyrightsCopyrightFilterIMIndexIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopyrightsCopyrightFilterIMIndexIM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Copyrights": {
+      "post": {
+        "tags": [
+          "Copyrights"
+        ],
+        "summary": "Creates a new Copyright",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CopyrigtIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Copyrights/{id}": {
+      "put": {
+        "tags": [
+          "Copyrights"
+        ],
+        "summary": "Updates a specified Copyright",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "The id of the copyright to update",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CopyrigtIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Copyrights"
+        ],
+        "summary": "Deletes a specified Copyright",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "The id of the Copyright to delete",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+
+    "/api/Formats/Get": {
+      "post": {
+        "tags": [
+          "Formats"
+        ],
+        "summary": "Gets a list of Formats",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FormatsFormatFilterIMIndexIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormatsFormatFilterIMIndexIM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Formats": {
+      "post": {
+        "tags": [
+          "Formats"
+        ],
+        "summary": "Creates a new Format",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FormatIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Formats/{id}": {
+      "put": {
+        "tags": [
+          "Formats"
+        ],
+        "summary": "Updates a specified Format",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FormatIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Formats"
+        ],
+        "summary": "Deletes a specified Format",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+
+    "/api/Genres/Get": {
+      "post": {
+        "tags": [
+          "Genres"
+        ],
+        "summary": "Gets a list of Genres",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenresGenreFilterIMIndexIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Genres": {
+      "post": {
+        "tags": [
+          "Genres"
+        ],
+        "summary": "Creates a new Genre",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenreIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Genres/{id}": {
+      "put": {
+        "tags": [
+          "Genres"
+        ],
+        "summary": "Updates a specified Genre",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenreIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Genres"
+        ],
+        "summary": "Deletes a specified Genre",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+
+    "/api/Tags/Get": {
+      "post": {
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Gets a list of Tags",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagsTagFilterIMIndexIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Tags": {
+      "post": {
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Creates a new Tag",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Tags/{id}": {
+      "put": {
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Updates a specified Tag",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Deletes a specified Tag",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+
+    "/api/Video/get/author/{videoId}": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Gets a list of Authors with connection with the specified video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "description": "ID of the video",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorVideoAuthorFilterIMIndexIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Video/author/{videoId}": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Adds an Author to the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorVideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Removes an Author from the specified video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorVideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+
+    "/api/Video/get/genre/{videoId}": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Gets a list of Genres with connection with the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagVideoGenreFilterIMIndexIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Video/genre/{videoId}": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Adds a Genre to the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenreVideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Removes a Genre from the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenreVideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+
+    "/api/Video/get/tag/{videoId}": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Gets a list of Tags with connection with the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagVideoTagFilterIMIndexIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Video/tag/{videoId}": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Adds a Tag to the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagVideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Removes a Tag from the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagVideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+
+    "/api/Video/Get": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Gets a list of Videos",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideosVideoFilterIMIndexIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Video": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Creates a new Video",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Video/{id}": {
+      "put": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Updates a specified Video",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoIM"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoIM"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Deletes a specified Video",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthorFilterIM": {
+        "type": "object",
+        "description": "Contains filter and ordering information",
+        "properties": {
+          "orderBy": {
+            "type": "string",
+            "nullable": true,
+            "description": "The field which will be used for ordering"
+          },
+          "orderDir": {
+            "type": "string",
+            "nullable": true,
+            "enum": [ "asc", "desc", null ]
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true,
+            "example": "Jhon"
+          },
+          "middleName": {
+            "type": "string",
+            "nullable": true,
+            "example": "Bon"
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true,
+            "example": "Jovi"
+          },
+          "biography": {
+            "type": "string",
+            "nullable": true,
+            "example": "Born in ..."
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthorIM": {
+        "required": [
+          "biography",
+          "firstName",
+          "lastName",
+          "middleName"
+        ],
+        "type": "object",
+        "description": "Input data for actions that alter the database",
+        "properties": {
+          "firstName": {
+            "minLength": 1,
+            "type": "string",
+            "example": "Jhon"
+          },
+          "middleName": {
+            "minLength": 1,
+            "type": "string",
+            "example": "Bon"
+          },
+          "lastName": {
+            "minLength": 1,
+            "type": "string",
+            "example": "Jovi"
+          },
+          "biography": {
+            "minLength": 1,
+            "type": "string",
+            "example": "Short Bio: Lorem ipsum dolor sit amet...I"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthorVideo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When was the connection created"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When was the connection last updated"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "description": "Is this connection being used or not by the application"
+          },
+          "authorId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The ID of the Author"
+          },
+          "videoId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The ID of the Video"
+          },
+          "author": {
+            "$ref": "#/components/schemas/Authors"
+          },
+          "video": {
+            "$ref": "#/components/schemas/Videos"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Information about a single Author and Video entities"
+      },
+      "AuthorVideoAuthorFilterIMIndexIM": {
+        "type": "object",
+        "description": "Used as input: sends Paging and Filtering to API \n\n Used as output: returns retrieved items, Filter and paging information",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuthorVideo"
+            },
+            "nullable": true
+          },
+          "pager": {
+            "$ref": "#/components/schemas/PagerIM"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/AuthorFilterIM"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthorVideoIM": {
+        "required": [
+          "authorId"
+        ],
+        "type": "object",
+        "description": "Input data for actions that alter the database",
+        "properties": {
+          "authorId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Authors": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "middleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "biography": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Information about a single Author entity"
+      },
+      "AuthorsAuthorFilterIMIndexIM": {
+        "type": "object",
+        "description": "Used as input: sends Paging and Filtering to API \n\n Used as output: returns retrieved items, Filter and paging information",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Authors"
+            },
+            "nullable": true
+          },
+          "pager": {
+            "$ref": "#/components/schemas/PagerIM"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/AuthorFilterIM"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CopyrightFilterIM": {
+        "type": "object",
+        "description": "Contains filter and ordering information",
+        "properties": {
+          "orderBy": {
+            "type": "string",
+            "nullable": true,
+            "description": "The field which will be used for ordering"
+          },
+          "orderDir": {
+            "type": "string",
+            "nullable": true,
+            "enum": [ "asc", "desc", null ]
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Copyrights": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Information about a single Copyright entity"
+      },
+      "CopyrightsCopyrightFilterIMIndexIM": {
+        "type": "object",
+        "description": "Used as input: sends Paging and Filtering to API \n\n Used as output: returns retrieved items, Filter and paging information",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Copyrights"
+            },
+            "nullable": true
+          },
+          "pager": {
+            "$ref": "#/components/schemas/PagerIM"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/CopyrightFilterIM"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CopyrigtIM": {
+        "required": [
+          "description",
+          "name",
+          "shortName"
+        ],
+        "type": "object",
+        "description": "Input data for actions that alter the database",
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string",
+            "example": "Creative Commons"
+          },
+          "shortName": {
+            "minLength": 1,
+            "type": "string",
+            "example": "CC"
+          },
+          "description": {
+            "minLength": 1,
+            "type": "string",
+            "example": "Used when ..."
+          }
+        },
+        "additionalProperties": false
+      },
+      "FormatFilterIM": {
+        "type": "object",
+        "description": "Contains filter and ordering information",
+        "properties": {
+          "orderBy": {
+            "type": "string",
+            "nullable": true,
+            "description": "The field which will be used for ordering"
+          },
+          "orderDir": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "extension": {
+            "type": "string",
+            "nullable": true
+          },
+          "isPhysical": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FormatIM": {
+        "required": [
+          "type",
+          "extension",
+          "isPhysical"
+        ],
+        "type": "object",
+        "description": "Input data for actions that alter the database",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "example": "Web Video Format"
+          },
+          "extension": {
+            "type": "string",
+            "nullable": true,
+            "example": ".MP4"
+          },
+          "isPhysical": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Formats": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "extension": {
+            "type": "string",
+            "nullable": true
+          },
+          "isPhysical": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Information about a single Format entity"
+      },
+      "FormatsFormatFilterIMIndexIM": {
+        "type": "object",
+        "description": "Used as input: sends Paging and Filtering to API \n\n Used as output: returns retrieved items, Filter and paging information",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Formats"
+            },
+            "nullable": true
+          },
+          "pager": {
+            "$ref": "#/components/schemas/PagerIM"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/FormatFilterIM"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GenreFilterIM": {
+        "type": "object",
+        "description": "Contains filter and ordering information",
+        "properties": {
+          "orderBy": {
+            "type": "string",
+            "nullable": true,
+            "description": "The field which will be used for ordering"
+          },
+          "orderDir": {
+            "type": "string",
+            "nullable": true,
+            "enum": [ "asc", "desc", null ]
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GenreIM": {
+        "required": [
+          "name",
+          "description"
+        ],
+        "type": "object",
+        "description": "Input data for actions that alter the database",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GenreVideoIM": {
+        "required": [
+          "genreId"
+        ],
+        "type": "object",
+        "description": "Input data for actions that alter the database",
+        "properties": {
+          "genreId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Genres": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Information about a single Genre entity"
+      },
+      "GenresGenreFilterIMIndexIM": {
+        "type": "object",
+        "description": "Used as input: sends Paging and Filtering to API \n\n Used as output: returns retrieved items, Filter and paging information",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Genres"
+            },
+            "nullable": true
+          },
+          "pager": {
+            "$ref": "#/components/schemas/PagerIM"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/GenreFilterIM"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PagerIM": {
+        "type": "object",
+        "description": "Contains information used for paging",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "itemsPerPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pagesCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TagFilterIM": {
+        "type": "object",
+        "description": "Contains filter and ordering information",
+        "properties": {
+          "orderBy": {
+            "type": "string",
+            "nullable": true,
+            "description": "The field which will be used for ordering"
+          },
+          "orderDir": {
+            "type": "string",
+            "nullable": true,
+            "enum": [ "asc", "desc", null ]
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TagIM": {
+        "type": "object",
+        "description": "Input data for actions that alter the database",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TagVideo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "tagId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "videoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tag": {
+            "$ref": "#/components/schemas/Tags"
+          },
+          "video": {
+            "$ref": "#/components/schemas/Videos"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Information about a single connection between a Tag and Video entities"
+      },
+      "TagVideoGenreFilterIMIndexIM": {
+        "type": "object",
+        "description": "Used as input: sends Paging and Filtering to API \n\n Used as output: returns retrieved items, Filter and paging information",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TagVideo"
+            },
+            "nullable": true
+          },
+          "pager": {
+            "$ref": "#/components/schemas/PagerIM"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/GenreFilterIM"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TagVideoIM": {
+        "required": [
+          "tagId"
+        ],
+        "type": "object",
+        "description": "Input data for actions that alter the database",
+        "properties": {
+          "tagId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TagVideoTagFilterIMIndexIM": {
+        "type": "object",
+        "description": "Used as input: sends Paging and Filtering to API \n\n Used as output: returns retrieved items, Filter and paging information",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TagVideo"
+            },
+            "nullable": true
+          },
+          "pager": {
+            "$ref": "#/components/schemas/PagerIM"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/TagFilterIM"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Tags": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Information about a single Tag entity"
+      },
+      "TagsTagFilterIMIndexIM": {
+        "type": "object",
+        "description": "Used as input: sends Paging and Filtering to API \n\n Used as output: returns retrieved items, Filter and paging information",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tags"
+            },
+            "nullable": true
+          },
+          "pager": {
+            "$ref": "#/components/schemas/PagerIM"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/TagFilterIM"
+          }
+        },
+        "additionalProperties": false
+      },
+      "VideoFilterIM": {
+        "type": "object",
+        "description": "Contains filter and ordering information",
+        "properties": {
+          "orderBy": {
+            "type": "string",
+            "nullable": true,
+            "description": "The field which will be used for ordering"
+          },
+          "orderDir": {
+            "type": "string",
+            "nullable": true,
+            "enum": [ "asc", "desc", null ]
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "size": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "yearOfPublishing": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "authorFirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "authorMiddleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "authorLastName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "VideoIM": {
+        "required": [
+          "copyrightId",
+          "description",
+          "fileId",
+          "formatId",
+          "size",
+          "title",
+          "yearOfPublishing"
+        ],
+        "type": "object",
+        "description": "Input data for actions that alter the database",
+        "properties": {
+          "title": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "fileId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "size": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "formatId": {
+            "maximum": 8,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "yearOfPublishing": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "copyrightId": {
+            "maximum": 6,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Videos": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "formatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "format": {
+            "$ref": "#/components/schemas/Formats"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "yearOfPublishing": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "copyrightId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "copyright": {
+            "$ref": "#/components/schemas/Copyrights"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Information about a single Video entity"
+      },
+      "VideosVideoFilterIMIndexIM": {
+        "type": "object",
+        "description": "Used as input: sends Paging and Filtering to API \n\n Used as output: returns retrieved items, Filter and paging information",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Videos"
+            },
+            "nullable": true
+          },
+          "pager": {
+            "$ref": "#/components/schemas/PagerIM"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/VideoFilterIM"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

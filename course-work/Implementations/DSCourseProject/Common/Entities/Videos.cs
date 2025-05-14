@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using Common.Entities.M2MEntities;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Common.Entities
@@ -24,6 +26,16 @@ namespace Common.Entities
 
         public int CopyrightId { get; set; }
         public virtual Copyrights Copyright { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<AuthorVideo> Authors { get; set; } = new List<AuthorVideo>();
+
+        [JsonIgnore]
+        public virtual ICollection<TagVideo> Tags { get; set; } = new List<TagVideo>();
+
+        [JsonIgnore]
+        public virtual ICollection<GenreVideo> Genres { get; set; } = new List<GenreVideo>();
+
 
 
     }

@@ -1,4 +1,5 @@
 ﻿using Common.Entities;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace VideoLibraryAPI.Infrastructure.Shared
 {
@@ -8,6 +9,6 @@ namespace VideoLibraryAPI.Infrastructure.Shared
     {
         public List<E>? Items { get; set; }
         public PagerIM? Pager { get; set; }
-        public FIM Filter { get; set; }
+        public FIM? Filter { get; set; }
     }
 }

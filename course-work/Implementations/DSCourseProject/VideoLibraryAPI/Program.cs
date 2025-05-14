@@ -1,5 +1,6 @@
 
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace VideoLibraryAPI
@@ -46,6 +47,9 @@ namespace VideoLibraryAPI
             builder.Services.AddSwaggerGen();
             builder.Services.AddSwaggerGen(options =>
             {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",

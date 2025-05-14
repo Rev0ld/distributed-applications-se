@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Common.Entities.M2MEntities
 {
-    class GenreVideo : BaseEntity
+    public class GenreVideo : BaseEntity
     {
         public int GenreId { get; set; }
 

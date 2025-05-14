@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Common.Entities.M2MEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Common.Entities
 {
-    class Authors : BaseEntity
+    public class Authors : BaseEntity
     {
         public string? FirstName { get; set; }
 
@@ -16,6 +18,7 @@ namespace Common.Entities
 
         public string? Biography { get; set; }
 
-
+        [JsonIgnore]
+        public virtual ICollection<AuthorVideo> Videos { get; set; } = new List<AuthorVideo>();
     }
 }

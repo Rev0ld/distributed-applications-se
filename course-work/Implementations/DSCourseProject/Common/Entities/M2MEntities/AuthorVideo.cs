@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common.Entities.M2MEntities
 {
-    class AuthorVideo : BaseEntity
+    public class AuthorVideo : BaseEntity
     {
         public int AuthorId { get; set; }
 

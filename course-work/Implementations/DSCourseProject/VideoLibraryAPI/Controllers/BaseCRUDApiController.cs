@@ -25,7 +25,7 @@ namespace VideoLibraryAPI.Controllers
         }
         protected abstract void PopulateEntity(E item, EIM model);
 
-
+        
         [HttpPost("Get")]
         public IActionResult GetList([FromBody] IndexIM<E, FIM> model)
         {

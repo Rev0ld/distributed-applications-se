@@ -979,27 +979,33 @@
           "orderDir": {
             "type": "string",
             "nullable": true,
-            "enum": [ "asc", "desc", null ]
+            "enum": [ "asc", "desc" ],
+            "examples": [ "asc", "desc" ],
+            "description": "Use Descending or ascending order"
           },
           "firstName": {
             "type": "string",
             "nullable": true,
-            "example": "Jhon"
+            "examples": [ "Jhon" ],
+            "description": "First name of the Author"
           },
           "middleName": {
             "type": "string",
             "nullable": true,
-            "example": "Bon"
+            "examples": [ "Bon" ],
+            "description": "Middle name of the Author"
           },
           "lastName": {
             "type": "string",
             "nullable": true,
-            "example": "Jovi"
+            "examples": [ "Jovi" ],
+            "description": "Last name of the Author"
           },
           "biography": {
             "type": "string",
             "nullable": true,
-            "example": "Born in ..."
+            "examples": [ "Born in ..." ],
+            "description": "Short biography of the Author"
           }
         },
         "additionalProperties": false
@@ -1017,22 +1023,26 @@
           "firstName": {
             "minLength": 1,
             "type": "string",
-            "example": "Jhon"
+            "examples": [ "Jhon" ],
+            "description": "Input for the First name of the Author"
           },
           "middleName": {
             "minLength": 1,
             "type": "string",
-            "example": "Bon"
+            "examples": [ "Bon" ],
+            "description": "Input for the Middle name of the Author"
           },
           "lastName": {
             "minLength": 1,
             "type": "string",
-            "example": "Jovi"
+            "examples": [ "Jovi" ],
+            "description": "Input for the Last name of the Author"
           },
           "biography": {
             "minLength": 1,
             "type": "string",
-            "example": "Short Bio: Lorem ipsum dolor sit amet...I"
+            "examples": [ "Short Bio: Lorem ipsum dolor sit amet...I" ],
+            "description": "Input for the Biography of the Author"
           }
         },
         "additionalProperties": false
@@ -1042,21 +1052,26 @@
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "description": "ID of the connection between an Author and a Video"
           },
           "createdOn": {
             "type": "string",
             "format": "date-time",
-            "description": "When was the connection created"
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is created"
           },
           "updatedOn": {
             "type": "string",
             "format": "date-time",
-            "description": "When was the connection last updated"
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is last updated"
           },
           "isDeleted": {
             "type": "boolean",
-            "description": "Is this connection being used or not by the application"
+            "examples": [ false ],
+            "enum": [ true, false ],
+            "description": "Is the entity used for business logic (Soft deleted or not)"
           },
           "authorId": {
             "type": "integer",
@@ -1117,34 +1132,51 @@
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "examples": [ 123 ],
+            "description": "ID of the entity"
           },
           "createdOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is created"
           },
           "updatedOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is last updated"
           },
           "isDeleted": {
-            "type": "boolean"
+            "type": "boolean",
+            "examples": [ false ],
+            "enum": [ true, false ],
+            "description": "Is the entity used for business logic (Soft deleted or not)"
           },
           "firstName": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "Jhon" ],
+            "description": "First name of the Author"
           },
           "middleName": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "Bon" ],
+            "description": "Middle name of the Author"
           },
           "lastName": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "Jovi" ],
+            "description": "Last name of the Author"
           },
           "biography": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "Born in ..." ],
+            "description": "Short biography of the Author"
           }
         },
         "additionalProperties": false,
@@ -1170,6 +1202,7 @@
         },
         "additionalProperties": false
       },
+      "#" "comment",
       "CopyrightFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1182,19 +1215,27 @@
           "orderDir": {
             "type": "string",
             "nullable": true,
-            "enum": [ "asc", "desc", null ]
+            "enum": [ "asc", "desc" ],
+            "examples": [ "asc", "desc" ],
+            "description": "Use Descending or ascending order"
           },
           "name": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "Creative commons" ],
+            "description": "Full name of the Copyright"
           },
           "shortName": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "CC" ],
+            "description": "Short name of the Copyright"
           },
           "description": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "Represents free use by anyone..." ],
+            "description": "Description of what the Copyright is"
           }
         },
         "additionalProperties": false
@@ -1204,30 +1245,45 @@
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "examples": [ 123 ],
+            "description": "ID of the entity"
           },
           "createdOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is created"
           },
           "updatedOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is last updated"
           },
           "isDeleted": {
-            "type": "boolean"
+            "type": "boolean",
+            "examples": [ false ],
+            "enum": [ true, false ],
+            "description": "Is the entity used for business logic (Soft deleted or not)"
           },
           "name": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "Creative commons" ],
+            "description": "Full name of the Copyright"
           },
           "shortName": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "CC" ],
+            "description": "Short name of the Copyright"
           },
           "description": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "Represents free use by anyone..." ],
+            "description": "Description of what the Copyright is"
           }
         },
         "additionalProperties": false,
@@ -1265,21 +1321,25 @@
           "name": {
             "minLength": 1,
             "type": "string",
-            "example": "Creative Commons"
+            "examples": [ "Creative Commons" ],
+            "description": "Input for the Name of the Copyright"
           },
           "shortName": {
             "minLength": 1,
             "type": "string",
-            "example": "CC"
+            "examples": [ "CC" ],
+            "description": "Input for the Short name of the Copyright"
           },
           "description": {
             "minLength": 1,
             "type": "string",
-            "example": "Used when ..."
+            "examples": [ "Used when ..." ],
+            "description": "Input for the Description of the Copyright"
           }
         },
         "additionalProperties": false
       },
+      "#" "comment",
       "FormatFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1291,7 +1351,10 @@
           },
           "orderDir": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "enum": [ "asc", "desc" ],
+            "examples": [ "asc", "desc" ],
+            "description": "Use Descending or ascending order"
           },
           "type": {
             "type": "string",
@@ -1320,15 +1383,18 @@
           "type": {
             "type": "string",
             "nullable": true,
-            "example": "Web Video Format"
+            "examples": [ "Web Video Format" ],
+            "description": "Input for the Type of the Format"
           },
           "extension": {
             "type": "string",
             "nullable": true,
-            "example": ".MP4"
+            "examples": [ ".MP4" ],
+            "description": "Input for the Extension of the Format"
           },
           "isPhysical": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Input for showing if the video is on physical or electronic storage media"
           }
         },
         "additionalProperties": false
@@ -1342,14 +1408,21 @@
           },
           "createdOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is created"
           },
           "updatedOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is last updated"
           },
           "isDeleted": {
-            "type": "boolean"
+            "type": "boolean",
+            "examples": [ false ],
+            "enum": [ true, false ],
+            "description": "Is the entity used for business logic (Soft deleted or not)"
           },
           "type": {
             "type": "string",
@@ -1386,6 +1459,7 @@
         },
         "additionalProperties": false
       },
+      "#" "comment",
       "GenreFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1398,7 +1472,9 @@
           "orderDir": {
             "type": "string",
             "nullable": true,
-            "enum": [ "asc", "desc", null ]
+            "enum": [ "asc", "desc" ],
+            "examples": [ "asc", "desc" ],
+            "description": "Use Descending or ascending order"
           },
           "name": {
             "type": "string",
@@ -1421,11 +1497,15 @@
         "properties": {
           "name": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [],
+            "description": "Input for the Name of the Genre"
           },
           "description": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [],
+            "description": "Input for the Description of the Genre"
           }
         },
         "additionalProperties": false
@@ -1453,14 +1533,21 @@
           },
           "createdOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is created"
           },
           "updatedOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is last updated"
           },
           "isDeleted": {
-            "type": "boolean"
+            "type": "boolean",
+            "examples": [ false ],
+            "enum": [ true, false ],
+            "description": "Is the entity used for business logic (Soft deleted or not)"
           },
           "name": {
             "type": "string",
@@ -1494,25 +1581,33 @@
         },
         "additionalProperties": false
       },
+      "#" "comment",
       "PagerIM": {
         "type": "object",
         "description": "Contains information used for paging",
         "properties": {
           "page": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "examples": [ 1, 2, 100 ],
+            "description": "The current page number"
           },
           "itemsPerPage": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "examples": [ 10, 20, 50 ],
+            "description": "How many items are represented per 1 page"
           },
           "pagesCount": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "examples": [ 12, 20, 100 ],
+            "description": "How many pages there are"
           }
         },
         "additionalProperties": false
       },
+      "#" "comment",
       "TagFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1525,7 +1620,9 @@
           "orderDir": {
             "type": "string",
             "nullable": true,
-            "enum": [ "asc", "desc", null ]
+            "enum": [ "asc", "desc" ],
+            "examples": [ "asc", "desc" ],
+            "description": "Use Descending or ascending order"
           },
           "name": {
             "type": "string",
@@ -1544,11 +1641,15 @@
         "properties": {
           "name": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [],
+            "description": "Input for "
           },
           "description": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [],
+            "description": ""
           }
         },
         "additionalProperties": false
@@ -1562,14 +1663,21 @@
           },
           "createdOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is created"
           },
           "updatedOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is last updated"
           },
           "isDeleted": {
-            "type": "boolean"
+            "type": "boolean",
+            "examples": [ false ],
+            "enum": [ true, false ],
+            "description": "Is the entity used for business logic (Soft deleted or not)"
           },
           "tagId": {
             "type": "integer",
@@ -1652,14 +1760,21 @@
           },
           "createdOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is created"
           },
           "updatedOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is last updated"
           },
           "isDeleted": {
-            "type": "boolean"
+            "type": "boolean",
+            "examples": [ false ],
+            "enum": [ true, false ],
+            "description": "Is the entity used for business logic (Soft deleted or not)"
           },
           "name": {
             "type": "string",
@@ -1693,6 +1808,7 @@
         },
         "additionalProperties": false
       },
+      "#" "comment",
       "VideoFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1705,7 +1821,9 @@
           "orderDir": {
             "type": "string",
             "nullable": true,
-            "enum": [ "asc", "desc", null ]
+            "enum": [ "asc", "desc" ],
+            "examples": [ "asc", "desc" ],
+            "description": "Use Descending or ascending order"
           },
           "title": {
             "type": "string",
@@ -1797,30 +1915,45 @@
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "examples": [ 123 ],
+            "description": "ID of the entity"
           },
           "createdOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is created"
           },
           "updatedOn": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Date when the entry is last updated"
           },
           "isDeleted": {
-            "type": "boolean"
+            "type": "boolean",
+            "examples": [ false ],
+            "enum": [ true, false ],
+            "description": "Is the entity used for business logic (Soft deleted or not)"
           },
           "title": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "The big bang theory" ],
+            "description": "The title of the video"
           },
           "fileId": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx" ],
+            "description": "A UUID that is used to identify the video from the BLOB storage"
           },
           "formatId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "examples": [ 24 ],
+            "description": "ID of the format entity"
           },
           "format": {
             "$ref": "#/components/schemas/Formats"
@@ -1828,20 +1961,27 @@
           "size": {
             "type": "integer",
             "format": "int32",
-            "nullable": true
+            "nullable": true,
+            "examples": [ 444 ]
           },
           "description": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "A short film about..." ],
+            "description": "A description of the video"
           },
           "yearOfPublishing": {
             "type": "string",
             "format": "date-time",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "2025-05-15T18:06:09.439Z" ],
+            "description": "Year when the video was published"
           },
           "copyrightId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "examples": [ 12 ],
+            "description": "ID of the copyright entity"
           },
           "copyright": {
             "$ref": "#/components/schemas/Copyrights"

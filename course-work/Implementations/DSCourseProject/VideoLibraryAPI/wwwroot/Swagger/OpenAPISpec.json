@@ -80,7 +80,76 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "firstName": {
+                      "type": "string",
+                      "examples": [ "Jhon" ]
+                    },
+                    "middleName": {
+                      "type": "string",
+                      "examples": [ "Bon" ]
+                    },
+                    "lastName": {
+                      "type": "string",
+                      "examples": [ "Jovi" ]
+                    },
+                    "biography": {
+                      "type": "string",
+                      "examples": [ "Short Bio: Lorem ipsum dolor sit amet...I" ]
+                    },
+                    "id": {
+                      "type": "integer",
+                      "examples": [ 4001 ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error: one or more fields are missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "One or more validation errors occurred."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "example": {
+                        "LastName": [ "This field is Required" ],
+                        "Biography": [ "This field is Required" ],
+                        "FirstName": [ "This field is Required" ],
+                        "MiddleName": [ "This field is Required" ]
+                      }
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-81437dff9ead2a366351e5daa440298c-391faf6c3c5f7fd8-00"
+                    }
+                  },
+                  "required": [ "title", "status", "errors", "traceId" ]
+                }
+              }
+            }
           }
         }
       }
@@ -114,7 +183,111 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Author updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "updated": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 100
+                        },
+                        "firstName": {
+                          "type": "string",
+                          "example": "Author Updated"
+                        },
+                        "middleName": {
+                          "type": "string",
+                          "example": "Author Updated"
+                        },
+                        "lastName": {
+                          "type": "string",
+                          "example": "Author Updated"
+                        },
+                        "biography": {
+                          "type": "string",
+                          "example": "Author Updated"
+                        }
+                      }
+                    },
+                    "old": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 100
+                        },
+                        "firstName": {
+                          "type": "string",
+                          "example": "Author Updated"
+                        },
+                        "middleName": {
+                          "type": "string",
+                          "example": "Author Updated"
+                        },
+                        "lastName": {
+                          "type": "string",
+                          "example": "Author Updated"
+                        },
+                        "biography": {
+                          "type": "string",
+                          "example": "Author Updated"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error: one or more fields are missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "One or more validation errors occurred."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "errors": {
+                      "type": "object",
+                      "description": "Field-specific validation messages",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "example": {
+                        "LastName": [ "This field is Required" ],
+                        "Biography": [ "This field is Required" ],
+                        "FirstName": [ "This field is Required" ],
+                        "MiddleName": [ "This field is Required" ]
+                      }
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-08595c70dda21ebe26fbed2eb531fe33-fb25e325e88e9bf6-00"
+                    }
+                  },
+                  "required": [ "title", "status", "errors", "traceId" ]
+                }
+              }
+            }
           }
         }
       },
@@ -137,7 +310,71 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "videos": {
+                      "type": "array",
+                      "items": {},
+                      "example": []
+                    },
+                    "lazyLoader": {
+                      "type": "object",
+                      "example": {}
+                    },
+                    "firstName": {
+                      "type": "string",
+                      "example": "Author 2 Added"
+                    },
+                    "middleName": {
+                      "type": "string",
+                      "example": "Author 2 Added"
+                    },
+                    "lastName": {
+                      "type": "string",
+                      "example": "Author 2 Added"
+                    },
+                    "biography": {
+                      "type": "string",
+                      "example": "Author 2 Added"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 4003
+                    }
+                  },
+                  "required": [ "firstName", "middleName", "lastName", "biography", "id", "videos", "lazyLoader" ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Not Found"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-599b022daa7b357382ddb2cb44ab2d4b-f9715d5c677d465b-00"
+                    }
+                  },
+                  "required": [ "title", "status", "traceId" ]
+                }
+              }
+            }
           }
         }
       }
@@ -189,8 +426,74 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Copyright entry retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "TestAdded"
+                    },
+                    "shorttName": {
+                      "type": "string",
+                      "example": "TestAdded"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "TestAdded"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 2001
+                    }
+                  },
+                  "required": [ "name", "shortName", "description", "id" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error: one or more fields are missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "One or more validation errors occurred."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "example": {
+                        "name": [ "This field is Required" ],
+                        "shortName": [ "This field is Required" ],
+                        "description": [ "This field is Required" ]
+                      }
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-c13063a7a43115fd4a000aebff1022ed-39b68c68879af4cf-00"
+                    }
+                  },
+                  "required": [ "title", "status", "errors", "traceId" ]
+                }
+              }
+            }
           }
+
         }
       }
     },
@@ -223,7 +526,104 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Update successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "updated": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 6
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Updated"
+                        },
+                        "shortName": {
+                          "type": "string",
+                          "example": "Updated"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "Updated"
+                        }
+                      },
+                      "required": [ "id", "name", "shortName", "description" ]
+                    },
+                    "old": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 6
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Updated"
+                        },
+                        "shortName": {
+                          "type": "string",
+                          "example": "Updated"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "Updated"
+                        }
+                      },
+                      "required": [ "id", "name", "shortName", "description" ]
+                    }
+                  },
+                  "required": [ "success", "updated", "old" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error: one or more fields are missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "One or more validation errors occurred."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "example": {
+                        "name": [ "This field is Required" ],
+                        "shortName": [ "This field is Required" ],
+                        "description": [ "This field is Required" ]
+                      }
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-2ab5e829e9c23e5255058d9acc2de105-aa8d0ef58cc8bd57-00"
+                    }
+                  },
+                  "required": [ "title", "status", "errors", "traceId" ]
+                }
+              }
+            }
           }
         }
       },
@@ -246,7 +646,62 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Copyright information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lazyLoader": {
+                      "type": "object",
+                      "example": {}
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "CC BY-NC-ND"
+                    },
+                    "shortName": {
+                      "type": "string",
+                      "example": "CC BY"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Creative Commons Attribution-NonCommercial-NoDerivs License"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 2000
+                    }
+                  },
+                  "required": [ "lazyLoader", "name", "shortName", "description", "id" ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Not Found"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-8a10f16e6bb830c9c2684458c6283c3a-4190fa51b428f9fa-00"
+                    }
+                  },
+                  "required": [ "title", "status", "traceId" ]
+                }
+              }
+            }
           }
         }
       }
@@ -967,6 +1422,7 @@
   },
   "components": {
     "schemas": {
+      "#" "|AUTHORS|",
       "AuthorFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -987,25 +1443,33 @@
             "type": "string",
             "nullable": true,
             "examples": [ "Jhon" ],
-            "description": "First name of the Author"
+            "description": "First name of the Author",
+            "minLength": 3,
+            "maxLength": 50
           },
           "middleName": {
             "type": "string",
             "nullable": true,
             "examples": [ "Bon" ],
-            "description": "Middle name of the Author"
+            "description": "Middle name of the Author",
+            "minLength": 3,
+            "maxLength": 50
           },
           "lastName": {
             "type": "string",
             "nullable": true,
             "examples": [ "Jovi" ],
-            "description": "Last name of the Author"
+            "description": "Last name of the Author",
+            "minLength": 3,
+            "maxLength": 50
           },
           "biography": {
             "type": "string",
             "nullable": true,
             "examples": [ "Born in ..." ],
-            "description": "Short biography of the Author"
+            "description": "Short biography of the Author",
+            "minLength": 3,
+            "maxLength": 255
           }
         },
         "additionalProperties": false
@@ -1021,28 +1485,32 @@
         "description": "Input data for actions that alter the database",
         "properties": {
           "firstName": {
-            "minLength": 1,
             "type": "string",
             "examples": [ "Jhon" ],
-            "description": "Input for the First name of the Author"
+            "description": "Input for the First name of the Author",
+            "minLength": 3,
+            "maxLength": 50
           },
           "middleName": {
-            "minLength": 1,
             "type": "string",
             "examples": [ "Bon" ],
-            "description": "Input for the Middle name of the Author"
+            "description": "Input for the Middle name of the Author",
+            "minLength": 3,
+            "maxLength": 40
           },
           "lastName": {
-            "minLength": 1,
             "type": "string",
             "examples": [ "Jovi" ],
-            "description": "Input for the Last name of the Author"
+            "description": "Input for the Last name of the Author",
+            "minLength": 3,
+            "maxLength": 50
           },
           "biography": {
-            "minLength": 1,
             "type": "string",
             "examples": [ "Short Bio: Lorem ipsum dolor sit amet...I" ],
-            "description": "Input for the Biography of the Author"
+            "description": "Input for the Biography of the Author",
+            "minLength": 3,
+            "maxLength": 255
           }
         },
         "additionalProperties": false
@@ -1053,7 +1521,9 @@
           "id": {
             "type": "integer",
             "format": "int32",
-            "description": "ID of the connection between an Author and a Video"
+            "description": "ID of the connection between an Author and a Video",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "createdOn": {
             "type": "string",
@@ -1076,12 +1546,16 @@
           "authorId": {
             "type": "integer",
             "format": "int32",
-            "description": "The ID of the Author"
+            "description": "The ID of the Author",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "videoId": {
             "type": "integer",
             "format": "int32",
-            "description": "The ID of the Video"
+            "description": "The ID of the Video",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "author": {
             "$ref": "#/components/schemas/Authors"
@@ -1122,7 +1596,9 @@
         "properties": {
           "authorId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 2147483647
           }
         },
         "additionalProperties": false
@@ -1134,7 +1610,9 @@
             "type": "integer",
             "format": "int32",
             "examples": [ 123 ],
-            "description": "ID of the entity"
+            "description": "ID of the entity",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "createdOn": {
             "type": "string",
@@ -1158,25 +1636,33 @@
             "type": "string",
             "nullable": true,
             "examples": [ "Jhon" ],
-            "description": "First name of the Author"
+            "description": "First name of the Author",
+            "minLength": 1,
+            "maxLength": 50
           },
           "middleName": {
             "type": "string",
             "nullable": true,
             "examples": [ "Bon" ],
-            "description": "Middle name of the Author"
+            "description": "Middle name of the Author",
+            "minLength": 1,
+            "maxLength": 50
           },
           "lastName": {
             "type": "string",
             "nullable": true,
             "examples": [ "Jovi" ],
-            "description": "Last name of the Author"
+            "description": "Last name of the Author",
+            "minLength": 1,
+            "maxLength": 50
           },
           "biography": {
             "type": "string",
             "nullable": true,
             "examples": [ "Born in ..." ],
-            "description": "Short biography of the Author"
+            "description": "Short biography of the Author",
+            "minLength": 1,
+            "maxLength": 255
           }
         },
         "additionalProperties": false,
@@ -1202,7 +1688,7 @@
         },
         "additionalProperties": false
       },
-      "#" "comment",
+      "#" "|COPYRIGHTS|",
       "CopyrightFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1223,19 +1709,25 @@
             "type": "string",
             "nullable": true,
             "examples": [ "Creative commons" ],
-            "description": "Full name of the Copyright"
+            "description": "Full name of the Copyright",
+            "minLength": 3,
+            "maxLength": 50
           },
           "shortName": {
             "type": "string",
             "nullable": true,
             "examples": [ "CC" ],
-            "description": "Short name of the Copyright"
+            "description": "Short name of the Copyright",
+            "minLength": 2,
+            "maxLength": 50
           },
           "description": {
             "type": "string",
             "nullable": true,
             "examples": [ "Represents free use by anyone..." ],
-            "description": "Description of what the Copyright is"
+            "description": "Description of what the Copyright is",
+            "minLength": 3,
+            "maxLength": 255
           }
         },
         "additionalProperties": false
@@ -1247,7 +1739,9 @@
             "type": "integer",
             "format": "int32",
             "examples": [ 123 ],
-            "description": "ID of the entity"
+            "description": "ID of the entity",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "createdOn": {
             "type": "string",
@@ -1271,19 +1765,25 @@
             "type": "string",
             "nullable": true,
             "examples": [ "Creative commons" ],
-            "description": "Full name of the Copyright"
+            "description": "Full name of the Copyright",
+            "minLength": 3,
+            "maxLength": 50
           },
           "shortName": {
             "type": "string",
             "nullable": true,
             "examples": [ "CC" ],
-            "description": "Short name of the Copyright"
+            "description": "Short name of the Copyright",
+            "minLength": 2,
+            "maxLength": 50
           },
           "description": {
             "type": "string",
             "nullable": true,
             "examples": [ "Represents free use by anyone..." ],
-            "description": "Description of what the Copyright is"
+            "description": "Description of what the Copyright is",
+            "minLength": 3,
+            "maxLength": 50
           }
         },
         "additionalProperties": false,
@@ -1319,27 +1819,30 @@
         "description": "Input data for actions that alter the database",
         "properties": {
           "name": {
-            "minLength": 1,
             "type": "string",
             "examples": [ "Creative Commons" ],
-            "description": "Input for the Name of the Copyright"
+            "description": "Input for the Name of the Copyright",
+            "minLength": 3,
+            "maxLength": 50
           },
           "shortName": {
-            "minLength": 1,
             "type": "string",
             "examples": [ "CC" ],
-            "description": "Input for the Short name of the Copyright"
+            "description": "Input for the Short name of the Copyright",
+            "minLength": 2,
+            "maxLength": 50
           },
           "description": {
-            "minLength": 1,
             "type": "string",
             "examples": [ "Used when ..." ],
-            "description": "Input for the Description of the Copyright"
+            "description": "Input for the Description of the Copyright",
+            "minLength": 3,
+            "maxLength": 50
           }
         },
         "additionalProperties": false
       },
-      "#" "comment",
+      "#" "|FORMATS|",
       "FormatFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1358,11 +1861,15 @@
           },
           "type": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "minLength": 3,
+            "maxLength": 50
           },
           "extension": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "minLength": 1,
+            "maxLength": 10
           },
           "isPhysical": {
             "type": "boolean",
@@ -1384,13 +1891,17 @@
             "type": "string",
             "nullable": true,
             "examples": [ "Web Video Format" ],
-            "description": "Input for the Type of the Format"
+            "description": "Input for the Type of the Format",
+            "minLength": 3,
+            "maxLength": 50
           },
           "extension": {
             "type": "string",
             "nullable": true,
             "examples": [ ".MP4" ],
-            "description": "Input for the Extension of the Format"
+            "description": "Input for the Extension of the Format",
+            "minLength": 1,
+            "maxLength": 10
           },
           "isPhysical": {
             "type": "boolean",
@@ -1404,7 +1915,11 @@
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "examples": [ 123 ],
+            "description": "ID of the entity",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "createdOn": {
             "type": "string",
@@ -1426,14 +1941,25 @@
           },
           "type": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "MP4" ],
+            "description": "Full name of the format",
+            "minLength": 3,
+            "maxLength": 50
           },
           "extension": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ ".mp4" ],
+            "description": "Extension of the format",
+            "minLength": 1,
+            "maxLength": 10
           },
           "isPhysical": {
-            "type": "boolean"
+            "type": "boolean",
+            "examples": [ "false" ],
+            "description": "Shows if the video is on a physical or digital media",
+            "enum": [ true, false ]
           }
         },
         "additionalProperties": false,
@@ -1459,7 +1985,7 @@
         },
         "additionalProperties": false
       },
-      "#" "comment",
+      "#" "|GENRES|",
       "GenreFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1478,11 +2004,15 @@
           },
           "name": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "minLength": 3,
+            "maxLength": 50
           },
           "description": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "minLength": 3,
+            "maxLength": 128
           }
         },
         "additionalProperties": false
@@ -1499,13 +2029,17 @@
             "type": "string",
             "nullable": true,
             "examples": [],
-            "description": "Input for the Name of the Genre"
+            "description": "Input for the Name of the Genre",
+            "minLength": 3,
+            "maxLength": 50
           },
           "description": {
             "type": "string",
             "nullable": true,
             "examples": [],
-            "description": "Input for the Description of the Genre"
+            "description": "Input for the Description of the Genre",
+            "minLength": 3,
+            "maxLength": 128
           }
         },
         "additionalProperties": false
@@ -1519,7 +2053,9 @@
         "properties": {
           "genreId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 2147483647
           }
         },
         "additionalProperties": false
@@ -1529,7 +2065,11 @@
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "examples": [ 123 ],
+            "description": "ID of the entity",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "createdOn": {
             "type": "string",
@@ -1551,11 +2091,19 @@
           },
           "name": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "Romance" ],
+            "description": "Name of the Genre",
+            "minLength": 3,
+            "maxLength": 50
           },
           "description": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "Contains the ..." ],
+            "description": "Description of the Copyright",
+            "minLength": 3,
+            "maxLength": 128
           }
         },
         "additionalProperties": false,
@@ -1590,24 +2138,30 @@
             "type": "integer",
             "format": "int32",
             "examples": [ 1, 2, 100 ],
-            "description": "The current page number"
+            "description": "The current page number",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "itemsPerPage": {
             "type": "integer",
             "format": "int32",
             "examples": [ 10, 20, 50 ],
-            "description": "How many items are represented per 1 page"
+            "description": "How many items are represented per 1 page",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "pagesCount": {
             "type": "integer",
             "format": "int32",
             "examples": [ 12, 20, 100 ],
-            "description": "How many pages there are"
+            "description": "How many pages there are",
+            "minimum": 1,
+            "maximum": 2147483647
           }
         },
         "additionalProperties": false
       },
-      "#" "comment",
+      "#" "|TAGS|",
       "TagFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1626,11 +2180,15 @@
           },
           "name": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "minLength": 3,
+            "maxLength": 50
           },
           "description": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "minLength": 3,
+            "maxLength": 128
           }
         },
         "additionalProperties": false
@@ -1643,13 +2201,17 @@
             "type": "string",
             "nullable": true,
             "examples": [],
-            "description": "Input for "
+            "description": "Input for ",
+            "minLength": 3,
+            "maxLength": 50
           },
           "description": {
             "type": "string",
             "nullable": true,
             "examples": [],
-            "description": ""
+            "description": "",
+            "minLength": 3,
+            "maxLength": 128
           }
         },
         "additionalProperties": false
@@ -1659,7 +2221,9 @@
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "createdOn": {
             "type": "string",
@@ -1681,11 +2245,15 @@
           },
           "tagId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "videoId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "tag": {
             "$ref": "#/components/schemas/Tags"
@@ -1756,7 +2324,11 @@
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "examples": [ 123 ],
+            "description": "ID of the entity",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "createdOn": {
             "type": "string",
@@ -1778,11 +2350,19 @@
           },
           "name": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "#test" ],
+            "description": "Name of the Tag",
+            "minLength": 3,
+            "maxLength": 50
           },
           "description": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "examples": [ "Describes..." ],
+            "description": "Description of the Tag",
+            "minLength": 3,
+            "maxLength": 128
           }
         },
         "additionalProperties": false,
@@ -1808,7 +2388,7 @@
         },
         "additionalProperties": false
       },
-      "#" "comment",
+      "#" "|VIDEOS|",
       "VideoFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1827,11 +2407,15 @@
           },
           "title": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "minLength": 3,
+            "maxLength": 50
           },
           "fileId": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "minLength": 36,
+            "maxLength": 36
           },
           "size": {
             "maximum": 2147483647,
@@ -1847,15 +2431,21 @@
           },
           "authorFirstName": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "minLength": 3,
+            "maxLength": 50
           },
           "authorMiddleName": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "minLength": 3,
+            "maxLength": 50
           },
           "authorLastName": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "minLength": 3,
+            "maxLength": 50
           }
         },
         "additionalProperties": false
@@ -1875,6 +2465,7 @@
         "properties": {
           "title": {
             "minLength": 1,
+            "maxLength": 50,
             "type": "string"
           },
           "fileId": {
@@ -1888,13 +2479,14 @@
             "format": "int32"
           },
           "formatId": {
-            "maximum": 8,
+            "maximum": 2147483647,
             "minimum": 1,
             "type": "integer",
             "format": "int32"
           },
           "description": {
             "minLength": 1,
+            "maxLength": 255,
             "type": "string"
           },
           "yearOfPublishing": {
@@ -1902,7 +2494,7 @@
             "format": "date-time"
           },
           "copyrightId": {
-            "maximum": 6,
+            "maximum": 2147483647,
             "minimum": 1,
             "type": "integer",
             "format": "int32"
@@ -1917,7 +2509,9 @@
             "type": "integer",
             "format": "int32",
             "examples": [ 123 ],
-            "description": "ID of the entity"
+            "description": "ID of the entity",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "createdOn": {
             "type": "string",
@@ -1941,19 +2535,25 @@
             "type": "string",
             "nullable": true,
             "examples": [ "The big bang theory" ],
-            "description": "The title of the video"
+            "description": "The title of the video",
+            "minLength": 3,
+            "maxLength": 50
           },
           "fileId": {
             "type": "string",
             "nullable": true,
             "examples": [ "xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx" ],
-            "description": "A UUID that is used to identify the video from the BLOB storage"
+            "description": "A UUID that is used to identify the video from the BLOB storage",
+            "minLength": 36,
+            "maxLength": 36
           },
           "formatId": {
             "type": "integer",
             "format": "int32",
             "examples": [ 24 ],
-            "description": "ID of the format entity"
+            "description": "ID of the format entity",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "format": {
             "$ref": "#/components/schemas/Formats"
@@ -1962,13 +2562,18 @@
             "type": "integer",
             "format": "int32",
             "nullable": true,
-            "examples": [ 444 ]
+            "examples": [ 444 ],
+            "description": "Size of the video in MB",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "description": {
             "type": "string",
             "nullable": true,
             "examples": [ "A short film about..." ],
-            "description": "A description of the video"
+            "description": "A description of the video",
+            "minLength": 3,
+            "maxLength": 255
           },
           "yearOfPublishing": {
             "type": "string",
@@ -1981,7 +2586,9 @@
             "type": "integer",
             "format": "int32",
             "examples": [ 12 ],
-            "description": "ID of the copyright entity"
+            "description": "ID of the copyright entity",
+            "minimum": 1,
+            "maximum": 2147483647
           },
           "copyright": {
             "$ref": "#/components/schemas/Copyrights"

@@ -29,7 +29,19 @@
     },
     {
       "name": "Video",
-      "description": "Methods for working with the Video table and the M2M tables connected to Videos"
+      "description": "Methods for working with the Video table "
+    },
+    {
+      "name": "Video-Authors",
+      "description": "Methods for working with the Video table and the M2M table connecting Authors to Videos"
+    },
+    {
+      "name": "Video-Genres",
+      "description": "Methods for working with the Video table and the M2M table connecting Genres to Videos"
+    },
+    {
+      "name": "Video-Tags",
+      "description": "Methods for working with the Video table and the M2M table connecting Tag to Videos"
     }
 
   ],
@@ -753,8 +765,73 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Video format information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "Format 2 Added"
+                    },
+                    "extension": {
+                      "type": "string",
+                      "example": "Format 2 Added"
+                    },
+                    "isPhysical": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 2001
+                    }
+                  },
+                  "required": [ "type", "extension", "isPhysical", "id" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error: missing or invalid fields.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "One or more validation errors occurred."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "example": {
+                        "Type": [ "This field is Required" ],
+                        "Extension": [ "This field is Required" ]
+                      }
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-650c2a568da3622851d6e6b8a8c21ad1-aad91d587bd7356a-00"
+                    }
+                  },
+                  "required": [ "title", "status", "errors", "traceId" ]
+                }
+              }
+            }
           }
+
         }
       }
     },
@@ -786,7 +863,81 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Format updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "updated": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "Format Updated1233"
+                        },
+                        "extension": {
+                          "type": "string",
+                          "example": "Format Updated1233"
+                        },
+                        "isPhysical": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "id": {
+                          "type": "integer",
+                          "example": 100
+                        }
+                      },
+                      "required": [ "type", "extension", "isPhysical", "id" ]
+                    }
+                  },
+                  "required": [ "success", "updated" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error: required fields are missing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "One or more validation errors occurred."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "example": {
+                        "Type": [ "This field is Required" ],
+                        "Extension": [ "This field is Required" ]
+                      }
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-6bb8ed0b3c6f5971458772eacaaeffaa-642869abfb546017-00"
+                    }
+                  },
+                  "required": [ "title", "status", "errors", "traceId" ]
+                }
+              }
+            }
           }
         }
       },
@@ -808,7 +959,59 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Format retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lazyLoader": {
+                      "type": "object",
+                      "description": "Lazy loading placeholder",
+                      "example": {}
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "Format To Delete"
+                    },
+                    "extension": {
+                      "type": "string",
+                      "example": "Format To Delete"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 200
+                    }
+                  },
+                  "required": [ "type", "extension", "id" ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Not Found"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-c992cb509efb3098067c91aa95986969-aa11e6b7b9b4a9fd-00"
+                    }
+                  },
+                  "required": [ "title", "status", "traceId" ]
+                }
+              }
+            }
           }
         }
       }
@@ -853,7 +1056,67 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Genre created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Genre 2 Added"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Genre 2 Added"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 2001
+                    }
+                  },
+                  "required": [ "name", "description", "id" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error: required fields are missing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "One or more validation errors occurred."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "example": {
+                        "name": [ "This field is Required" ],
+                        "description": [ "This field is Required" ]
+                      }
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-81df894ffb62db1ca3d15b3963431d88-5bb74da772af7e15-00"
+                    }
+                  },
+                  "required": [ "title", "status", "errors", "traceId" ]
+                }
+              }
+            }
           }
         }
       }
@@ -886,7 +1149,81 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Genre updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "updated": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Genre Name 2 update"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "Description 2 update"
+                        },
+                        "id": {
+                          "type": "integer",
+                          "example": 2
+                        }
+                      },
+                      "required": [ "name", "description", "id" ]
+                    }
+                  },
+                  "required": [ "success", "updated" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error: required fields are missing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "One or more validation errors occurred."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "example": {
+                        "name": [
+                          "This field is Required"
+                        ],
+                        "description": [
+                          "This field is Required"
+                        ]
+                      }
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-e7aa812b90a4ef7f5f40b837681208a0-941f3bb22d9e0616-00"
+                    }
+                  },
+                  "required": [ "title", "status", "errors", "traceId" ]
+                }
+              }
+            }
           }
         }
       },
@@ -908,7 +1245,59 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Genre retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lazyLoader": {
+                      "type": "object",
+                      "description": "Lazy loading placeholder",
+                      "example": {}
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Genre To Delete"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Genre To Delete"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 200
+                    }
+                  },
+                  "required": [ "name", "description", "id" ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Not Found"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-4a317db71ab37fcfac68c02bf5c5452c-3472281bc8365a9c-00"
+                    }
+                  },
+                  "required": [ "title", "status", "traceId" ]
+                }
+              }
+            }
           }
         }
       }
@@ -953,7 +1342,71 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Tag retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Tag 3"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Tag 3"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 2001
+                    }
+                  },
+                  "required": [ "name", "description", "id" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error: required fields are missing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "One or more validation errors occurred."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "example": {
+                        "name": [
+                          "This field is Required"
+                        ],
+                        "description": [
+                          "This field is Required"
+                        ]
+                      }
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-9b36fb499e6c294f2ab2e4874c8e4f74-70403dc7339d2bd5-00"
+                    }
+                  },
+                  "required": [ "title", "status", "errors", "traceId" ]
+                }
+              }
+            }
           }
         }
       }
@@ -986,7 +1439,81 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Tag updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "updated": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Tag Updated"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "Tag Updated"
+                        },
+                        "id": {
+                          "type": "integer",
+                          "example": 200
+                        }
+                      },
+                      "required": [ "name", "description", "id" ]
+                    }
+                  },
+                  "required": [ "success", "updated" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error: required fields are missing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "One or more validation errors occurred."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "example": {
+                        "name": [
+                          "This field is Required"
+                        ],
+                        "description": [
+                          "This field is Required"
+                        ]
+                      }
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-c10a381d5b9f1549252702673f0fe8f6-ffcffee1bdc5bc34-00"
+                    }
+                  },
+                  "required": [ "title", "status", "errors", "traceId" ]
+                }
+              }
+            }
           }
         }
       },
@@ -1008,308 +1535,63 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Tag retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lazyLoader": {
+                      "type": "object",
+                      "description": "Lazy loading placeholder",
+                      "example": {}
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Tag Updated"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Tag Updated"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 200
+                    }
+                  },
+                  "required": [ "name", "description", "id" ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Not Found"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-dd191d652ab0e5537bf9a3aee8967295-6a63826bbbc3d6da-00"
+                    }
+                  },
+                  "required": [ "title", "status", "traceId" ]
+                }
+              }
+            }
           }
         }
       }
     },
-
-    "/api/Video/get/author/{videoId}": {
-      "post": {
-        "tags": [
-          "Video"
-        ],
-        "summary": "Gets a list of Authors with connection with the specified video",
-        "parameters": [
-          {
-            "name": "videoId",
-            "in": "path",
-            "description": "ID of the video",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "example": 1
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AuthorVideoAuthorFilterIMIndexIM"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Video/author/{videoId}": {
-      "post": {
-        "tags": [
-          "Video"
-        ],
-        "summary": "Adds an Author to the specified Video",
-        "parameters": [
-          {
-            "name": "videoId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AuthorVideoIM"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Video"
-        ],
-        "summary": "Removes an Author from the specified video",
-        "parameters": [
-          {
-            "name": "videoId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AuthorVideoIM"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-
-    "/api/Video/get/genre/{videoId}": {
-      "post": {
-        "tags": [
-          "Video"
-        ],
-        "summary": "Gets a list of Genres with connection with the specified Video",
-        "parameters": [
-          {
-            "name": "videoId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TagVideoGenreFilterIMIndexIM"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Video/genre/{videoId}": {
-      "post": {
-        "tags": [
-          "Video"
-        ],
-        "summary": "Adds a Genre to the specified Video",
-        "parameters": [
-          {
-            "name": "videoId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GenreVideoIM"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Video"
-        ],
-        "summary": "Removes a Genre from the specified Video",
-        "parameters": [
-          {
-            "name": "videoId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GenreVideoIM"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-
-    "/api/Video/get/tag/{videoId}": {
-      "post": {
-        "tags": [
-          "Video"
-        ],
-        "summary": "Gets a list of Tags with connection with the specified Video",
-        "parameters": [
-          {
-            "name": "videoId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TagVideoTagFilterIMIndexIM"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Video/tag/{videoId}": {
-      "post": {
-        "tags": [
-          "Video"
-        ],
-        "summary": "Adds a Tag to the specified Video",
-        "parameters": [
-          {
-            "name": "videoId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TagVideoIM"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Video"
-        ],
-        "summary": "Removes a Tag from the specified Video",
-        "parameters": [
-          {
-            "name": "videoId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TagVideoIM"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-
     "/api/Video/Get": {
       "post": {
         "tags": [
@@ -1349,7 +1631,125 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Video information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Vid Test Add"
+                    },
+                    "fileLocation": {
+                      "type": "string",
+                      "example": "Vid Test Add"
+                    },
+                    "fileID": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "550e8400-e29b-41d4-a716-446655440000"
+                    },
+                    "formatId": {
+                      "type": "integer",
+                      "example": 8
+                    },
+                    "format": {
+                      "type": [ "string", "null" ],
+                      "nullable": true,
+                      "example": null
+                    },
+                    "size": {
+                      "type": "integer",
+                      "example": 10
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Vid Test Add"
+                    },
+                    "yearOfPublishing": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "1980-01-01T00:00:00Z"
+                    },
+                    "copyrightId": {
+                      "type": "integer",
+                      "example": 6
+                    },
+                    "copyright": {
+                      "type": [ "string", "null" ],
+                      "nullable": true,
+                      "example": null
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 6
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "fileLocation",
+                    "fileID",
+                    "formatId",
+                    "size",
+                    "description",
+                    "yearOfPublishing",
+                    "copyrightId",
+                    "id"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "One or more validation errors occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "One or more validation errors occurred."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "errors": {
+                      "type": "object",
+                      "properties": {
+                        "Title": {
+                          "type": "array",
+                          "items": { "type": "string" },
+                          "example": [ "This field is Required" ]
+                        },
+                        "CopyrightId": {
+                          "type": "array",
+                          "items": { "type": "string" },
+                          "example": [ "The field CopyrightId must be between 1 and 6." ]
+                        },
+                        "Description": {
+                          "type": "array",
+                          "items": { "type": "string" },
+                          "example": [ "This field is Required" ]
+                        },
+                        "FileLocation": {
+                          "type": "array",
+                          "items": { "type": "string" },
+                          "example": [ "This field is Required" ]
+                        }
+                      }
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-825bb4134c7fae6a27e3921d6e792542-3630ef2fadf1076b-00"
+                    }
+                  },
+                  "required": [ "title", "status", "errors", "traceId" ]
+                }
+              }
+            }
           }
         }
       }
@@ -1377,22 +1777,144 @@
               "schema": {
                 "$ref": "#/components/schemas/VideoIM"
               }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VideoIM"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/VideoIM"
-              }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successful update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "updated": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "example": "Vid Test Add"
+                        },
+                        "fileLocation": {
+                          "type": "string",
+                          "example": "Vid Test Add"
+                        },
+                        "formatId": {
+                          "type": "integer",
+                          "example": 8
+                        },
+                        "format": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "example": "MKV"
+                            },
+                            "extension": {
+                              "type": "string",
+                              "example": "Format 1"
+                            },
+                            "id": {
+                              "type": "integer",
+                              "example": 8
+                            }
+                          }
+                        },
+                        "size": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "Vid Test Add"
+                        },
+                        "yearOfPublishing": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "1980-01-01T00:00:00"
+                        },
+                        "copyrightId": {
+                          "type": "integer",
+                          "example": 6
+                        },
+                        "copyright": {
+                          "type": "object",
+                          "properties": {
+                            "copyrightName": {
+                              "type": "string",
+                              "example": "Updated"
+                            },
+                            "copyrightDescription": {
+                              "type": "string",
+                              "example": "Updated"
+                            },
+                            "id": {
+                              "type": "integer",
+                              "example": 6
+                            }
+                          }
+                        },
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        }
+                      },
+                      "required": [ "title", "fileLocation", "formatId", "format", "size", "description", "yearOfPublishing", "copyrightId", "copyright", "id" ]
+                    }
+                  },
+                  "required": [ "success", "updated" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "One or more validation errors occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "One or more validation errors occurred."
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "errors": {
+                      "type": "object",
+                      "properties": {
+                        "Title": {
+                          "type": "array",
+                          "items": { "type": "string" },
+                          "example": [ "This field is Required" ]
+                        },
+                        "Description": {
+                          "type": "array",
+                          "items": { "type": "string" },
+                          "example": [ "This field is Required" ]
+                        },
+                        "FileLocation": {
+                          "type": "array",
+                          "items": { "type": "string" },
+                          "example": [ "This field is Required" ]
+                        }
+                      }
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-b8936b718dbb34a2fc21652b3290e97d-0172645c91c88544-00"
+                    }
+                  },
+                  "required": [ "title", "status", "errors", "traceId" ]
+                }
+              }
+            }
           }
         }
       },
@@ -1414,7 +1936,832 @@
         ],
         "responses": {
           "200": {
+            "description": "Successful update with related entities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "format": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "example": "MKV"
+                            },
+                            "extension": {
+                              "type": "string",
+                              "example": "Format 1"
+                            },
+                            "id": {
+                              "type": "integer",
+                              "example": 8
+                            }
+                          }
+                        },
+                        { "type": "null" }
+                      ]
+                    },
+                    "copyright": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "copyrightName": {
+                              "type": "string",
+                              "example": "Updated"
+                            },
+                            "copyrightDescription": {
+                              "type": "string",
+                              "example": "Updated"
+                            },
+                            "id": {
+                              "type": "integer",
+                              "example": 6
+                            }
+                          }
+                        },
+                        { "type": "null" }
+                      ]
+                    },
+                    "authors": {
+                      "type": "array",
+                      "items": { "type": "object" },
+                      "example": []
+                    },
+                    "tags": {
+                      "type": "array",
+                      "items": { "type": "object" },
+                      "example": []
+                    },
+                    "genres": {
+                      "type": "array",
+                      "items": { "type": "object" },
+                      "example": []
+                    },
+                    "lazyLoader": {
+                      "type": "object",
+                      "example": {}
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Vid Test Add"
+                    },
+                    "fileLocation": {
+                      "type": "string",
+                      "example": "Vid Test Add"
+                    },
+                    "formatId": {
+                      "type": "integer",
+                      "example": 8
+                    },
+                    "size": {
+                      "type": "integer",
+                      "example": 10
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Vid Test Add"
+                    },
+                    "yearOfPublishing": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "1980-01-01T00:00:00"
+                    },
+                    "copyrightId": {
+                      "type": "integer",
+                      "example": 6
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  },
+                  "required": [
+                    "format",
+                    "copyright",
+                    "authors",
+                    "tags",
+                    "genres",
+                    "lazyLoader",
+                    "title",
+                    "fileLocation",
+                    "formatId",
+                    "size",
+                    "description",
+                    "yearOfPublishing",
+                    "copyrightId",
+                    "id"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Not Found"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "traceId": {
+                      "type": "string",
+                      "example": "00-b596af2ee609af616d6aef0a4657323f-fd9a802b9c297b58-00"
+                    }
+                  },
+                  "required": [ "title", "status", "traceId" ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/Video/get/author/{videoId}": {
+      "post": {
+        "tags": [
+          "Video-Authors"
+        ],
+        "summary": "Gets a list of Authors with connection with the specified video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "description": "ID of the video",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorVideoAuthorFilterIMIndexIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Video/author/{videoId}": {
+      "post": {
+        "tags": [
+          "Video-Authors"
+        ],
+        "summary": "Adds an Author to the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorVideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success with author-video link data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "authorId": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "videoId": {
+                          "type": "integer",
+                          "example": 2
+                        },
+                        "author": {
+                          "nullable": true,
+                          "type": [ "object", "null" ],
+                          "example": null
+                        },
+                        "video": {
+                          "nullable": true,
+                          "type": [ "object", "null" ],
+                          "example": null
+                        },
+                        "id": {
+                          "type": "integer",
+                          "example": 6
+                        }
+                      },
+                      "required": [ "authorId", "videoId", "author", "video", "id" ]
+                    }
+                  },
+                  "required": [ "success", "data" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request – input parameters are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Error in input params!"
+                    }
+                  },
+                  "required": [ "success", "errorMessage" ]
+                }
+              }
+            }
+          }
+
+        }
+      },
+      "delete": {
+        "tags": [
+          "Video-Authors"
+        ],
+        "summary": "Removes an Author from the specified video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorVideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success response with author-video link data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "authorId": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "videoId": {
+                          "type": "integer",
+                          "example": 2
+                        },
+                        "author": {
+                          "nullable": true,
+                          "type": [ "object", "null" ],
+                          "example": null
+                        },
+                        "video": {
+                          "nullable": true,
+                          "type": [ "object", "null" ],
+                          "example": null
+                        },
+                        "id": {
+                          "type": "integer",
+                          "example": 7
+                        }
+                      },
+                      "required": [ "authorId", "videoId", "author", "video", "id" ]
+                    }
+                  },
+                  "required": [ "success", "data" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Error in input params!"
+                    }
+                  },
+                  "required": [ "success", "errorMessage" ]
+                }
+              }
+            }
+          }
+
+
+
+        }
+      }
+    },
+
+    "/api/Video/get/genre/{videoId}": {
+      "post": {
+        "tags": [
+          "Video-Genres"
+        ],
+        "summary": "Gets a list of Genres with connection with the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagVideoGenreFilterIMIndexIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Video/genre/{videoId}": {
+      "post": {
+        "tags": [
+          "Video-Genres"
+        ],
+        "summary": "Adds a Genre to the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenreVideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success response with genre-video link data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "genreId": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "videoId": {
+                          "type": "integer",
+                          "example": 2
+                        },
+                        "genre": {
+                          "nullable": true,
+                          "type": [ "object", "null" ],
+                          "example": null
+                        },
+                        "video": {
+                          "nullable": true,
+                          "type": [ "object", "null" ],
+                          "example": null
+                        },
+                        "id": {
+                          "type": "integer",
+                          "example": 9
+                        }
+                      },
+                      "required": [ "genreId", "videoId", "genre", "video", "id" ]
+                    }
+                  },
+                  "required": [ "success", "data" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Error in input params!"
+                    }
+                  },
+                  "required": [ "success", "errorMessage" ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Video-Genres"
+        ],
+        "summary": "Removes a Genre from the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenreVideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success response with genre-video link data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "genreId": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "videoId": {
+                          "type": "integer",
+                          "example": 2
+                        },
+                        "genre": {
+                          "nullable": true,
+                          "type": [ "object", "null" ],
+                          "example": null
+                        },
+                        "video": {
+                          "nullable": true,
+                          "type": [ "object", "null" ],
+                          "example": null
+                        },
+                        "id": {
+                          "type": "integer",
+                          "example": 9
+                        }
+                      },
+                      "required": [ "genreId", "videoId", "genre", "video", "id" ]
+                    }
+                  },
+                  "required": [ "success", "data" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Error in input params!"
+                    }
+                  },
+                  "required": [ "success", "errorMessage" ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/Video/get/tag/{videoId}": {
+      "post": {
+        "tags": [
+          "Video-Tags"
+        ],
+        "summary": "Gets a list of Tags with connection with the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagVideoTagFilterIMIndexIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Video/tag/{videoId}": {
+      "post": {
+        "tags": [
+          "Video-Tags"
+        ],
+        "summary": "Adds a Tag to the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagVideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success response with tag-video link data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "tagId": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "videoId": {
+                          "type": "integer",
+                          "example": 2
+                        },
+                        "tag": {
+                          "nullable": true,
+                          "type": [ "object", "null" ],
+                          "example": null
+                        },
+                        "video": {
+                          "nullable": true,
+                          "type": [ "object", "null" ],
+                          "example": null
+                        },
+                        "id": {
+                          "type": "integer",
+                          "example": 8
+                        }
+                      },
+                      "required": [ "tagId", "videoId", "tag", "video", "id" ]
+                    }
+                  },
+                  "required": [ "success", "data" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Error in input params!"
+                    }
+                  },
+                  "required": [ "success", "errorMessage" ]
+                }
+              }
+            }
+          }
+
+        }
+      },
+      "delete": {
+        "tags": [
+          "Video-Tags"
+        ],
+        "summary": "Removes a Tag from the specified Video",
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagVideoIM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success response with tag-video association",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "tagId": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "videoId": {
+                          "type": "integer",
+                          "example": 2
+                        },
+                        "tag": {
+                          "nullable": true,
+                          "type": [ "object", "null" ],
+                          "example": null
+                        },
+                        "video": {
+                          "nullable": true,
+                          "type": [ "object", "null" ],
+                          "example": null
+                        },
+                        "id": {
+                          "type": "integer",
+                          "example": 3
+                        }
+                      },
+                      "required": [ "tagId", "videoId", "tag", "video", "id" ]
+                    }
+                  },
+                  "required": [ "success", "data" ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Error in imput params!"
+                    }
+                  },
+                  "required": [ "success", "errorMessage" ]
+                }
+              }
+            }
           }
         }
       }
@@ -1422,7 +2769,6 @@
   },
   "components": {
     "schemas": {
-      "#" "|AUTHORS|",
       "AuthorFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1688,7 +3034,6 @@
         },
         "additionalProperties": false
       },
-      "#" "|COPYRIGHTS|",
       "CopyrightFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1842,7 +3187,6 @@
         },
         "additionalProperties": false
       },
-      "#" "|FORMATS|",
       "FormatFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -1985,7 +3329,6 @@
         },
         "additionalProperties": false
       },
-      "#" "|GENRES|",
       "GenreFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -2129,7 +3472,6 @@
         },
         "additionalProperties": false
       },
-      "#" "comment",
       "PagerIM": {
         "type": "object",
         "description": "Contains information used for paging",
@@ -2161,7 +3503,6 @@
         },
         "additionalProperties": false
       },
-      "#" "|TAGS|",
       "TagFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",
@@ -2388,7 +3729,6 @@
         },
         "additionalProperties": false
       },
-      "#" "|VIDEOS|",
       "VideoFilterIM": {
         "type": "object",
         "description": "Contains filter and ordering information",

@@ -77,7 +77,7 @@ namespace VideoLibraryAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => 
                 {
-                    c.SwaggerEndpoint("/Swagger/OpenAPISpec.json", "Custom API");
+                    c.SwaggerEndpoint("/Swagger/OpenAPISpec.json", "VideoLibrary API v1");
                     c.RoutePrefix = "swagger";
                 });
             }

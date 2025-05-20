@@ -1,0 +1,19 @@
+﻿@page "/genres-add"
+
+<EditForm Model="@Genre"
+          OnValidSubmit="AddToDataBase">
+    <DataAnnotationsValidator/>
+
+    <div class="mb-3">
+        <label>Name</label>
+        <InputText @bind-Value="Genre.Name" class="form-control" />
+        <ValidationMessage For="@(() => Genre.Name)" />
+    </div>
+    <div class="mb-3">
+        <label>Description</label>
+        <InputText @bind-Value="Genre.Description" class="form-control" />
+        <ValidationMessage For="@(() => Genre.Description)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>

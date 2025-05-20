@@ -16,9 +16,4 @@
     <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Shared\GenresModels\" />
-    <Folder Include="Shared\TagsModels\" />
-  </ItemGroup>
-
 </Project>

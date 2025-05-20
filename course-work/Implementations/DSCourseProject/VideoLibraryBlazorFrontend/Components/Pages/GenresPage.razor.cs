@@ -1,17 +1,16 @@
 using Common.Entities;
 using Microsoft.AspNetCore.Components;
-using VideoLibraryBlazorFrontend.Shared.AuthorsModels;
-using VideoLibraryBlazorFrontend.Shared;
-using VideoLibraryBlazorFrontend.Shared.FormatsModels;
 using Microsoft.JSInterop;
+using VideoLibraryBlazorFrontend.Shared;
+using VideoLibraryBlazorFrontend.Shared.AuthorsModels;
+using VideoLibraryBlazorFrontend.Shared.GenresModels;
 
 namespace VideoLibraryBlazorFrontend.Components.Pages
 {
-    public partial class FormatsPage
+    public partial class GenresPage
     {
         [Inject]
         public NavigationManager NavManager { get; set; }
-
         [Inject]
         public HttpClient HttpClient { get; set; }
 
@@ -19,49 +18,44 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
         IJSRuntime JS { get; set; }
 
         private Pager pager = new();
-        private FormatsFilter filter = new();
-        private List<Formats> Items = new();
+        private GenresFilter filter = new();
+        private List<Genres> Items = new();
 
         private int[] ItemsPerPageOptions = new[] { 1, 5, 10, 20, 50 };
         private Dictionary<string, string> OrderByOptions = new()
         {
             { "id", "Default (ID)"},
-            { "type", "Type" },
-            { "extension", "Extension" },
-            { "isPhysical", "Is Physical" }
+            { "name", "Name" },
+            { "description", "Description" }
         };
-        private Dictionary<string, string> OrderDirOptions = new()
+        private Dictionary<string, string> orderDirOptions = new()
         {
             { "desc", "Descending" },
             { "asc", "Ascending" }
         };
-        private Dictionary<string, string> IsPhysicalOptions = new()
-        {
-            { "", "All" },
-            { "true", "Physical" },
-            { "false", "Digital" }
-        };
+
         private bool CanPrev => pager.Page > 1;
         private bool CanNext => pager.Page < pager.PagesCount;
 
+
         protected override async Task OnInitializedAsync()
         {
-            await LoadFormats();
+            await LoadGenres();
         }
 
-        private async Task LoadFormats()
+        private async Task LoadGenres()
         {
-            var request = new IndexRequestModel<FormatsFilter>
+            var request = new IndexRequestModel<GenresFilter>
             {
                 Pager = pager,
                 Filter = filter
             };
 
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Formats/get", request);
+            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Genres/get", request);
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Formats, FormatsFilter>>>();
+                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Genres, GenresFilter>>>();
 
                 if (result?.Success == true)
                 {
@@ -75,35 +69,35 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
             }
         }
-        private async Task DeleteFormat(int id)
+
+        private async Task DeleteAuthor(int id)
         {
-            var confirm = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to delete this format?");
+            var confirm = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to delete this genre?");
 
             if (!confirm)
             {
                 return;
             }
-            var response = await HttpClient.DeleteAsync($"https://localhost:7209/api/Formats/{id}");
+            var response = await HttpClient.DeleteAsync($"https://localhost:7209/api/Genres/{id}");
             if (response.IsSuccessStatusCode)
             {
-                await LoadFormats();
+                await LoadGenres();
             }
         }
         private void NavigateToEdit(int id)
         {
-            NavManager.NavigateTo($"/formats/edit/{id}");
+            NavManager.NavigateTo($"/genres/edit/{id}");
         }
-
 
         private async Task ApplyFilter()
         {
             pager.Page = 1;
-            await LoadFormats();
+            await LoadGenres();
         }
         private async Task FirstPage()
         {
             pager.Page = 1;
-            await LoadFormats();
+            await LoadGenres();
 
         }
         private async Task PrevPage()
@@ -111,7 +105,7 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             if (CanPrev)
             {
                 pager.Page--;
-                await LoadFormats();
+                await LoadGenres();
             }
         }
 
@@ -120,30 +114,14 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             if (CanNext)
             {
                 pager.Page++;
-                await LoadFormats();
+                await LoadGenres();
             }
         }
         private async Task LastPage()
         {
             pager.Page = pager.PagesCount;
-            await LoadFormats();
+            await LoadGenres();
 
-        }
-
-        private string? IsPhysicalSelection
-        {
-            get => filter.IsPhysical?.ToString().ToLower();
-            set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    filter.IsPhysical = null;
-                }
-                else if (bool.TryParse(value, out var result))
-                {
-                    filter.IsPhysical = result;
-                }
-            }
         }
 
         private async Task ItemsPerPageChanged(ChangeEventArgs e)
@@ -152,8 +130,12 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             {
                 pager.ItemsPerPage = newCount;
                 pager.Page = 1;
-                await LoadFormats();
+                await LoadGenres();
             }
         }
+
+
+
+
     }
 }

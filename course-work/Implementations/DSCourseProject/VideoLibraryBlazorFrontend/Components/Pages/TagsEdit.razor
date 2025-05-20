@@ -1,0 +1,28 @@
+﻿@page "/tags/edit/{TagID:int}"
+
+@if (Tag == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@Tag" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label>First Name</label>
+            <InputText @bind-Value="Tag.Name" class="form-control" />
+            <ValidationMessage For="@(() => Tag.Name)" />
+        </div>
+
+        <div class="mb-3">
+            <label>Middle Name</label>
+            <InputText @bind-Value="Tag.Description" class="form-control" />
+            <ValidationMessage For="@(() => Tag.Description)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary me-2">Confirm</button>
+        <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+    </EditForm>
+}

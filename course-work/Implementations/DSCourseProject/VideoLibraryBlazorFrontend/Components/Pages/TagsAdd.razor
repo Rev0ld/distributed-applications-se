@@ -1,0 +1,21 @@
+﻿@page "/tags-add"
+
+
+<EditForm Model="@Tag"
+          OnValidSubmit="AddToDataBase">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label>Name</label>
+        <InputText @bind-Value="Tag.Name" class="form-control" />
+        <ValidationMessage For="@(() => Tag.Name)" />
+    </div>
+
+    <div class="mb-3">
+        <label>Middle Name</label>
+        <InputText @bind-Value="Tag.Description" class="form-control" />
+        <ValidationMessage For="@(() => Tag.Description)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>

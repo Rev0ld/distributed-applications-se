@@ -15,6 +15,9 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
         [Inject]
         public HttpClient HttpClient { get; set; }
 
+        [Inject]
+        IJSRuntime JS { get; set; }
+
         private Pager pager = new();
         private CopyrightsFilter filter = new();
         private List<Copyrights> Items = new();

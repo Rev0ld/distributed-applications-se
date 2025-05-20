@@ -1,0 +1,30 @@
+﻿@page "/genres/edit/{GenreID:int}"
+
+@if (Genre == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@Genre" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label>Name</label>
+            <InputText @bind-Value="Genre.Name" class="form-control" />
+            <ValidationMessage For="@(() => Genre.Name)" />
+        </div>
+
+        <div class="mb-3">
+            <label>Description</label>
+            <InputText @bind-Value="Genre.Description" class="form-control" />
+            <ValidationMessage For="@(() => Genre.Description)" />
+        </div>
+
+
+        <button type="submit" class="btn btn-primary me-2">Confirm</button>
+        <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+    </EditForm>
+}
+

@@ -12,7 +12,7 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
         [Inject]
         HttpClient HttpClient { get; set; }
 
-        private FormatsIM Author = new FormatsIM();
+        private AuthorsIM Author = new AuthorsIM();
         private async Task AddToDataBase() 
         {
             var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Authors", Author);

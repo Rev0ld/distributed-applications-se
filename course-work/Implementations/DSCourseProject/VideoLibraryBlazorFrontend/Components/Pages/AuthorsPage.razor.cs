@@ -1,4 +1,3 @@
-
 using Common.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -16,7 +15,10 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
         public NavigationManager NavManager { get; set; }
         [Inject]
         public HttpClient HttpClient { get; set; }
-        
+
+        [Inject]
+        IJSRuntime JS { get; set; }
+
 
         private Pager pager = new();
         private AuthorsFilter filter = new();

@@ -1,10 +1,10 @@
-﻿@page "/copyrights"
+﻿@page "/genres"
 
-<h3>Copyrights</h3>
+<h3>Genres</h3>
+
 
 <div class="filter-form mb-3">
     <input placeholder="Name" @bind="filter.Name" class="form-control mb-1" />
-    <input placeholder="Short Name" @bind="filter.ShortName" class="form-control mb-1" />
     <input placeholder="Description" @bind="filter.Description" class="form-control mb-1" />
     <select class="form-control mb-1" style="width: auto;" @bind="filter.OrderBy">
         @foreach (var item in OrderByOptions)
@@ -31,56 +31,52 @@
         <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Short Name</th>
             <th>Description</th>
         </tr>
     </thead>
     <tbody>
         @if (Items == null)
         {
-            <tr><td colspan="6">Loading...</td></tr>
+            <tr><td colspan="4">Loading...</td></tr>
         }
         else if (!Items.Any())
         {
-            <tr><td colspan="6">No copyrights found.</td></tr>
+            <tr><td colspan="4">No genres found.</td></tr>
         }
         else
         {
-            @foreach (var copyright in Items)
+            @foreach (var genre in Items)
             {
-                @if (copyright.IsDeleted)
+                @if (genre.IsDeleted)
                 {
                     <tr>
-                        <td><del>@copyright.Id</del></td>
-                        <td><del>@copyright.Name</del></td>
-                        <td><del>@copyright.ShortName</del></td>
-                        <td><del>@copyright.Description</del></td>
+                        <td><del>@genre.Id</del></td>
+                        <td><del>@genre.Name</del></td>
+                        <td><del>@genre.Description</del></td>
                         <td>
-                            <button class="btn btn-sm btn-primary me-1" @onclick="() => NavigateToEdit(copyright.Id)">Edit</button>
-                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteCopyright(copyright.Id)">Delete</button>
+                            <button class="btn btn-sm btn-primary me-1" @onclick="() => NavigateToEdit(genre.Id)">Edit</button>
+                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteAuthor(genre.Id)">Delete</button>
                         </td>
                     </tr>
                 }
                 else
                 {
                     <tr>
-                        <td>@copyright.Id</td>
-                        <td>@copyright.Name</td>
-                        <td>@copyright.ShortName</td>
-                        <td>@copyright.Description</td>
+                        <td>@genre.Id</td>
+                        <td>@genre.Name</td>
+                        <td>@genre.Description</td>
                         <td>
-                            <button class="btn btn-sm btn-primary me-1" @onclick="() => NavigateToEdit(copyright.Id)">Edit</button>
-                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteCopyright(copyright.Id)">Delete</button>
+                            <button class="btn btn-sm btn-primary me-1" @onclick="() => NavigateToEdit(genre.Id)">Edit</button>
+                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteAuthor(genre.Id)">Delete</button>
                         </td>
                     </tr>
-                    
                 }
-                
+
+
             }
         }
     </tbody>
 </table>
-
 
 <div class="d-flex align-items-center gap-3 mt-3">
     <div class="d-flex align-items-center gap-2">
@@ -100,4 +96,3 @@
     <button class="btn btn-secondary" @onclick="NextPage" disabled="@(!CanNext)">Next</button>
     <button class="btn btn-secondary" @onclick="LastPage" disabled="@((pager.Page == pager.PagesCount))">Last Page</button>
 </div>
-

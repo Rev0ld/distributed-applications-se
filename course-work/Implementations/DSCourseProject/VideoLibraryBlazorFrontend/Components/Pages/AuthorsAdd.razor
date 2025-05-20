@@ -1,0 +1,34 @@
+﻿@page "/authors-add"
+
+
+<EditForm Model="@Author"
+          OnValidSubmit="AddToDataBase">
+    <DataAnnotationsValidator />
+    
+    <div class="mb-3">
+        <label>First Name</label>
+        <InputText @bind-Value="Author.FirstName" class="form-control" />
+        <ValidationMessage For="@(() => Author.FirstName)" />
+    </div>
+
+    <div class="mb-3">
+        <label>Middle Name</label>
+        <InputText @bind-Value="Author.MiddleName" class="form-control" />
+        <ValidationMessage For="@(() => Author.MiddleName)" />
+    </div>
+
+    <div class="mb-3">
+        <label>Last Name</label>
+        <InputText @bind-Value="Author.LastName" class="form-control" />
+        <ValidationMessage For="@(() => Author.LastName)" />
+
+    </div>
+
+    <div class="mb-3">
+        <label>Biography</label>
+        <InputTextArea @bind-Value="Author.Biography" class="form-control" />
+        <ValidationMessage For="@(() => Author.Biography)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>

@@ -25,9 +25,21 @@ namespace VideoLibraryAPI.Controllers
         }
         protected abstract void PopulateEntity(E item, EIM model);
 
-        
+        [HttpGet("{id}")]
+        public IActionResult GetOne(int id)
+        {
+            E item = repo.FirstOrDefault(x => x.Id == id);
+
+            if (item == null)
+            {
+                return NotFound(new { success = false, message = $"Entity with ID {id} not found." });
+            }
+
+            return Ok(new { success = true, data = item });
+        }
+
         [HttpPost("Get")]
-        public IActionResult GetList([FromBody] IndexIM<E, FIM> model)
+        public IActionResult Search([FromBody] IndexIM<E, FIM> model)
         {
             model.Pager ??= new();
             model.Filter ??= new();
@@ -79,6 +91,9 @@ namespace VideoLibraryAPI.Controllers
         public IActionResult Post([FromBody] EIM model)
         {
             E item = new();
+            item.IsDeleted = false;
+            item.CreatedOn = DateTime.UtcNow;
+            item.UpdatedOn = DateTime.UtcNow;
             PopulateEntity(item, model);
 
             repo.Add(item);
@@ -89,7 +104,7 @@ namespace VideoLibraryAPI.Controllers
         public IActionResult Put(int id, [FromBody] EIM model)
         {
             E item = repo.FirstOrDefault(x => x.Id == id);
-            E showOld = item;
+            item.UpdatedOn = DateTime.UtcNow;
 
             if (item == null)
             {
@@ -104,8 +119,7 @@ namespace VideoLibraryAPI.Controllers
                 new
                 {
                     success = true,
-                    updated = item,
-                    old = showOld
+                    updated = item
                 }
                 );
         }
@@ -114,13 +128,24 @@ namespace VideoLibraryAPI.Controllers
         public IActionResult Delete(int id)
         {
             E item = repo.FirstOrDefault(x => x.Id == id);
+            item.UpdatedOn = DateTime.UtcNow;
+
             if (item == null)
             {
                 return NotFound();
             }
 
-            repo.Delete(item);
-            return Ok(item);
+            item.IsDeleted = true;
+
+            repo.Update(item);
+            return Ok
+                (
+                new
+                {
+                    success = true,
+                    updated = item
+                }
+                );
         }
     }
 }

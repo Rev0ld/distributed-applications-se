@@ -30,7 +30,7 @@ namespace VideoLibraryAPI
                     // Audience format {AUDIENCE} for ME-ID tenant type: api://{CLIENT ID}
                     // Audience format {AUDIENCE} for B2C tenant type: https://{DIRECTORY NAME}.onmicrosoft.com/{CLIENT ID}
                     //
-                    jwtOptions.Audience = "api://e6de894a-7857-4ac4-babe-bb5731887f9f";
+                    jwtOptions.Audience = "api://ffadac3f-3d18-4ef8-903b-39f7bdc23957";
                 });
 
             builder.Services.AddAuthorization();

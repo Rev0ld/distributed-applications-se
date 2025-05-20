@@ -1,12 +1,9 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace VideoLibraryAPI.Infrastructure.Author
+namespace VideoLibraryBlazorFrontend.Shared.AuthorsModels
 {
-    public class AuthorIM
-    {   
-        
+    public class AuthorsIM
+    {
         [Required(ErrorMessage = "First Name field is Required")]
         [StringLength(50, ErrorMessage = "First Name cannot be longer than 50 characters")]
         public string? FirstName { get; set; }

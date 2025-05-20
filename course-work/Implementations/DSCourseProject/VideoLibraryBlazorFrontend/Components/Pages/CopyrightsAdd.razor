@@ -1,0 +1,25 @@
+﻿@page "/copyrights-add"
+
+<EditForm Model="@Copyright"
+          OnValidSubmit="AddToDataBase">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label>Name</label>
+        <InputText @bind-Value="Copyright.Name" class="form-control"/>
+        <ValidationMessage For="@(() => Copyright.Name)"/>
+    </div>
+
+    <div class="mb-3">
+        <label>Short Name</label>
+        <InputText @bind-Value="Copyright.ShortName" class="form-control" />
+        <ValidationMessage For="@(() => Copyright.ShortName)" />
+    </div>
+
+    <div class="mb-3">
+        <label>Description</label>
+        <InputText @bind-Value="Copyright.Description" class="form-control" />
+        <ValidationMessage For="@(() => Copyright.Description)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>

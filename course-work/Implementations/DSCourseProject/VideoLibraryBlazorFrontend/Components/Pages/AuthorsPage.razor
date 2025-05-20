@@ -1,0 +1,110 @@
+﻿@page "/authors"
+@inject IJSRuntime JS
+
+<h3>Authors</h3>
+
+
+<div class="filter-form mb-3">
+    <input placeholder="First Name" @bind="filter.FirstName" class="form-control mb-1" />
+    <input placeholder="Middle Name" @bind="filter.MiddleName" class="form-control mb-1" />
+    <input placeholder="Last Name" @bind="filter.LastName" class="form-control mb-1" />
+    <input placeholder="Biography" @bind="filter.Biography" class="form-control mb-1" />
+    <select class="form-control mb-1" style="width: auto;" @bind="filter.OrderBy">
+        @foreach (var item in OrderByOptions)
+        {
+            <option value="@item.Key">
+                @item.Value
+            </option>
+        }
+    </select>
+    <select class="form-control mb-1" style="width: auto;" @bind="filter.OrderDir">
+        @foreach (var item in orderDirOptions)
+        {
+            <option value="@item.Key">
+                @item.Value
+            </option>
+        }
+    </select>
+
+    <button class="btn btn-primary" @onclick="ApplyFilter">Apply Filter</button>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Biography</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Items == null)
+        {
+            <tr><td colspan="6">Loading...</td></tr>
+        }
+        else if (!Items.Any())
+        {
+            <tr><td colspan="6">No authors found.</td></tr>
+        }
+        else
+        {
+            @foreach (var author in Items)
+            {
+                @if (author.IsDeleted)
+                {
+                    <tr>
+                        <td><del>@author.Id</del></td>
+                        <td><del>@author.FirstName</del></td>
+                        <td><del>@author.MiddleName</del></td>
+                        <td><del>@author.LastName</del></td>
+                        <td><del>@author.Biography</del></td>
+                        <td>
+                            <button class="btn btn-sm btn-primary me-1" @onclick="() => NavigateToEdit(author.Id)">Edit</button>
+                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteAuthor(author.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@author.Id</td>
+                        <td>@author.FirstName</td>
+                        <td>@author.MiddleName</td>
+                        <td>@author.LastName</td>
+                        <td>@author.Biography</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary me-1" @onclick="() => NavigateToEdit(author.Id)">Edit</button>
+                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteAuthor(author.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+                
+                
+            }
+        }
+    </tbody>
+</table>
+
+<div class="d-flex align-items-center gap-3 mt-3">
+    <div class="d-flex align-items-center gap-2">
+        <label for="itemsPerPage">Items per page:</label>
+        <select id="itemsPerPage" class="form-select" style="width: auto;" @onchange="ItemsPerPageChanged">
+            @foreach (var count in ItemsPerPageOptions)
+            {
+                <option value="@count" selected="@(pager.ItemsPerPage == count)">
+                    @count
+                </option>
+            }
+        </select>
+    </div>
+    <button class="btn btn-secondary" @onclick="FirstPage" disabled="@((pager.Page == 1))">First Page</button>
+    <button class="btn btn-secondary" @onclick="PrevPage" disabled="@(!CanPrev)">Previous</button>
+    <span>Page @pager.Page of @pager.PagesCount</span>
+    <button class="btn btn-secondary" @onclick="NextPage" disabled="@(!CanNext)">Next</button>
+    <button class="btn btn-secondary" @onclick="LastPage" disabled="@((pager.Page == pager.PagesCount))">Last Page</button>
+</div>
+
+
+

@@ -19,8 +19,8 @@ namespace VideoLibraryAPI.Controllers
         {
             return f =>
                 (string.IsNullOrEmpty(filterModel.Type) || f.Type.Contains(filterModel.Type)) &&
-                (string.IsNullOrEmpty(filterModel.Extension) || f.Type.Contains(filterModel.Extension)) &&
-                (filterModel.IsPhysical.HasValue || f.IsPhysical.Equals(filterModel.IsPhysical));
+                (string.IsNullOrEmpty(filterModel.Extension) || f.Extension.Contains(filterModel.Extension)) &&
+                (!filterModel.IsPhysical.HasValue || f.IsPhysical == filterModel.IsPhysical.Value);
 
         }
     }

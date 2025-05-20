@@ -1,0 +1,23 @@
+﻿@page "/formats-add"
+
+<EditForm Model="@Format"
+          OnValidSubmit="AddToDataBase">
+    <DataAnnotationsValidator/>
+
+    <div class="mb-3">
+        <label>Type</label>
+        <InputText @bind-Value="Format.Type" class="form-control" />
+        <ValidationMessage For="@(() => Format.Type)" />
+    </div>
+    <div class="mb-3">
+        <label>Extension</label>
+        <InputText @bind-Value="Format.Extension" class="form-control" />
+        <ValidationMessage For="@(() => Format.Extension)" />
+    </div>
+    <div class="form-check mb-3">
+        <InputCheckbox @bind-Value="Format.IsPhysical" class="form-check-input"/>
+        <label class="form-check-label" for="isPhysical">Is Physical</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>

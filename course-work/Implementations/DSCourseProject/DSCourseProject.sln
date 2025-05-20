@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoLibraryAPI", "VideoLibraryAPI\VideoLibraryAPI.csproj", "{9B4F3D32-F569-429A-9FB2-B0ABFD9B5129}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoLibraryBlazorFrontend", "VideoLibraryBlazorFrontend\VideoLibraryBlazorFrontend.csproj", "{BF746FCF-94FB-4724-920D-54F4A3697CC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9B4F3D32-F569-429A-9FB2-B0ABFD9B5129}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B4F3D32-F569-429A-9FB2-B0ABFD9B5129}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B4F3D32-F569-429A-9FB2-B0ABFD9B5129}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF746FCF-94FB-4724-920D-54F4A3697CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF746FCF-94FB-4724-920D-54F4A3697CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF746FCF-94FB-4724-920D-54F4A3697CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF746FCF-94FB-4724-920D-54F4A3697CC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "VideoLibrary API",
-    "description": "An ASP.NET Core Web API for managing videos in",
+    "description": "An ASP.NET Core Web API for managing videos in a BLOB storage \n\n Use https://editor-next.swagger.io/ when checking the documentation since its writen in version 3.1.0",
 
     "version": "v1"
   },
@@ -51,6 +51,11 @@
         "tags": [
           "Authors"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Gets a list of Authors",
         "requestBody": {
           "content": {
@@ -79,6 +84,11 @@
       "post": {
         "tags": [
           "Authors"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Creates a new Author",
         "requestBody": {
@@ -132,11 +142,11 @@
                   "properties": {
                     "title": {
                       "type": "string",
-                      "example": "One or more validation errors occurred."
+                      "examples": [ "One or more validation errors occurred." ]
                     },
                     "status": {
                       "type": "integer",
-                      "example": 400
+                      "examples": [ 400 ]
                     },
                     "errors": {
                       "type": "object",
@@ -155,7 +165,7 @@
                     },
                     "traceId": {
                       "type": "string",
-                      "example": "00-81437dff9ead2a366351e5daa440298c-391faf6c3c5f7fd8-00"
+                      "examples": [ "00-81437dff9ead2a366351e5daa440298c-391faf6c3c5f7fd8-00" ]
                     }
                   },
                   "required": [ "title", "status", "errors", "traceId" ]
@@ -167,9 +177,76 @@
       }
     },
     "/api/Authors/{authorId}": {
+      "get": {
+        "summary": "Get a single Author by ID",
+        "description": "Retrieves a specific entity by its unique identifier.",
+        "tags": [ "Authors" ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Numeric ID of the author to retrieve",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Entity found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Authors"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Entity with ID 123 not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "Authors"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Updates a specified Author",
         "parameters": [
@@ -195,7 +272,7 @@
         },
         "responses": {
           "200": {
-            "description": "Author updated successfully",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -307,6 +384,11 @@
         "tags": [
           "Authors"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Deletes a specified Author",
         "parameters": [
           {
@@ -392,10 +474,16 @@
       }
     },
 
+
     "/api/Copyrights/Get": {
       "post": {
         "tags": [
           "Copyrights"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Gets a list of Copyrights",
         "requestBody": {
@@ -425,6 +513,11 @@
       "post": {
         "tags": [
           "Copyrights"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Creates a new Copyright",
         "requestBody": {
@@ -510,9 +603,76 @@
       }
     },
     "/api/Copyrights/{id}": {
+      "get": {
+        "summary": "Get a single copyright by ID",
+        "description": "Retrieves a specific copyright by the ID.",
+        "tags": [ "Copyrights" ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Numeric ID of the copyright to retrieve",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Copyright found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Copyrights"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Author not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Author with ID 123 not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "Copyrights"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Updates a specified Copyright",
         "parameters": [
@@ -643,6 +803,11 @@
         "tags": [
           "Copyrights"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Deletes a specified Copyright",
         "parameters": [
           {
@@ -724,6 +889,11 @@
         "tags": [
           "Formats"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Gets a list of Formats",
         "requestBody": {
           "content": {
@@ -752,6 +922,11 @@
       "post": {
         "tags": [
           "Formats"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Creates a new Format",
         "requestBody": {
@@ -836,9 +1011,76 @@
       }
     },
     "/api/Formats/{id}": {
+      "get": {
+        "summary": "Get a single format by ID",
+        "description": "Retrieves a specific format by their ID.",
+        "tags": [ "Formats" ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Numeric ID of the author to retrieve",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Author found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Formats"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Author not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Author with ID 123 not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "Formats"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Updates a specified Format",
         "parameters": [
@@ -945,6 +1187,11 @@
         "tags": [
           "Formats"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Deletes a specified Format",
         "parameters": [
           {
@@ -1022,6 +1269,11 @@
         "tags": [
           "Genres"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Gets a list of Genres",
         "requestBody": {
           "content": {
@@ -1043,6 +1295,11 @@
       "post": {
         "tags": [
           "Genres"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Creates a new Genre",
         "requestBody": {
@@ -1122,9 +1379,76 @@
       }
     },
     "/api/Genres/{id}": {
+      "get": {
+        "summary": "Get a single genre by ID",
+        "description": "Retrieves a specific genre by their ID.",
+        "tags": [ "Genres" ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Numeric ID of the genre to retrieve",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Genre found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Genres"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Genre not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Author with ID 123 not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "Genres"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Updates a specified Genre",
         "parameters": [
@@ -1231,6 +1555,11 @@
         "tags": [
           "Genres"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Deletes a specified Genre",
         "parameters": [
           {
@@ -1308,6 +1637,11 @@
         "tags": [
           "Tags"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Gets a list of Tags",
         "requestBody": {
           "content": {
@@ -1329,6 +1663,11 @@
       "post": {
         "tags": [
           "Tags"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Creates a new Tag",
         "requestBody": {
@@ -1412,9 +1751,76 @@
       }
     },
     "/api/Tags/{id}": {
+      "get": {
+        "summary": "Get a single tag by ID",
+        "description": "Retrieves a specific tag by their unique identifier.",
+        "tags": [ "Tags" ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Numeric ID of the tag to retrieve",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Tags"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tag not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Tag with ID 123 not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "Tags"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Updates a specified Tag",
         "parameters": [
@@ -1521,6 +1927,11 @@
         "tags": [
           "Tags"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Deletes a specified Tag",
         "parameters": [
           {
@@ -1597,6 +2008,11 @@
         "tags": [
           "Video"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Gets a list of Videos",
         "requestBody": {
           "content": {
@@ -1618,6 +2034,11 @@
       "post": {
         "tags": [
           "Video"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Creates a new Video",
         "requestBody": {
@@ -1755,9 +2176,76 @@
       }
     },
     "/api/Video/{id}": {
+      "get": {
+        "summary": "Get a single video by ID",
+        "description": "Retrieves a specific genre by their unique identifier.",
+        "tags": [ "Video" ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Numeric ID of the video to retrieve",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Video found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Videos"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Genre not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Video with ID 123 not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "Video"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Updates a specified Video",
         "parameters": [
@@ -1921,6 +2409,11 @@
       "delete": {
         "tags": [
           "Video"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Deletes a specified Video",
         "parameters": [
@@ -2093,6 +2586,11 @@
         "tags": [
           "Video-Authors"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Gets a list of Authors with connection with the specified video",
         "parameters": [
           {
@@ -2127,6 +2625,11 @@
       "post": {
         "tags": [
           "Video-Authors"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Adds an Author to the specified Video",
         "parameters": [
@@ -2222,6 +2725,11 @@
       "delete": {
         "tags": [
           "Video-Authors"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Removes an Author from the specified video",
         "parameters": [
@@ -2323,6 +2831,11 @@
         "tags": [
           "Video-Genres"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Gets a list of Genres with connection with the specified Video",
         "parameters": [
           {
@@ -2355,6 +2868,11 @@
       "post": {
         "tags": [
           "Video-Genres"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Adds a Genre to the specified Video",
         "parameters": [
@@ -2449,6 +2967,11 @@
       "delete": {
         "tags": [
           "Video-Genres"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Removes a Genre from the specified Video",
         "parameters": [
@@ -2547,6 +3070,11 @@
         "tags": [
           "Video-Tags"
         ],
+        "security": [
+          {
+            "EntraID": []
+          }
+        ],
         "summary": "Gets a list of Tags with connection with the specified Video",
         "parameters": [
           {
@@ -2579,6 +3107,11 @@
       "post": {
         "tags": [
           "Video-Tags"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Adds a Tag to the specified Video",
         "parameters": [
@@ -2674,6 +3207,11 @@
       "delete": {
         "tags": [
           "Video-Tags"
+        ],
+        "security": [
+          {
+            "EntraID": []
+          }
         ],
         "summary": "Removes a Tag from the specified Video",
         "parameters": [
@@ -3957,6 +4495,25 @@
         },
         "additionalProperties": false
       }
-    }
+    },
+    "securitySchemes": {
+      "EntraID": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://login.microsoftonline.com/{tenant-id}/oauth2/v2.0/authorize",
+            "tokenUrl": "https://login.microsoftonline.com/{tenant-id}/oauth2/v2.0/token",
+            "scopes": {
+              "api://your-client-id/.default": "Access the API as the signed-in user"
+            }
+          }
+        }
+      }
+    },
+    "security": [
+      {
+        "EntraID": []
+      }
+    ]
   }
 }

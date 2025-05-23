@@ -19,7 +19,6 @@ namespace VideoLibraryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class VideoController : BaseCRUDApiController<Videos, VideoIM, VideoFilterIM>
     {
         protected override void PopulateEntity(Videos item, VideoIM model)
@@ -36,14 +35,22 @@ namespace VideoLibraryAPI.Controllers
         protected override Expression<Func<Videos, bool>> GetFilter(VideoFilterIM filterModel)
         {
             return v =>
-            (string.IsNullOrEmpty(filterModel.Title) || v.Title.Contains(filterModel.Title)) &&
-            (string.IsNullOrEmpty(filterModel.FileId) || v.FileId.Contains(filterModel.FileId)) &&
-            (!filterModel.Size.HasValue || v.Size == filterModel.Size) &&
-            (!filterModel.YearOfPublishing.HasValue || v.YearOfPublishing == filterModel.YearOfPublishing) &&
-            (string.IsNullOrEmpty(filterModel.AuthorFirstName) || v.Authors.Any(av => string.IsNullOrEmpty(filterModel.AuthorFirstName) || av.Author.FirstName.Contains(filterModel.AuthorFirstName))) &&
-            (string.IsNullOrEmpty(filterModel.AuthorFirstName) || v.Authors.Any(av => string.IsNullOrEmpty(filterModel.AuthorFirstName) || av.Author.FirstName.Contains(filterModel.AuthorFirstName))) &&
-            (string.IsNullOrEmpty(filterModel.AuthorFirstName) || v.Authors.Any(av => string.IsNullOrEmpty(filterModel.AuthorFirstName) || av.Author.FirstName.Contains(filterModel.AuthorFirstName)))
-            ;
+        (string.IsNullOrEmpty(filterModel.Title) || v.Title.Contains(filterModel.Title)) &&
+        (string.IsNullOrEmpty(filterModel.FileId) || v.FileId.Contains(filterModel.FileId)) &&
+        (!filterModel.Size.HasValue || v.Size == filterModel.Size) &&
+        (!filterModel.YearOfPublishing.HasValue || v.YearOfPublishing == filterModel.YearOfPublishing) &&
+        (string.IsNullOrEmpty(filterModel.Description) || v.Description.Contains(filterModel.Description)) &&
+
+        (string.IsNullOrEmpty(filterModel.FormatExtension) || v.Format.Extension.Contains(filterModel.FormatExtension)) &&
+        (!filterModel.FormatIsPhysical.HasValue || v.Format.IsPhysical == filterModel.FormatIsPhysical) &&
+
+        (string.IsNullOrEmpty(filterModel.CopyrightShortName) || v.Copyright.Name.Contains(filterModel.CopyrightShortName)) &&
+
+        (string.IsNullOrEmpty(filterModel.AuthorFirstName) || v.Authors.Any(av => av.Author.FirstName.Contains(filterModel.AuthorFirstName))) &&
+        (string.IsNullOrEmpty(filterModel.AuthorMiddleName) || v.Authors.Any(av => av.Author.MiddleName.Contains(filterModel.AuthorMiddleName))) &&
+        (string.IsNullOrEmpty(filterModel.AuthorLastName) || v.Authors.Any(av => av.Author.LastName.Contains(filterModel.AuthorLastName))) &&
+
+        (string.IsNullOrEmpty(filterModel.GenreName) || v.Genres.Any(gv => gv.Genre.Name.Contains(filterModel.GenreName)));
         }
 
         protected Expression<Func<AuthorVideo, bool>> GetFilterAuthorVideo(AuthorFilterIM filterModel, int id)

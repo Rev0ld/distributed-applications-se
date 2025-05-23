@@ -1,0 +1,216 @@
+﻿@page "/videos-add"
+
+<EditForm Model="@Video"
+          OnValidSubmit="AddToDataBase">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label>Title</label>
+        <InputText @bind-Value="Video.Title" class="form-control" />
+        <ValidationMessage For="@(() => Video.Title)" />
+    </div>
+    <div class="mb-3">
+        <label>File ID</label>
+        <InputText @bind-Value="Video.FileId" class="form-control" />
+        <ValidationMessage For="@(() => Video.FileId)" />
+    </div>
+    <div class="mb-3">
+        <label>Size (MB)</label>
+        <InputNumber @bind-Value="Video.Size" class="form-control" min="0" />
+        <ValidationMessage For="@(() => Video.Size)" />
+    </div>
+    <div class="mb-3">
+        <label>Description</label>
+        <InputText @bind-Value="Video.Description" class="form-control" />
+        <ValidationMessage For="@(() => Video.Description)" />
+    </div>
+    <div class="mb-3">
+        <label>Year of Publishing</label>
+        <InputDate @bind-Value="Video.YearOfPublishing"
+                   class="form-control" />
+        <ValidationMessage For="@(() => Video.YearOfPublishing)" />
+    </div>
+
+    
+    
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+<div style="border: solid 2px">
+    <div class="filter-form mb-3">
+        <input placeholder="Type" @bind="formatsFilter.Type" class="form-control mb-1" />
+        <input placeholder="Extension" @bind="formatsFilter.Extension" class="form-control mb-1" />
+        <select class="form-control mb-1" style="width: auto;" @bind="formatsIsPhysicalSelection">
+            @foreach (var item in IsPhysicalOptions)
+            {
+                <option value="@item.Key">@item.Value</option>
+            }
+        </select>
+
+        <select class="form-control mb-1" style="width: auto;" @bind="formatsFilter.OrderBy">
+            @foreach (var item in OrderByFormatOptions)
+            {
+                <option value="@item.Key">@item.Value</option>
+            }
+        </select>
+
+        <select class="form-control mb-1" style="width: auto;" @bind="formatsFilter.OrderDir">
+            @foreach (var item in OrderDirOptions)
+            {
+                <option value="@item.Key">@item.Value</option>
+            }
+        </select>
+
+        <button class="btn btn-primary" @onclick="ApplyFormatsFilter">Apply Filter</button>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Extension</th>
+                <th>Is Physical</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (formatsItems == null)
+            {
+                <tr><td colspan="5">Loading...</td></tr>
+            }
+            else if (!formatsItems.Any())
+            {
+                <tr><td colspan="5">No formats found.</td></tr>
+            }
+            else
+            {
+                @foreach (var format in formatsItems)
+                {
+                    <tr>
+                        <td>@format.Id</td>
+                        <td>@format.Type</td>
+                        <td>@format.Extension</td>
+                        <td>@format.IsPhysical</td>
+                        <td>
+                            <button class="btn btn-sm btn-success" @onclick="() => SelectFormat(format.Id)">Select</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="d-flex align-items-center gap-3 mt-3">
+        <div class="d-flex align-items-center gap-2">
+            <label for="formatsItemsPerPage">Items per page:</label>
+            <select id="formatsItemsPerPage" class="form-select" style="width: auto;" @onchange="FormatsItemsPerPageChanged">
+                @foreach (var count in ItemsPerPageOptions)
+                {
+                    <option value="@count" selected="@(formatsPager.ItemsPerPage == count)">@count</option>
+                }
+            </select>
+        </div>
+
+        <button class="btn btn-secondary" @onclick="FormatsFirstPage" disabled="@(formatsPager.Page == 1)">First Page</button>
+        <button class="btn btn-secondary" @onclick="FormatsPrevPage" disabled="@(formatsPager.Page == 1)">Previous</button>
+        <span>Page @formatsPager.Page of @formatsPager.PagesCount</span>
+        <button class="btn btn-secondary" @onclick="FormatsNextPage" disabled="@(formatsPager.Page == formatsPager.PagesCount)">Next</button>
+        <button class="btn btn-secondary" @onclick="FormatsLastPage" disabled="@(formatsPager.Page == formatsPager.PagesCount)">Last Page</button>
+    </div>
+</div>
+<div style="border: solid 2px">
+    <div class="filter-form mb-3">
+        <input placeholder="Name" @bind="copyrightFilter.Name" class="form-control mb-1" />
+        <input placeholder="Short Name" @bind="copyrightFilter.ShortName" class="form-control mb-1" />
+        <input placeholder="Description" @bind="copyrightFilter.Description" class="form-control mb-1" />
+
+        <select class="form-control mb-1" style="width: auto;" @bind="copyrightFilter.OrderBy">
+            @foreach (var item in OrderByCopyrightOptions)
+            {
+                <option value="@item.Key">
+                    @item.Value
+                </option>
+            }
+        </select>
+        <select class="form-control mb-1" style="width: auto;" @bind="copyrightFilter.OrderDir">
+            @foreach (var item in OrderDirOptions)
+            {
+                <option value="@item.Key">
+                    @item.Value
+                </option>
+            }
+        </select>
+
+        <button class="btn btn-primary" @onclick="ApplyCopyrightFilter">Apply Copyright</button>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Short Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (copyrightItems == null)
+            {
+                <tr><td colspan="5">Loading...</td></tr>
+            }
+            else if (!copyrightItems.Any())
+            {
+                <tr><td colspan="5">No copyrights found.</td></tr>
+            }
+            else
+            {
+                @foreach (var copyright in copyrightItems)
+                {
+                    @if (copyright.IsDeleted)
+                    {
+                        <tr>
+                            <td><del>@copyright.Id</del></td>
+                            <td><del>@copyright.Name</del></td>
+                            <td><del>@copyright.ShortName</del></td>
+                            <td><del>@copyright.Description</del></td>
+                            <td>
+                                <button class="btn btn-sm btn-success" @onclick="() => SelectCopyright(copyright.Id)">Select</button>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@copyright.Id</td>
+                            <td>@copyright.Name</td>
+                            <td>@copyright.ShortName</td>
+                            <td>@copyright.Description</td>
+                            <td>
+                                <button class="btn btn-sm btn-success" @onclick="() => SelectCopyright(copyright.Id)">Select</button>
+                            </td>
+                        </tr>
+
+                    }
+
+                }
+            }
+        </tbody>
+    </table>
+    <div class="d-flex align-items-center gap-3 mt-3">
+        <div class="d-flex align-items-center gap-2">
+            <label for="copyrightItemsPerPage">Items per page:</label>
+            <select id="copyrightItemsPerPage" class="form-select" style="width: auto;" @onchange="CopyrightItemsPerPageChanged">
+                @foreach (var count in ItemsPerPageOptions)
+                {
+                    <option value="@count" selected="@(copyrightPager.ItemsPerPage == count)">@count</option>
+                }
+            </select>
+        </div>
+
+        <button class="btn btn-secondary" @onclick="CopyrightFirstPage" disabled="@(copyrightPager.Page == 1)">First Page</button>
+        <button class="btn btn-secondary" @onclick="CopyrightPrevPage" disabled="@(copyrightPager.Page == 1)">Previous</button>
+        <span>Page @copyrightPager.Page of @copyrightPager.PagesCount</span>
+        <button class="btn btn-secondary" @onclick="CopyrightNextPage" disabled="@(copyrightPager.Page == copyrightPager.PagesCount)">Next</button>
+        <button class="btn btn-secondary" @onclick="CopyrightLastPage" disabled="@(copyrightPager.Page == copyrightPager.PagesCount)">Last Page</button>
+    </div>
+</div>
+

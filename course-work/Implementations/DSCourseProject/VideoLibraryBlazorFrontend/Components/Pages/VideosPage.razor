@@ -1,0 +1,135 @@
+﻿@page "/videos"
+
+<h3>Videos</h3>
+
+
+<div class="filter-form mb-3">
+    <input placeholder="Title" @bind="filter.Title" class="form-control mb-1" />
+    <input placeholder="File Id" @bind="filter.FileId" class="form-control mb-1" />
+    <input placeholder="Format Extension" @bind="filter.FormatExtension" class="form-control mb-1" />
+    <select class="form-control mb-1" style="width: auto;" @bind="IsPhysicalSelection">
+        @foreach (var item in IsPhysicalOptions)
+        {
+            <option value="@item.Key">@item.Value</option>
+        }
+    </select>
+    <input type="number" placeholder="Size (MB)" @bind="filter.Size" min="0" class="form-control mb-1" />
+    <input placeholder="Description" @bind="filter.Description" class="form-control mb-1" />
+    <input type="date" @bind="filter.YearOfPublishing" class="form-control mb-1" />
+    <input placeholder="Copyright Short Name" @bind="filter.CopyrightShortName" class="form-control mb-1" />
+    <input placeholder="Author First Name" @bind="filter.AuthorFirstName" class="form-control mb-1" />
+    <input placeholder="Author Middle Name" @bind="filter.AuthorMiddleName" class="form-control mb-1" />
+    <input placeholder="Author Last Name" @bind="filter.AuthorLastName" class="form-control mb-1" />
+    <input placeholder="Genre Name" @bind="filter.GenreName" class="form-control mb-1" />
+
+    <select class="form-control mb-1" style="width: auto;" @bind="filter.OrderBy">
+        @foreach (var item in OrderByOptions)
+        {
+            <option value="@item.Key">
+                @item.Value
+            </option>
+        }
+    </select>
+    <select class="form-control mb-1" style="width: auto;" @bind="filter.OrderDir">
+        @foreach (var item in orderDirOptions)
+        {
+            <option value="@item.Key">
+                @item.Value
+            </option>
+        }
+    </select>
+
+    <button class="btn btn-primary" @onclick="ApplyFilter">Apply Filter</button>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>File ID</th>
+            <th>Extension</th>
+            <th>Is Physical</th>
+            <th>Size</th>
+            <th>Description</th>
+            <th>Year Of Publishing</th>
+            <th>Copyright code</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Items == null)
+        {
+            <tr><td colspan="10">Loading...</td></tr>
+        }
+        else if (!Items.Any())
+        {
+            <tr><td colspan="10">No videos found.</td></tr>
+        }
+        else
+        {
+            @foreach (var video in Items)
+            {
+                @if (video.IsDeleted)
+                {
+                    <tr>
+                        <td><del>@video.Id</del></td>
+                        <td><del>@video.Title</del></td>
+                        <td><del>@video.FileId</del></td>
+                        <td><del>@video.Format.Extension</del></td>
+                        <td><del>@video.Format.IsPhysical</del></td>
+                        <td><del>@video.Size</del></td>
+                        <td><del>@video.Description</del></td>
+                        <td><del>@video.YearOfPublishing</del></td>
+                        <td><del>@video.Copyright.ShortName</del></td>
+                        
+                        <td>
+                            <button class="btn btn-sm btn-primary me-1" @onclick="() => NavigateToEdit(video.Id)">Edit</button>
+                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteVideo(video.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@video.Id</td>
+                        <td>@video.Title</td>
+                        <td>@video.FileId</td>
+                        <td>@video.Format.Extension</td>
+                        <td>@video.Format.IsPhysical</td>
+                        <td>@video.Size</td>
+                        <td>@video.Description</td>
+                        <td>@video.YearOfPublishing</td>
+                        <td>@video.Copyright.ShortName</td>
+
+                        <td>
+                            <button class="btn btn-sm btn-primary me-1" @onclick="() => NavigateToEdit(video.Id)">Edit</button>
+                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteVideo(video.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+
+
+            }
+        }
+    </tbody>
+</table>
+
+<div class="d-flex align-items-center gap-3 mt-3">
+    <div class="d-flex align-items-center gap-2">
+        <label for="itemsPerPage">Items per page:</label>
+        <select id="itemsPerPage" class="form-select" style="width: auto;" @onchange="ItemsPerPageChanged">
+            @foreach (var count in ItemsPerPageOptions)
+            {
+                <option value="@count" selected="@(pager.ItemsPerPage == count)">
+                    @count
+                </option>
+            }
+        </select>
+    </div>
+    <button class="btn btn-secondary" @onclick="FirstPage" disabled="@((pager.Page == 1))">First Page</button>
+    <button class="btn btn-secondary" @onclick="PrevPage" disabled="@(!CanPrev)">Previous</button>
+    <span>Page @pager.Page of @pager.PagesCount</span>
+    <button class="btn btn-secondary" @onclick="NextPage" disabled="@(!CanNext)">Next</button>
+    <button class="btn btn-secondary" @onclick="LastPage" disabled="@((pager.Page == pager.PagesCount))">Last Page</button>
+</div>

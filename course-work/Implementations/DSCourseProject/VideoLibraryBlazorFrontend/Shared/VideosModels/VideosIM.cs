@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace VideoLibraryAPI.Infrastructure.Video
+namespace VideoLibraryBlazorFrontend.Shared.VideosModels
 {
-    public class VideoIM
+    public class VideosIM
     {
         [Required(ErrorMessage = "This field is Required")]
         public string Title { get; set; }

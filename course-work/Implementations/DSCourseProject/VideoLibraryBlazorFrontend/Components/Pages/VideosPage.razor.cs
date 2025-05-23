@@ -1,15 +1,13 @@
 using Common.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Text.Json.Serialization;
 using VideoLibraryBlazorFrontend.Shared;
 using VideoLibraryBlazorFrontend.Shared.AuthorsModels;
-using static System.Net.WebRequestMethods;
-using static VideoLibraryBlazorFrontend.Components.Pages.Home;
+using VideoLibraryBlazorFrontend.Shared.VideosModels;
 
 namespace VideoLibraryBlazorFrontend.Components.Pages
 {
-    public partial class AuthorsPage
+    public partial class VideosPage
     {
         [Inject]
         public NavigationManager NavManager { get; set; }
@@ -19,48 +17,48 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
         [Inject]
         IJSRuntime JS { get; set; }
 
-
         private Pager pager = new();
-        private AuthorsFilter filter = new();
-        private List<Authors> Items = new();
+        private VideosFilter filter = new();
+        private List<Videos> Items= new();
 
-        private int[] ItemsPerPageOptions = new[] { 1,5, 10, 20, 50 };
-        private Dictionary<string, string> OrderByOptions = new() 
+        private int[] ItemsPerPageOptions = new[] { 1, 5, 10, 20, 50 };
+        private Dictionary<string, string> OrderByOptions = new()
         {
-            { "id", "Default (ID)"},
-            { "FirstName", "First Name" },
-            { "MiddleName", "Middle Name" },
-            { "LastName", "Last Name" },
-            { "Biography", "Biography" }
+            { "id", "Default (ID)"}
         };
-        private Dictionary<string, string> orderDirOptions = new() 
-        { 
-            { "desc", "Descending" }, 
-            { "asc", "Ascending" } 
+        private Dictionary<string, string> orderDirOptions = new()
+        {
+            { "desc", "Descending" },
+            { "asc", "Ascending" }
         };
-        
+        private Dictionary<string, string> IsPhysicalOptions = new()
+        {
+            { "", "All" },
+            { "true", "Physical" },
+            { "false", "Digital" }
+        };
 
         private bool CanPrev => pager.Page > 1;
         private bool CanNext => pager.Page < pager.PagesCount;
 
         protected override async Task OnInitializedAsync()
         {
-            await LoadAuthors();
+            await LoadVideos();
         }
 
-        private async Task LoadAuthors()
+        private async Task LoadVideos()
         {
-            var request = new IndexRequestModel<AuthorsFilter>
+            var request = new IndexRequestModel<VideosFilter>
             {
                 Pager = pager,
                 Filter = filter
             };
 
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Authors/get", request);
-
+            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Video/get", request);
+            Console.WriteLine(response.Content.ReadAsStringAsync().Result);
             if (response.IsSuccessStatusCode)
-             {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Authors, AuthorsFilter>>>();
+            {
+                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Videos, VideosFilter>>>();
 
                 if (result?.Success == true)
                 {
@@ -71,46 +69,46 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             }
             else
             {
-            
+
             }
         }
 
-        private async Task DeleteAuthor(int id) 
+        private async Task DeleteVideo(int id)
         {
             var confirm = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to delete this author?");
 
-            if (!confirm) 
+            if (!confirm)
             {
                 return;
             }
-            var response = await HttpClient.DeleteAsync($"https://localhost:7209/api/Authors/{id}");
+            var response = await HttpClient.DeleteAsync($"https://localhost:7209/api/Video/{id}");
             if (response.IsSuccessStatusCode)
             {
-                await LoadAuthors();
+                await LoadVideos();
             }
         }
         private void NavigateToEdit(int id)
         {
-            NavManager.NavigateTo($"/authors/edit/{id}");
+            NavManager.NavigateTo($"/videos/edit/{id}");
         }
 
         private async Task ApplyFilter()
         {
             pager.Page = 1;
-            await LoadAuthors();
+            await LoadVideos();
         }
         private async Task FirstPage()
         {
-                pager.Page = 1;
-                await LoadAuthors();
-            
+            pager.Page = 1;
+            await LoadVideos();
+
         }
         private async Task PrevPage()
         {
             if (CanPrev)
             {
                 pager.Page--;
-                await LoadAuthors();
+                await LoadVideos();
             }
         }
 
@@ -119,14 +117,29 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             if (CanNext)
             {
                 pager.Page++;
-                await LoadAuthors();
+                await LoadVideos();
             }
         }
         private async Task LastPage()
         {
             pager.Page = pager.PagesCount;
-            await LoadAuthors();
+            await LoadVideos();
 
+        }
+        private string? IsPhysicalSelection
+        {
+            get => filter.FormatIsPhysical?.ToString().ToLower();
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    filter.FormatIsPhysical = null;
+                }
+                else if (bool.TryParse(value, out var result))
+                {
+                    filter.FormatIsPhysical = result;
+                }
+            }
         }
 
         private async Task ItemsPerPageChanged(ChangeEventArgs e)
@@ -135,10 +148,8 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             {
                 pager.ItemsPerPage = newCount;
                 pager.Page = 1;
-                await LoadAuthors();
+                await LoadVideos();
             }
         }
-
-
     }
 }

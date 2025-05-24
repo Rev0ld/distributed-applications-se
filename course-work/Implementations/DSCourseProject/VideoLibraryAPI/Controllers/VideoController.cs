@@ -138,17 +138,17 @@ namespace VideoLibraryAPI.Controllers
                 }
                 );
         }
-        [HttpPost("author/{videoId}")]
-        public IActionResult AddAuthor(int videoId, [FromBody] AuthorVideoIM model)
+        [HttpPost("author/{videoId}/{authorId}")]
+        public IActionResult AddAuthor(int videoId, int authorId)
         {
             BaseRepository<AuthorVideo> authorVideoRepo = new();
             BaseRepository<Authors> authorRepo = new();
             BaseRepository<Videos> videoRepo = new();
 
-            if (authorRepo.GetAll(x => x.Id == model.AuthorId).Any() && videoRepo.GetAll(x => x.Id == videoId).Any())
+            if (authorRepo.GetAll(x => x.Id == authorId).Any() && videoRepo.GetAll(x => x.Id == videoId).Any())
             {
                 AuthorVideo authorVideo = new();
-                authorVideo.AuthorId = model.AuthorId;
+                authorVideo.AuthorId = authorId;
                 authorVideo.VideoId = videoId;
 
                 authorVideoRepo.Add(authorVideo);
@@ -271,17 +271,17 @@ namespace VideoLibraryAPI.Controllers
                 );
         }
 
-        [HttpPost("genre/{videoId}")]
-        public IActionResult AddGenre(int videoId, [FromBody] GenreVideoIM model)
+        [HttpPost("genre/{videoId}/{genreId}")]
+        public IActionResult AddGenre(int videoId, int genreId)
         {
             BaseRepository<GenreVideo> genreVideoRepo = new();
             BaseRepository<Genres> genreRepo = new();
             BaseRepository<Videos> videoRepo = new();
 
-            if (genreRepo.GetAll(x => x.Id == model.GenreId).Any() && videoRepo.GetAll(x => x.Id == videoId).Any())
+            if (genreRepo.GetAll(x => x.Id == genreId).Any() && videoRepo.GetAll(x => x.Id == videoId).Any())
             {
                 GenreVideo genreVideo = new();
-                genreVideo.GenreId = model.GenreId;
+                genreVideo.GenreId = genreId;
                 genreVideo.VideoId = videoId;
 
                 genreVideoRepo.Add(genreVideo);
@@ -403,18 +403,18 @@ namespace VideoLibraryAPI.Controllers
                 );
         }
 
-        [HttpPost("tag/{videoId}")]
-        public IActionResult Addtag(int videoId, [FromBody] TagVideoIM model)
+        [HttpPost("tag/{videoId}/{tagId}")]
+        public IActionResult Addtag(int videoId, int tagId)
         {
             BaseRepository<TagVideo> tagVideoRepo = new();
             BaseRepository<Tags> tagRepo = new();
             BaseRepository<Videos> videoRepo = new();
 
-            if (tagRepo.GetAll(x => x.Id == model.TagId).Any() && videoRepo.GetAll(x => x.Id == videoId).Any())
+            if (tagRepo.GetAll(x => x.Id == tagId).Any() && videoRepo.GetAll(x => x.Id == videoId).Any())
             {
                 TagVideo tagVideo = new();
 
-                tagVideo.TagId = model.TagId;
+                tagVideo.TagId = tagId;
                 tagVideo.VideoId = videoId;
 
                 tagVideoRepo.Add(tagVideo);

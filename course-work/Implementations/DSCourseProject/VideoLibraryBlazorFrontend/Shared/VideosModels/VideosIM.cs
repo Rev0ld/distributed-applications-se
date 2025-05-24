@@ -15,6 +15,7 @@ namespace VideoLibraryBlazorFrontend.Shared.VideosModels
         public int Size { get; set; }
 
         [Required(ErrorMessage = "This field is Required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a format.")]
         public int FormatId { get; set; }
 
         [Required(ErrorMessage = "This field is Required")]
@@ -24,6 +25,7 @@ namespace VideoLibraryBlazorFrontend.Shared.VideosModels
         public DateTime YearOfPublishing { get; set; }
 
         [Required(ErrorMessage = "This field is Required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a copyright.")]
         public int CopyrightId { get; set; }
     }
 }

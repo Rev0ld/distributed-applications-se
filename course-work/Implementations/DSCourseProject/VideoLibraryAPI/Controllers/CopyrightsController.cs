@@ -1,4 +1,5 @@
 ﻿using Common.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using VideoLibraryAPI.Infrastructure.Copyright;
@@ -7,6 +8,7 @@ namespace VideoLibraryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CopyrightsController : BaseCRUDApiController<Copyrights, CopyrightIM, CopyrightFilterIM>
     {
         protected override void PopulateEntity(Copyrights item, CopyrightIM model)

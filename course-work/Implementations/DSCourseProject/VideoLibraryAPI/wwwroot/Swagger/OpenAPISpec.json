@@ -4501,10 +4501,10 @@
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://login.microsoftonline.com/{tenant-id}/oauth2/v2.0/authorize",
-            "tokenUrl": "https://login.microsoftonline.com/{tenant-id}/oauth2/v2.0/token",
+            "authorizationUrl": "https://login.microsoftonline.com/f68e025c-940a-4eaf-8cc3-d486d95844a2/oauth2/v2.0/authorize",
+            "tokenUrl": "https://login.microsoftonline.com/f68e025c-940a-4eaf-8cc3-d486d95844a2/oauth2/v2.0/token",
             "scopes": {
-              "api://your-client-id/.default": "Access the API as the signed-in user"
+              "api://e6de894a-7857-4ac4-babe-bb5731887f9f/Weather.Get": "Access the API as the signed-in user"
             }
           }
         }

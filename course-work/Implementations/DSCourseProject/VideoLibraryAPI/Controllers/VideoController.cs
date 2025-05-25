@@ -19,6 +19,7 @@ namespace VideoLibraryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class VideoController : BaseCRUDApiController<Videos, VideoIM, VideoFilterIM>
     {
         protected override void PopulateEntity(Videos item, VideoIM model)
@@ -521,7 +522,7 @@ namespace VideoLibraryAPI.Controllers
         }
 
         [HttpPost("tag/{videoId}/{tagId}")]
-        public IActionResult Addtag(int videoId, int tagId)
+        public IActionResult AddTag(int videoId, int tagId)
         {
             BaseRepository<TagVideo> tagVideoRepo = new();
             BaseRepository<Tags> tagRepo = new();
@@ -559,7 +560,7 @@ namespace VideoLibraryAPI.Controllers
         }
 
         [HttpPost("tag/update/{videoId}/")]
-        public IActionResult UpdatTags(int videoId, [FromBody] List<int> tagIds)
+        public IActionResult UpdateTags(int videoId, [FromBody] List<int> tagIds)
         {
             BaseRepository<TagVideo> tagVideoRepo = new();
             BaseRepository<Videos> videoRepo = new();

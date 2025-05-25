@@ -11,7 +11,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        
+
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
 
@@ -25,22 +25,19 @@ public class Program
 
         builder.Services.AddAuthorization();
 
-
-        builder.Services.AddAuthorization();
-
         builder.Services.AddHttpClient();
 
-        builder.Services.AddHttpClient("ApiClient", client =>
+        builder.Services.AddScoped<ApiAuthorizationHandler>();
+
+        builder.Services.AddHttpClient("AuthorizedApiClient", client =>
         {
             client.BaseAddress = new Uri(builder.Configuration["DownstreamApi:BaseUrl"]!);
-        });
+        })
+        .AddHttpMessageHandler<ApiAuthorizationHandler>();
 
-        //builder.Services.AddScoped<ApiAuthorizationHandler>();
-        //builder.Services.AddHttpClient("AuthorizedApiClient")
-        //    .AddHttpMessageHandler<ApiAuthorizationHandler>();
+        builder.Services.AddScoped(sp =>
+            sp.GetRequiredService<IHttpClientFactory>().CreateClient("AuthorizedApiClient"));
 
-        //builder.Services.AddScoped(sp =>
-        //    sp.GetRequiredService<IHttpClientFactory>().CreateClient("ApiClient"));
 
         var app = builder.Build();
 

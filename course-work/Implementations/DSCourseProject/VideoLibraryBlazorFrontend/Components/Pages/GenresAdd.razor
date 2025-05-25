@@ -1,4 +1,5 @@
 ﻿@page "/genres-add"
+@attribute [Authorize]
 
 <EditForm Model="@Genre"
           OnValidSubmit="AddToDataBase">

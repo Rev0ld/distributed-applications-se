@@ -6,22 +6,4 @@
 
 Welcome to your new app.
 
-@if (authors is not null)
-{
-    @for (int i = 0; i < authors.Count; i++)
-    {
-        <br>
-        <label>Author @(i+1)</label>
-        <br>
-        @authors[i].Id; 
-        <br>
-        @authors[i].FirstName
-        <br>
-        @authors[i].MiddleName
-        <br>
-        @authors[i].LastName
-        <br>
-        <label>---</label>
-    }
-}
 

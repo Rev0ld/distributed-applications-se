@@ -1,4 +1,5 @@
 ﻿@page "/authors/edit/{AuthorID:int}"
+@attribute [Authorize]
 
 @if (Author == null)
 {

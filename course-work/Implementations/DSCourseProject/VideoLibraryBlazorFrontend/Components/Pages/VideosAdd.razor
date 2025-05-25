@@ -1,4 +1,5 @@
 ﻿@page "/videos-add"
+@attribute [Authorize]
 
 <EditForm Model="@Video"
 OnValidSubmit="AddToDataBase">

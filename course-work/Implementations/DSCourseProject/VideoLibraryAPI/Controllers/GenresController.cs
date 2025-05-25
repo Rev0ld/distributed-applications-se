@@ -1,4 +1,5 @@
 ﻿using Common.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using VideoLibraryAPI.Infrastructure.Genre;
@@ -7,6 +8,7 @@ namespace VideoLibraryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class GenresController : BaseCRUDApiController<Genres, GenreIM, GenreFilterIM>
     {
         protected override void PopulateEntity(Genres item, GenreIM model)

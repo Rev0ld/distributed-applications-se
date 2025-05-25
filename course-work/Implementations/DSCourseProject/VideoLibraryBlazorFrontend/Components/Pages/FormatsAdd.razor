@@ -1,4 +1,5 @@
 ﻿@page "/formats-add"
+@attribute [Authorize]
 
 <EditForm Model="@Format"
           OnValidSubmit="AddToDataBase">

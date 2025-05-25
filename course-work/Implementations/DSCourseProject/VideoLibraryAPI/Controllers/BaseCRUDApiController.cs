@@ -1,5 +1,6 @@
 ﻿using Common.Entities;
 using Common.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.HostFiltering;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,8 @@ namespace VideoLibraryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public abstract class BaseCRUDApiController<E, EIM, FIM> : ControllerBase
         where E : BaseEntity, new()
         where FIM : FilterIM, new()

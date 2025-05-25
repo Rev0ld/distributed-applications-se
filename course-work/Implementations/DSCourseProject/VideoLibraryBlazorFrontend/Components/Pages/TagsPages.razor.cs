@@ -1,5 +1,6 @@
 using Common.Entities;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Identity.Abstractions;
 using Microsoft.JSInterop;
 using VideoLibraryBlazorFrontend.Shared;
 using VideoLibraryBlazorFrontend.Shared.AuthorsModels;

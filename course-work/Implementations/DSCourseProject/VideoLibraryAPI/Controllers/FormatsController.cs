@@ -1,4 +1,5 @@
 ﻿using Common.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using VideoLibraryAPI.Infrastructure.Format;
@@ -7,6 +8,7 @@ namespace VideoLibraryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FormatsController : BaseCRUDApiController<Formats, FormatIM, FormatFilterIM>
     {
         protected override void PopulateEntity(Formats item, FormatIM model)

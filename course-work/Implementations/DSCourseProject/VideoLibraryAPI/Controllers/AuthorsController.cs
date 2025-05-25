@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
+using Microsoft.AspNetCore.Authorization;
 
 namespace VideoLibraryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthorsController : BaseCRUDApiController<Authors, AuthorIM, AuthorFilterIM>
     {
         protected override void PopulateEntity(Authors item, AuthorIM model)

@@ -1,28 +1,35 @@
 using Common.Entities;
+using Common.Entities.M2MEntities;
 using Microsoft.AspNetCore.Components;
-using VideoLibraryBlazorFrontend.Shared.FormatsModels;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Text;
+using System.Text.Json;
 using VideoLibraryBlazorFrontend.Shared;
-using VideoLibraryBlazorFrontend.Shared.VideosModels;
-using static VideoLibraryBlazorFrontend.Components.Pages.Home;
-using VideoLibraryBlazorFrontend.Shared.CopyrightsModels;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using VideoLibraryBlazorFrontend.Shared.AuthorsModels;
-using System.Runtime.CompilerServices;
+using VideoLibraryBlazorFrontend.Shared.CopyrightsModels;
+using VideoLibraryBlazorFrontend.Shared.FormatsModels;
 using VideoLibraryBlazorFrontend.Shared.GenresModels;
 using VideoLibraryBlazorFrontend.Shared.TagsModels;
-using Microsoft.AspNetCore.Components.Forms;
+using VideoLibraryBlazorFrontend.Shared.VideosModels;
+using static VideoLibraryBlazorFrontend.Components.Pages.Home;
 
 namespace VideoLibraryBlazorFrontend.Components.Pages
 {
-    public partial class VideosAdd
+    public partial class VideosEdit
     {
-        [Inject]
-        HttpClient HttpClient { get; set; }
-        private EditContext editContext;
-        private bool clearVideo = true;
-        public int? videoId = -1;
+        [Parameter]
+        public int VideoId { get; set; }
 
-        private VideosIM Video = new VideosIM();
+        [Inject]
+        public HttpClient HttpClient { get; set; }
+
+        [Inject]
+        public NavigationManager NavManager { get; set; }
+
+
+
+        private VideosIM? Video;
+        private EditContext editContext;
 
         private Pager formatsPager = new();
         private FormatsFilter formatsFilter = new();
@@ -32,20 +39,37 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
         private CopyrightsFilter copyrightFilter = new();
         private List<Copyrights> copyrightItems = new();
 
+
+        private List<int> authorsUpdate = new();
+
         private Pager authorPager = new();
         private AuthorsFilter authorFilter = new();
         private List<Authors> authorsItems = new();
-        private List<int> authorsToAdd = new();
+
+        private Pager authorExistPager = new();
+        private AuthorsFilter authorExistFilter = new();
+        private List<Authors> authorsExistItems = new();
+
+        private List<int> genresUpdate = new();
 
         private Pager genrePager = new();
         private GenresFilter genreFilter = new();
-        private List<Genres> genreItems = new();
-        private List<int> genreToAdd = new();
+        private List<Genres> genresItems = new();
+
+        private Pager genreExistPager = new();
+        private GenresFilter genreExistFilter = new();
+        private List<Genres> genresExistItems = new();
+
+        private List<int> tagsUpdate = new();
 
         private Pager tagPager = new();
         private TagsFilter tagFilter = new();
-        private List<Tags> tagItems = new();
-        private List<int> tagToAdd = new();
+        private List<Tags> tagsItems = new();
+
+        private Pager tagExistPager = new();
+        private TagsFilter tagExistFilter = new();
+        private List<Tags> tagsExistItems = new();
+
 
 
         private int[] ItemsPerPageOptions = new[] { 1, 5, 10, 20, 50 };
@@ -96,149 +120,46 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             { "false", "Digital" }
         };
 
-        private async Task AddToDataBase()
-        {
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Video", Video);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var createdVideo = await response.Content.ReadFromJsonAsync<Videos>();
-                videoId = createdVideo?.Id;
-
-                List<int> authorsToRemove = new();
-                List<int> genresToRemove = new();
-                List<int> tagsToRemove = new();
-
-                for (int i = 0; i < authorsToAdd.Count; i++)
-                {
-                    var responseAddAuthors = await HttpClient.PostAsync($"https://localhost:7209/api/Video/author/{videoId}/{authorsToAdd[i]}", null);
-                    if (!responseAddAuthors.IsSuccessStatusCode)
-                    {
-                        var errorContent = await responseAddAuthors.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
-                        clearVideo = false;
-                    }
-                    else
-                    {
-                        authorsToRemove.Add(authorsToAdd[i]);
-                    }
-                }
-                for (int i = 0; i < genreToAdd.Count; i++) 
-                {
-                    var responseAddGenres = await HttpClient.PostAsync($"https://localhost:7209/api/Video/Genre/{videoId}/{genreToAdd[i]}", null);
-                    if (!responseAddGenres.IsSuccessStatusCode)
-                    {
-                        var errorContent = await responseAddGenres.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
-                        clearVideo = false;
-                    }
-                    else
-                    {
-                        genresToRemove.Add(genreToAdd[i]);
-                    }
-                }
-                for (int i = 0; i < tagToAdd.Count; i++)
-                {
-                    var responseAddTag = await HttpClient.PostAsync($"https://localhost:7209/api/Video/Tag/{videoId}/{tagToAdd[i]}", null);
-                    if (!responseAddTag.IsSuccessStatusCode)
-                    {
-                        var errorContent = await responseAddTag.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
-                        clearVideo = false;
-                    }
-                    else
-                    {
-                        tagsToRemove.Add(tagToAdd[i]);
-                    }
-                }
-                foreach (var item in authorsToRemove)
-                {
-                    authorsToAdd.Remove(item);
-                }
-                foreach (var item in genresToRemove)
-                {
-                    genreToAdd.Remove(item);
-                }
-                foreach (var item in tagsToRemove)
-                {
-                    tagToAdd.Remove(item);
-                }
-
-                if (clearVideo) 
-                {
-                    Video = new();
-                    videoId = -1;
-                }
-                
-
-            }
-            else
-            { }
-        }
-        private async Task TryAddConnections(int? id) 
-        {
-            if (id is not null) 
-            {
-                for (int i = 0; i < authorsToAdd.Count; i++)
-                {
-                    var responseAddAuthors = await HttpClient.PostAsync($"https://localhost:7209/api/Video/author/{id}/{authorsToAdd[i]}", null);
-                    if (!responseAddAuthors.IsSuccessStatusCode)
-                    {
-                        var errorContent = await responseAddAuthors.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
-                        clearVideo = false;
-                    }
-                    else
-                    {
-                        authorsToAdd.Remove(authorsToAdd[i]);
-                    }
-                }
-                for (int i = 0; i < genreToAdd.Count; i++)
-                {
-                    var responseAddGenres = await HttpClient.PostAsync($"https://localhost:7209/api/Video/Genre/{id}/{genreToAdd[i]}", null);
-                    if (!responseAddGenres.IsSuccessStatusCode)
-                    {
-                        var errorContent = await responseAddGenres.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
-                        clearVideo = false;
-                    }
-                    else
-                    {
-                        genreToAdd.Remove(genreToAdd[i]);
-                    }
-                }
-                for (int i = 0; i < tagToAdd.Count; i++)
-                {
-                    var responseAddTag = await HttpClient.PostAsync($"https://localhost:7209/api/Video/Tag/{id}/{tagToAdd[i]}", null);
-                    if (!responseAddTag.IsSuccessStatusCode)
-                    {
-                        var errorContent = await responseAddTag.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
-                        clearVideo = false;
-                    }
-                    else
-                    {
-                        tagToAdd.Remove(tagToAdd[i]);
-                    }
-                }
-                if (clearVideo)
-                {
-                    Video = new();
-                    videoId = -1;
-                }
-            }
-            
-        }
-
         protected override async Task OnInitializedAsync()
         {
-            editContext = new EditContext(Video);
             await LoadFormats();
             await LoadCopyrights();
             await LoadAuthors();
+            await LoadExistAuthors();
             await LoadGenres();
+            await LoadExistGenres();
             await LoadTags();
+            await LoadExistTags();
+
+
+            var response = await HttpClient.GetFromJsonAsync<ApiResponse<VideosIM>>($"https://localhost:7209/api/Video/{VideoId}");
+            if (response != null && response.Success) 
+            {
+                Video = response.Data;
+
+                editContext = new EditContext(Video);
+            }
         }
+
+        private async Task HandleValidSubmit()
+        {
+            var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Video/{VideoId}", Video);
+
+
+            var responseUpdateAuthors = await HttpClient.PostAsync($"https://localhost:7209/api/Video/author/update/{VideoId}", new StringContent(JsonSerializer.Serialize(authorsUpdate), Encoding.UTF8, "application/json"));
+            var responseUpdateGenres = await HttpClient.PostAsync($"https://localhost:7209/api/Video/genre/update/{VideoId}", new StringContent(JsonSerializer.Serialize(genresUpdate), Encoding.UTF8, "application/json"));
+            var responseUpdateTags = await HttpClient.PostAsync($"https://localhost:7209/api/Video/tag/update/{VideoId}", new StringContent(JsonSerializer.Serialize(tagsUpdate), Encoding.UTF8, "application/json"));
+            if (response.IsSuccessStatusCode && responseUpdateAuthors.IsSuccessStatusCode && responseUpdateGenres.IsSuccessStatusCode && responseUpdateTags.IsSuccessStatusCode)
+            {
+                await OnInitializedAsync();
+            }
+        }
+
+        private void Cancel()
+        {
+            NavManager.NavigateTo("/videos");
+        }
+
 
 
         private async Task LoadFormats()
@@ -280,8 +201,10 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
                     copyrightFilter = result.Data.Filter;
                 }
             }
+
         }
-        private async Task LoadAuthors()
+
+        private async Task LoadAuthors() 
         {
             var request = new IndexRequestModel<AuthorsFilter>
             {
@@ -301,7 +224,33 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
                 }
             }
         }
-        private async Task LoadGenres()
+        private async Task LoadExistAuthors() 
+        {
+            var request = new IndexRequestModel<AuthorsFilter>
+            {
+                Pager = authorExistPager,
+                Filter = authorExistFilter
+            };
+
+            var response = await HttpClient.PostAsJsonAsync($"https://localhost:7209/api/Video/get/author/{VideoId}", request);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Authors, AuthorsFilter>>>();
+                if (result?.Success == true)
+                {
+                    authorsExistItems = result.Data.Items;
+                    authorExistPager = result.Data.Pager;
+                    authorExistFilter = result.Data.Filter;
+
+                    foreach (var item in authorsExistItems)
+                    {
+                        authorsUpdate.Add(item.Id);
+                    }
+                }
+            }
+        }
+
+        private async Task LoadGenres() 
         {
             var request = new IndexRequestModel<GenresFilter>
             {
@@ -310,17 +259,50 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             };
 
             var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Genres/get", request);
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode) 
             {
                 var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Genres, GenresFilter>>>();
-                if (result?.Success == true)
+                if (result?.Success == true) 
                 {
-                    genreItems = result.Data.Items;
+                    genresItems = result.Data.Items;
                     genrePager = result.Data.Pager;
                     genreFilter = result.Data.Filter;
                 }
             }
+
         }
+        private async Task LoadExistGenres() 
+        {
+            var request = new IndexRequestModel<GenresFilter>
+            {
+                Pager = genreExistPager,
+                Filter = genreExistFilter
+            };
+
+            var response = await HttpClient.PostAsJsonAsync($"https://localhost:7209/api/Video/get/genre/{VideoId}", request);
+            if (response.IsSuccessStatusCode) 
+            {
+                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Genres, GenresFilter>>>();
+                if (result?.Success == true) 
+                {
+                    genresExistItems = result.Data.Items;
+                    genreExistPager = result.Data.Pager;
+                    genreExistFilter = result.Data.Filter;
+
+                    foreach (var item in genresExistItems)
+                    {
+                        genresUpdate.Add(item.Id);
+                    }
+
+                }
+
+
+            }
+
+
+
+        }
+
         private async Task LoadTags()
         {
             var request = new IndexRequestModel<TagsFilter>
@@ -335,11 +317,43 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
                 var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Tags, TagsFilter>>>();
                 if (result?.Success == true)
                 {
-                    tagItems = result.Data.Items;
+                    tagsItems = result.Data.Items;
                     tagPager = result.Data.Pager;
                     tagFilter = result.Data.Filter;
                 }
             }
+
+        }
+        private async Task LoadExistTags()
+        {
+            var request = new IndexRequestModel<TagsFilter>
+            {
+                Pager = tagExistPager,
+                Filter = tagExistFilter
+            };
+
+            var response = await HttpClient.PostAsJsonAsync($"https://localhost:7209/api/Video/get/Tag/{VideoId}", request);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Tags, TagsFilter>>>();
+                if (result?.Success == true)
+                {
+                    tagsExistItems = result.Data.Items;
+                    tagExistPager = result.Data.Pager;
+                    tagExistFilter = result.Data.Filter;
+
+                    foreach (var item in tagsExistItems)
+                    {
+                        tagsUpdate.Add(item.Id);
+                    }
+
+                }
+
+
+            }
+
+
+
         }
 
 
@@ -353,21 +367,42 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             copyrightPager.Page = 1;
             await LoadCopyrights();
         }
-        private async Task ApplyAuthorFilter() 
+
+
+
+        private async Task ApplyAuthorFilter()
         {
             authorPager.Page = 1;
             await LoadAuthors();
         }
-        private async Task ApplyGenreFilter()
+        private async Task ApplyExistAuthorFilter()
+        {
+            authorExistPager.Page = 1;
+            await LoadExistAuthors();
+        }
+
+        private async Task ApplyGenreFilter() 
         {
             genrePager.Page = 1;
             await LoadGenres();
         }
+        private async Task ApplyExistGenreFilter() 
+        {
+            genreExistPager.Page = 1;
+            await LoadExistGenres();
+        }
+
         private async Task ApplyTagFilter()
         {
             tagPager.Page = 1;
             await LoadTags();
         }
+        private async Task ApplyExistTagFilter()
+        {
+            tagExistPager.Page = 1;
+            await LoadExistTags();
+        }
+
 
 
         private async Task FormatsItemsPerPageChanged(ChangeEventArgs e)
@@ -388,25 +423,47 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
                 await LoadCopyrights();
             }
         }
-        private async Task AuthorsItemsPerPageChanged(ChangeEventArgs e) 
+
+        private async Task AuthorItemsPerPageChanged(ChangeEventArgs e)
         {
-            if (int.TryParse(e.Value?.ToString(), out var newCount)) 
+            if (int.TryParse(e.Value?.ToString(), out var newCount))
             {
                 authorPager.ItemsPerPage = newCount;
                 authorPager.Page = 1;
                 await LoadAuthors();
             }
         }
-        private async Task GenresItemsPerPageChanged(ChangeEventArgs e)
+        private async Task AuthorExistItemsPerPageChanged(ChangeEventArgs e)
         {
             if (int.TryParse(e.Value?.ToString(), out var newCount))
+            {
+                authorExistPager.ItemsPerPage = newCount;
+                authorExistPager.Page = 1;
+                await LoadExistAuthors();
+            }
+        }
+
+        private async Task GenreItemsPerPageChanged(ChangeEventArgs e) 
+        {
+            if (int.TryParse(e.Value?.ToString(), out var newCount)) 
             {
                 genrePager.ItemsPerPage = newCount;
                 genrePager.Page = 1;
                 await LoadGenres();
             }
+
         }
-        private async Task TagsItemsPerPageChanged(ChangeEventArgs e)
+        private async Task GenreExistItemsPerPageChanged(ChangeEventArgs e)
+        {
+            if (int.TryParse(e.Value?.ToString(), out var newCount)) 
+            {
+                genreExistPager.ItemsPerPage = newCount;
+                genreExistPager.Page = 1;
+                await LoadExistGenres();
+            }
+        }
+
+        private async Task TagItemsPerPageChanged(ChangeEventArgs e)
         {
             if (int.TryParse(e.Value?.ToString(), out var newCount))
             {
@@ -414,7 +471,18 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
                 tagPager.Page = 1;
                 await LoadTags();
             }
+
         }
+        private async Task TagExistItemsPerPageChanged(ChangeEventArgs e)
+        {
+            if (int.TryParse(e.Value?.ToString(), out var newCount))
+            {
+                tagExistPager.ItemsPerPage = newCount;
+                tagExistPager.Page = 1;
+                await LoadExistTags();
+            }
+        }
+
 
 
         private async Task FormatsFirstPage() { formatsPager.Page = 1; await LoadFormats(); }
@@ -427,22 +495,36 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
         private async Task CopyrightNextPage() { if (copyrightPager.Page < copyrightPager.PagesCount) { copyrightPager.Page++; await LoadCopyrights(); } }
         private async Task CopyrightLastPage() { copyrightPager.Page = copyrightPager.PagesCount; await LoadCopyrights(); }
 
+
         private async Task AuthorsFirstPage() { authorPager.Page = 1; await LoadAuthors(); }
         private async Task AuthorsPrevPage() { if (authorPager.Page > 1) { authorPager.Page--; await LoadAuthors(); } }
         private async Task AuthorsNextPage() { if (authorPager.Page < authorPager.PagesCount) { authorPager.Page++; await LoadAuthors(); } }
         private async Task AuthorsLastPage() { authorPager.Page = authorPager.PagesCount; await LoadAuthors(); }
+
+        private async Task AuthorsExistFirstPage() { authorExistPager.Page = 1; await LoadExistAuthors(); }
+        private async Task AuthorsExistPrevPage() { if (authorExistPager.Page > 1) { authorExistPager.Page--; await LoadExistAuthors(); } }
+        private async Task AuthorsExistNextPage() { if (authorExistPager.Page < authorExistPager.PagesCount) { authorExistPager.Page++; await LoadExistAuthors(); } }
+        private async Task AuthorsExistLastPage() { authorExistPager.Page = authorExistPager.PagesCount; await LoadExistAuthors(); }
 
         private async Task GenresFirstPage() { genrePager.Page = 1; await LoadGenres(); }
         private async Task GenresPrevPage() { if (genrePager.Page > 1) { genrePager.Page--; await LoadGenres(); } }
         private async Task GenresNextPage() { if (genrePager.Page < genrePager.PagesCount) { genrePager.Page++; await LoadGenres(); } }
         private async Task GenresLastPage() { genrePager.Page = genrePager.PagesCount; await LoadGenres(); }
 
+        private async Task GenresExistFirstPage() { genreExistPager.Page = 1; await LoadExistGenres(); }
+        private async Task GenresExistPrevPage() { if (genreExistPager.Page > 1) { genreExistPager.Page--; await LoadExistGenres(); } }
+        private async Task GenresExistNextPage() { if (genreExistPager.Page < genreExistPager.PagesCount) { genreExistPager.Page++; await LoadExistGenres(); } }
+        private async Task GenresExistLastPage() { genreExistPager.Page = genreExistPager.PagesCount; await LoadExistGenres(); }
+
         private async Task TagsFirstPage() { tagPager.Page = 1; await LoadTags(); }
         private async Task TagsPrevPage() { if (tagPager.Page > 1) { tagPager.Page--; await LoadTags(); } }
         private async Task TagsNextPage() { if (tagPager.Page < tagPager.PagesCount) { tagPager.Page++; await LoadTags(); } }
         private async Task TagsLastPage() { tagPager.Page = tagPager.PagesCount; await LoadTags(); }
 
-
+        private async Task TagsExistFirstPage() { tagExistPager.Page = 1; await LoadExistTags(); }
+        private async Task TagsExistPrevPage() { if (tagExistPager.Page > 1) { tagExistPager.Page--; await LoadExistTags(); } }
+        private async Task TagsExistNextPage() { if (tagExistPager.Page < tagExistPager.PagesCount) { tagExistPager.Page++; await LoadExistTags(); } }
+        private async Task TagsExistLastPage() { tagExistPager.Page = tagExistPager.PagesCount; await LoadExistTags(); }
 
         private void SelectFormat(int id)
         {
@@ -455,29 +537,49 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             editContext.NotifyFieldChanged(FieldIdentifier.Create(() => Video.CopyrightId));
         }
 
-        private void SelectAuthor(int id) 
+        private void AddAuthor(int id) 
         {
-            authorsToAdd.Add(id);
+            if (!authorsUpdate.Contains(id)) 
+            {
+                authorsUpdate.Add(id);
+            }
         }
-        private void UnselectAuthor(int id) 
+        private void RemoveAuthor(int id) 
         {
-            authorsToAdd.Remove(id);
+            if (authorsUpdate.Contains(id))
+            {
+                authorsUpdate.Remove(id);
+            }
         }
-        private void SelectGenre(int id)
+
+        private void AddGenre(int id) 
         {
-            genreToAdd.Add(id);
+            if (!genresUpdate.Contains(id)) 
+            {
+                genresUpdate.Add(id);
+            }
         }
-        private void UnselectGenre(int id)
+        private void RemoveGenre(int id) 
         {
-            genreToAdd.Remove(id);
+            if (genresUpdate.Contains(id)) 
+            {
+                genresUpdate.Remove(id);
+            }
         }
-        private void SelectTag(int id)
+
+        private void AddTag(int id) 
         {
-            tagToAdd.Add(id);
+            if (!tagsUpdate.Contains(id))
+            {
+                tagsUpdate.Add(id);
+            }
         }
-        private void UnselectTag(int id)
+        private void RemoveTag(int id) 
         {
-            tagToAdd.Remove(id);
+            if (tagsUpdate.Contains(id))
+            {
+                tagsUpdate.Remove(id);
+            }
         }
 
         private string? formatsIsPhysicalSelection

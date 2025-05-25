@@ -172,6 +172,7 @@ OnValidSubmit="AddToDataBase">
                                 <th>Name</th>
                                 <th>Short Name</th>
                                 <th>Description</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -349,7 +350,6 @@ OnValidSubmit="AddToDataBase">
             <button class="btn btn-secondary" @onclick="AuthorsLastPage" disabled="@(authorPager.Page == authorPager.PagesCount)">Last Page</button>
         </div>
     </div>
-
     <div style="border: dashed">
         <h4>Genres</h4>
         <div class="filter-form mb-3">
@@ -486,16 +486,17 @@ OnValidSubmit="AddToDataBase">
                     <th>ID</th>
                     <th>Name</th>
                     <th>Description</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @if (tagItems == null)
                 {
-                    <tr><td colspan="6">Loading...</td></tr>
+                    <tr><td colspan="4">Loading...</td></tr>
                 }
                 else if (!tagItems.Any())
                 {
-                    <tr><td colspan="6">No authors found.</td></tr>
+                    <tr><td colspan="4">No authors found.</td></tr>
                 }
                 else
                 {

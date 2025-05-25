@@ -30,7 +30,7 @@ namespace VideoLibraryAPI
                     // Audience format {AUDIENCE} for ME-ID tenant type: api://{CLIENT ID}
                     // Audience format {AUDIENCE} for B2C tenant type: https://{DIRECTORY NAME}.onmicrosoft.com/{CLIENT ID}
                     //
-                    jwtOptions.Audience = "api://ffadac3f-3d18-4ef8-903b-39f7bdc23957";
+                    jwtOptions.Audience = "api://e6de894a-7857-4ac4-babe-bb5731887f9f";
                 });
 
             builder.Services.AddAuthorization();
@@ -45,29 +45,29 @@ namespace VideoLibraryAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddSwaggerGen(options =>
-            {
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                options.IncludeXmlComments(xmlPath);
-                options.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "ToDo API",
-                    Description = "An ASP.NET Core Web API for managing ToDo items",
-                    TermsOfService = new Uri("https://example.com/terms"),
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Example Contact",
-                        Url = new Uri("https://example.com/contact")
-                    },
-                    License = new OpenApiLicense
-                    {
-                        Name = "Example License",
-                        Url = new Uri("https://example.com/license")
-                    }
-                });
-            });
+            //builder.Services.AddSwaggerGen(options =>
+            //{
+            //    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            //    options.IncludeXmlComments(xmlPath);
+            //    options.SwaggerDoc("v1", new OpenApiInfo
+            //    {
+            //        Version = "v1",
+            //        Title = "ToDo API",
+            //        Description = "An ASP.NET Core Web API for managing ToDo items",
+            //        TermsOfService = new Uri("https://example.com/terms"),
+            //        Contact = new OpenApiContact
+            //        {
+            //            Name = "Example Contact",
+            //            Url = new Uri("https://example.com/contact")
+            //        },
+            //        License = new OpenApiLicense
+            //        {
+            //            Name = "Example License",
+            //            Url = new Uri("https://example.com/license")
+            //        }
+            //    });
+            //});
 
             var app = builder.Build();
             app.UseStaticFiles();

@@ -32,16 +32,17 @@
             <th>ID</th>
             <th>Name</th>
             <th>Description</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @if (Items == null)
         {
-            <tr><td colspan="6">Loading...</td></tr>
+            <tr><td colspan="4">Loading...</td></tr>
         }
         else if (!Items.Any())
         {
-            <tr><td colspan="6">No authors found.</td></tr>
+            <tr><td colspan="4">No authors found.</td></tr>
         }
         else
         {

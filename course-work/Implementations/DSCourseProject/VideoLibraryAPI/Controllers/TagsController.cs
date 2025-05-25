@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Common.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using VideoLibraryAPI.Infrastructure.Tag;
@@ -8,6 +9,7 @@ namespace VideoLibraryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TagsController : BaseCRUDApiController<Tags, TagIM, TagFilterIM>
     {
         protected override void PopulateEntity(Tags item, TagIM model)

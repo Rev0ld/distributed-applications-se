@@ -36,16 +36,17 @@
             <th>Middle Name</th>
             <th>Last Name</th>
             <th>Biography</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @if (Items == null)
         {
-            <tr><td colspan="6">Loading...</td></tr>
+            <tr><td colspan="5">Loading...</td></tr>
         }
         else if (!Items.Any())
         {
-            <tr><td colspan="6">No authors found.</td></tr>
+            <tr><td colspan="5">No authors found.</td></tr>
         }
         else
         {

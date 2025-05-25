@@ -39,8 +39,8 @@ namespace Common.Repositories
             return Items.FirstOrDefault(filter);
         }
 
-        public List<T> GetAll(Expression<Func<T, bool>> filter = null, int page = 1, int itemsPerPage = int.MaxValue,
-                                                string orderBy = null, string orderDir = null)
+        public List<T> GetAll(Expression<Func<T, bool>>? filter = null, int page = 1, int itemsPerPage = int.MaxValue,
+                                                string? orderBy = null, string? orderDir = null)
         {
 
             if (orderBy.IsNullOrEmpty())
@@ -69,30 +69,6 @@ namespace Common.Repositories
 
             var property = Expression.Property(param, orderBy);
 
-            /*
-            //if (!orderByMember.PropertyType.IsValueType)
-            //{
-            //    var order = Expression.Lambda<Func<T, object>>(
-            //                    Expression.Convert(property, typeof(object)),
-            //                    param);
-
-            //    if (orderDir == "desc")
-            //        query = query.OrderByDescending(order);
-            //    else
-            //        query = query.OrderBy(order);
-            //}
-            //else if (orderByMember.PropertyType.IsAssignableFrom(typeof(int)))
-            //{
-            //    var order = Expression.Lambda<Func<T, object>>(
-            //                    Expression.Convert(property, typeof(object)),
-            //                    param);
-
-            //    if (orderDir == "desc")
-            //        query = query.OrderByDescending(order);
-            //    else
-            //        query = query.OrderBy(order);
-            //}
-            */
 
             var order = Expression.Lambda<Func<T, object>>(
                                 Expression.Convert(property, typeof(object)),

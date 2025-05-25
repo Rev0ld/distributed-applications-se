@@ -138,6 +138,7 @@ namespace VideoLibraryAPI.Controllers
                 }
                 );
         }
+
         [HttpPost("author/{videoId}/{authorId}")]
         public IActionResult AddAuthor(int videoId, int authorId)
         {
@@ -175,16 +176,74 @@ namespace VideoLibraryAPI.Controllers
 
         }
 
-        [HttpDelete("author/{videoId}")]
-        public IActionResult RemoveAuthor(int videoId, [FromBody] AuthorVideoIM model)
+        [HttpPost("author/update/{videoId}/")]
+        public IActionResult UpdateAuthors(int videoId, [FromBody] List<int> authorIds)
+        {
+            BaseRepository<AuthorVideo> authorVideoRepo = new();
+            BaseRepository<Videos> videoRepo = new();
+            BaseRepository<Authors> authorRepo = new();
+
+            if (!videoRepo.GetAll(x => x.Id == videoId).Any())
+            {
+                return BadRequest(new { success = false, errorMessage = "Invalid video ID." });
+            }
+
+            var existingAuthorIds = authorVideoRepo
+                .GetAll(x => x.VideoId == videoId)
+                .Select(x => x.AuthorId)
+                .ToList();
+
+            var newAuthorIds = authorIds.Distinct().ToList();
+
+            var toAdd = newAuthorIds.Except(existingAuthorIds).ToList();
+            var toRemove = existingAuthorIds.Except(newAuthorIds).ToList();
+
+            foreach (var authorId in toAdd)
+            {
+                if (authorRepo.GetAll(x => x.Id == authorId).Any())
+                {
+                    authorVideoRepo.Add(new AuthorVideo
+                    {
+                        VideoId = videoId,
+                        AuthorId = authorId,
+                        IsDeleted = false,
+                        CreatedOn = DateTime.UtcNow,
+                        UpdatedOn = DateTime.UtcNow
+                    });
+
+                }
+            }
+
+            foreach (var authorId in toRemove)
+            {
+                var av = authorVideoRepo.FirstOrDefault(x => x.VideoId == videoId && x.AuthorId == authorId);
+                if (av != null)
+                {
+                    authorVideoRepo.Delete(av);
+                }
+            }
+
+            return Ok(new
+            {
+                success = true,
+                data = new
+                {
+                    added = toAdd,
+                    removed = toRemove
+                }
+            });
+        }
+
+        [HttpDelete("author/{videoId}/{authorId}")]
+        public IActionResult RemoveAuthor(int videoId, int authorId)
         {
             BaseRepository<AuthorVideo> authorVideoRepo = new();
             BaseRepository<Authors> authorRepo = new();
             BaseRepository<Videos> videoRepo = new();
 
-            if (authorRepo.GetAll(x => x.Id == model.AuthorId).Any() && authorVideoRepo.GetAll(x => x.AuthorId == model.AuthorId && x.VideoId == videoId).Any() && videoRepo.GetAll(x => x.Id == videoId).Any())
+            if (authorRepo.GetAll(x => x.Id == authorId).Any() && authorVideoRepo.GetAll(x => x.AuthorId == authorId && x.VideoId == videoId).Any() && videoRepo.GetAll(x => x.Id == videoId).Any())
             {
-                AuthorVideo authorVideo = authorVideoRepo.FirstOrDefault(x => x.VideoId == videoId && x.AuthorId == model.AuthorId);
+                AuthorVideo authorVideo = authorVideoRepo.FirstOrDefault(x => x.VideoId == videoId && x.AuthorId == authorId);
                 authorVideoRepo.Delete(authorVideo);
                 return Ok
                 (
@@ -306,6 +365,64 @@ namespace VideoLibraryAPI.Controllers
                 }
 
                 );
+
+        }
+
+        [HttpPost("genre/update/{videoId}/")]
+        public IActionResult UpdateGenres(int videoId, [FromBody] List<int> genreIds) 
+        {
+            BaseRepository<GenreVideo> genreVideoRepo = new();
+            BaseRepository<Videos> videoRepo = new();
+            BaseRepository<Genres> genreRepo = new();
+
+            if (!videoRepo.GetAll(x=> x.Id == videoId).Any()) 
+            {
+                return BadRequest(new { success = false, errorMessage = "Invalid video ID." });
+            }
+
+            var exisitingGenreIds = genreVideoRepo
+                .GetAll(x => x.VideoId == videoId)
+                .Select(x => x.GenreId)
+                .ToList();
+
+            var newGenreIds = genreIds.Distinct().ToList();
+
+            var toAdd = newGenreIds.Except(exisitingGenreIds).ToList();
+            var toRemove = exisitingGenreIds.Except(newGenreIds).ToList();
+
+            foreach (var genreId in toAdd) 
+            {
+                if (genreRepo.GetAll(x => x.Id == genreId).Any()) 
+                {
+                    genreVideoRepo.Add( new GenreVideo 
+                    {
+                        VideoId = videoId,
+                        GenreId = genreId,
+                        IsDeleted = false,
+                        CreatedOn = DateTime.UtcNow,
+                        UpdatedOn = DateTime.UtcNow
+
+                    });
+                }
+            }
+
+            foreach (var genreId in toRemove)
+            {
+                var gv = genreVideoRepo.FirstOrDefault(x => x.VideoId == videoId && x.GenreId == genreId);
+                if (gv != null) 
+                {
+                    genreVideoRepo.Delete(gv);
+                }
+            }
+            return Ok(new
+            {
+                success = true,
+                data = new
+                {
+                    added = toAdd,
+                    removed = toRemove
+                }
+            });
 
         }
 
@@ -438,6 +555,64 @@ namespace VideoLibraryAPI.Controllers
                 }
 
                 );
+
+        }
+
+        [HttpPost("tag/update/{videoId}/")]
+        public IActionResult UpdatTags(int videoId, [FromBody] List<int> tagIds)
+        {
+            BaseRepository<TagVideo> tagVideoRepo = new();
+            BaseRepository<Videos> videoRepo = new();
+            BaseRepository<Tags> tagRepo = new();
+
+            if (!videoRepo.GetAll(x => x.Id == videoId).Any())
+            {
+                return BadRequest(new { success = false, errorMessage = "Invalid video ID." });
+            }
+
+            var exisitingTagIds = tagVideoRepo
+                .GetAll(x => x.VideoId == videoId)
+                .Select(x => x.TagId)
+                .ToList();
+
+            var newTagIds = tagIds.Distinct().ToList();
+
+            var toAdd = newTagIds.Except(exisitingTagIds).ToList();
+            var toRemove = exisitingTagIds.Except(newTagIds).ToList();
+
+            foreach (var tagId in toAdd)
+            {
+                if (tagRepo.GetAll(x => x.Id == tagId).Any())
+                {
+                    tagVideoRepo.Add(new TagVideo
+                    {
+                        VideoId = videoId,
+                        TagId = tagId,
+                        IsDeleted = false,
+                        CreatedOn = DateTime.UtcNow,
+                        UpdatedOn = DateTime.UtcNow
+
+                    });
+                }
+            }
+
+            foreach (var tagId in toRemove)
+            {
+                var tv = tagVideoRepo.FirstOrDefault(x => x.VideoId == videoId && x.TagId == tagId);
+                if (tv != null)
+                {
+                    tagVideoRepo.Delete(tv);
+                }
+            }
+            return Ok(new
+            {
+                success = true,
+                data = new
+                {
+                    added = toAdd,
+                    removed = toRemove
+                }
+            });
 
         }
 

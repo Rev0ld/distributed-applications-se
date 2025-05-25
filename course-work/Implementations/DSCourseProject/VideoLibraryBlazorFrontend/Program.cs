@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web;
 using VideoLibraryBlazorFrontend.Components;
 
 namespace VideoLibraryBlazorFrontend;
@@ -8,15 +11,36 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
+        
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
+
+        builder.Services.AddCascadingAuthenticationState();
+
+        builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
+            .EnableTokenAcquisitionToCallDownstreamApi()
+            .AddDownstreamApi("MyApi", builder.Configuration.GetSection("DownstreamApi"))
+            .AddInMemoryTokenCaches();
+
+        builder.Services.AddAuthorization();
+
+
+        builder.Services.AddAuthorization();
+
         builder.Services.AddHttpClient();
 
         builder.Services.AddHttpClient("ApiClient", client =>
         {
-            client.BaseAddress = new Uri("https://localhost:7209");
+            client.BaseAddress = new Uri(builder.Configuration["DownstreamApi:BaseUrl"]!);
         });
+
+        //builder.Services.AddScoped<ApiAuthorizationHandler>();
+        //builder.Services.AddHttpClient("AuthorizedApiClient")
+        //    .AddHttpMessageHandler<ApiAuthorizationHandler>();
+
+        //builder.Services.AddScoped(sp =>
+        //    sp.GetRequiredService<IHttpClientFactory>().CreateClient("ApiClient"));
 
         var app = builder.Build();
 
@@ -24,7 +48,6 @@ public class Program
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
 
@@ -35,7 +58,7 @@ public class Program
 
         app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode();
-
+        app.MapGroup("/authentication").MapLoginAndLogout();
         app.Run();
     }
 }

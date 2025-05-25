@@ -39,16 +39,17 @@
             <th>Type</th>
             <th>Extension</th>
             <th>Is Physical</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @if (Items == null)
         {
-            <tr><td colspan="6">Loading...</td></tr>
+            <tr><td colspan="5">Loading...</td></tr>
         }
         else if (!Items.Any())
         {
-            <tr><td colspan="6">No formats found.</td></tr>
+            <tr><td colspan="5">No formats found.</td></tr>
         }
         else
         {

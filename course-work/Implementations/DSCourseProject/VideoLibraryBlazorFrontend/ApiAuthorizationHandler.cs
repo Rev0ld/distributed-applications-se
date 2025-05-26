@@ -11,7 +11,6 @@ public class ApiAuthorizationHandler : DelegatingHandler
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<ApiAuthorizationHandler> _logger;
 
-    // Define your scopes here
     private readonly string[] _scopes = new[] { "api://e6de894a-7857-4ac4-babe-bb5731887f9f/Weather.Get" };
 
     public ApiAuthorizationHandler(
@@ -44,7 +43,6 @@ public class ApiAuthorizationHandler : DelegatingHandler
         catch (MsalUiRequiredException ex)
         {
             _logger.LogWarning(ex, "Access token could not be acquired silently; user interaction required.");
-            // Throw with the original exception and the scopes to trigger a challenge
             throw new MicrosoftIdentityWebChallengeUserException(ex, _scopes);
         }
 

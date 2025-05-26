@@ -23,7 +23,6 @@ namespace VideoLibraryBlazorFrontend
             return group;
         }
 
-        // Prevent open redirects. Non-empty returnUrls are absolute URIs provided by NavigationManager.Uri.
         private static AuthenticationProperties GetAuthProperties(string? returnUrl) =>
             new()
             {

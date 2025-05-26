@@ -245,610 +245,623 @@ else
 
         </div>
 
-        <div style="border: dashed; padding: 10px; margin: 10px">
-            <h4>All Authors</h4>
-            <div class="filter-form mb-3">
-                <input placeholder="First Name" @bind="authorFilter.FirstName" class="form-control mb-1" />
-                <input placeholder="Middle Name" @bind="authorFilter.MiddleName" class="form-control mb-1" />
-                <input placeholder="Last Name" @bind="authorFilter.LastName" class="form-control mb-1" />
-                <input placeholder="Biography" @bind="authorFilter.Biography" class="form-control mb-1" />
-                <select class="form-control mb-1" style="width: auto;" @bind="authorFilter.OrderBy">
-                    @foreach (var item in OrderByAuthorOptions)
-                    {
-                        <option value="@item.Key">
-                            @item.Value
-                        </option>
-                    }
-                </select>
-                <select class="form-control mb-1" style="width: auto;" @bind="authorFilter.OrderDir">
-                    @foreach (var item in OrderDirOptions)
-                    {
-                        <option value="@item.Key">
-                            @item.Value
-                        </option>
-                    }
-                </select>
-
-                <button type="button" class="btn btn-primary" @onclick="ApplyAuthorFilter">Apply Filter</button>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>First Name</th>
-                        <th>Middle Name</th>
-                        <th>Last Name</th>
-                        <th>Biography</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (authorsItems == null)
-                    {
-                        <tr><td colspan="6">Loading...</td></tr>
-                    }
-                    else if (!authorsItems.Any())
-                    {
-                        <tr><td colspan="6">No authors found.</td></tr>
-                    }
-                    else
-                    {
-                        @foreach (var author in authorsItems)
+        <div class="row">
+            <h4>Authors</h4>
+            <div class="col-md-12">
+                <h4>All</h4>
+                <div class="filter-form mb-3">
+                    <input placeholder="First Name" @bind="authorFilter.FirstName" class="form-control mb-1" />
+                    <input placeholder="Middle Name" @bind="authorFilter.MiddleName" class="form-control mb-1" />
+                    <input placeholder="Last Name" @bind="authorFilter.LastName" class="form-control mb-1" />
+                    <input placeholder="Biography" @bind="authorFilter.Biography" class="form-control mb-1" />
+                    <select class="form-control mb-1" style="width: auto;" @bind="authorFilter.OrderBy">
+                        @foreach (var item in OrderByAuthorOptions)
                         {
-                            if (author.IsDeleted)
-                            {
-                                <tr>
-                                    <td><del>@author.Id</del></td>
-                                    <td><del>@author.FirstName</del></td>
-                                    <td><del>@author.MiddleName</del></td>
-                                    <td><del>@author.LastName</del></td>
-                                    <td><del>@author.Biography</del></td>
-                                    <td>
-                                    </td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td>@author.Id</td>
-                                    <td>@author.FirstName</td>
-                                    <td>@author.MiddleName</td>
-                                    <td>@author.LastName</td>
-                                    <td>@author.Biography</td>
-                                    <td>
-                                        @if (authorsUpdate.Contains(author.Id))
-                                        {
-                                            <button type="button" class="btn btn-sm btn-danger me-1" @onclick="() => RemoveAuthor(author.Id)">Remove</button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => AddAuthor(author.Id)">Add</button>
-                                        }
-
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    }
-                </tbody>
-            </table>
-            <div class="d-flex flex-wrap align-items-center gap-3 mt-3">
-                <div class="d-flex align-items-center gap-2">
-                    <label for="authorItemsPerPage">Items per page:</label>
-                    <select id="authorItemsPerPage" class="form-select" style="width: auto;" @onchange="AuthorItemsPerPageChanged">
-                        @foreach (var count in ItemsPerPageOptions)
-                        {
-                            <option value="@count" selected="@(authorPager.ItemsPerPage == count)">@count</option>
+                            <option value="@item.Key">
+                                @item.Value
+                            </option>
                         }
                     </select>
-                </div>
-
-                <button type="button" class="btn btn-secondary" @onclick="AuthorsFirstPage" disabled="@(authorPager.Page == 1)">First Page</button>
-                <button type="button" class="btn btn-secondary" @onclick="AuthorsPrevPage" disabled="@(authorPager.Page == 1)">Previous</button>
-                <span>Page @authorPager.Page of @authorPager.PagesCount</span>
-                <button type="button" class="btn btn-secondary" @onclick="AuthorsNextPage" disabled="@(authorPager.Page == authorPager.PagesCount)">Next</button>
-                <button type="button" class="btn btn-secondary" @onclick="AuthorsLastPage" disabled="@(authorPager.Page == authorPager.PagesCount)">Last Page</button>
-            </div>
-
-            <h4>Current connected</h4>
-            <div class="filter-form mb-3">
-                <input placeholder="First Name" @bind="authorExistFilter.FirstName" class="form-control mb-1" />
-                <input placeholder="Middle Name" @bind="authorExistFilter.MiddleName" class="form-control mb-1" />
-                <input placeholder="Last Name" @bind="authorExistFilter.LastName" class="form-control mb-1" />
-                <input placeholder="Biography" @bind="authorExistFilter.Biography" class="form-control mb-1" />
-                <select class="form-control mb-1" style="width: auto;" @bind="authorExistFilter.OrderBy">
-                    @foreach (var item in OrderByAuthorOptions)
-                    {
-                        <option value="@item.Key">
-                            @item.Value
-                        </option>
-                    }
-                </select>
-                <select class="form-control mb-1" style="width: auto;" @bind="authorExistFilter.OrderDir">
-                    @foreach (var item in OrderDirOptions)
-                    {
-                        <option value="@item.Key">
-                            @item.Value
-                        </option>
-                    }
-                </select>
-
-                <button type="button" class="btn btn-primary" @onclick="ApplyExistAuthorFilter">Apply Filter</button>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>First Name</th>
-                        <th>Middle Name</th>
-                        <th>Last Name</th>
-                        <th>Biography</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (authorsExistItems == null)
-                    {
-                        <tr><td colspan="6">Loading...</td></tr>
-                    }
-                    else if (!authorsExistItems.Any())
-                    {
-                        <tr><td colspan="6">No authors found.</td></tr>
-                    }
-                    else
-                    {
-                        @foreach (var author in authorsExistItems)
+                    <select class="form-control mb-1" style="width: auto;" @bind="authorFilter.OrderDir">
+                        @foreach (var item in OrderDirOptions)
                         {
-                            if (author.IsDeleted)
-                            {
-                                <tr>
-                                    <td><del>@author.Id</del></td>
-                                    <td><del>@author.FirstName</del></td>
-                                    <td><del>@author.MiddleName</del></td>
-                                    <td><del>@author.LastName</del></td>
-                                    <td><del>@author.Biography</del></td>
-                                    <td></td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td>@author.Id</td>
-                                    <td>@author.FirstName</td>
-                                    <td>@author.MiddleName</td>
-                                    <td>@author.LastName</td>
-                                    <td>@author.Biography</td>
-                                    <td>
-                                        @* @if (authorsToAdd.Contains(author.Id)) *@
-                                        @* { *@
-                                        @*     <button disabled="true" type="button" class="btn btn-sm btn-success me-1" @onclick="() => SelectAuthor(author.Id)">Select</button> *@
-                                        @*     <button type="button" class="btn btn-sm btn-danger" @onclick="() => UnselectAuthor(author.Id)">Remove</button> *@
-                                        @* } *@
-                                        @* else *@
-                                        @* { *@
-                                        @*     <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => SelectAuthor(author.Id)">Select</button> *@
-                                        @*     <button disabled="true" type="button" class="btn btn-sm btn-danger" @onclick="() => UnselectAuthor(author.Id)">Remove</button> *@
-                                        @* } *@
-                                        @if (authorsUpdate.Contains(author.Id))
-                                        {
-                                            <button type="button" class="btn btn-sm btn-danger me-1" @onclick="() => RemoveAuthor(author.Id)">Remove</button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => AddAuthor(author.Id)">Add</button>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    }
-                </tbody>
-            </table>
-            <div class="d-flex flex-wrap align-items-center gap-3 mt-3">
-                <div class="d-flex align-items-center gap-2">
-                    <label for="authorItemsPerPage">Items per page:</label>
-                    <select id="authorItemsPerPage" class="form-select" style="width: auto;" @onchange="AuthorExistItemsPerPageChanged">
-                        @foreach (var count in ItemsPerPageOptions)
-                        {
-                            <option value="@count" selected="@(authorExistPager.ItemsPerPage == count)">@count</option>
+                            <option value="@item.Key">
+                                @item.Value
+                            </option>
                         }
                     </select>
+
+                    <button type="button" class="btn btn-primary" @onclick="ApplyAuthorFilter">Apply Filter</button>
                 </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
+                            <th>Last Name</th>
+                            <th>Biography</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (authorsItems == null)
+                        {
+                            <tr><td colspan="6">Loading...</td></tr>
+                        }
+                        else if (!authorsItems.Any())
+                        {
+                            <tr><td colspan="6">No authors found.</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var author in authorsItems)
+                            {
+                                if (author.IsDeleted)
+                                {
+                                    <tr>
+                                        <td><del>@author.Id</del></td>
+                                        <td><del>@author.FirstName</del></td>
+                                        <td><del>@author.MiddleName</del></td>
+                                        <td><del>@author.LastName</del></td>
+                                        <td><del>@author.Biography</del></td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>@author.Id</td>
+                                        <td>@author.FirstName</td>
+                                        <td>@author.MiddleName</td>
+                                        <td>@author.LastName</td>
+                                        <td>@author.Biography</td>
+                                        <td>
+                                            @if (authorsUpdate.Contains(author.Id))
+                                            {
+                                                <button type="button" class="btn btn-sm btn-danger me-1" @onclick="() => RemoveAuthor(author.Id)">Remove</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => AddAuthor(author.Id)">Add</button>
+                                            }
 
-                <button type="button" class="btn btn-secondary" @onclick="AuthorsExistFirstPage" disabled="@(authorExistPager.Page == 1)">First Page</button>
-                <button type="button" class="btn btn-secondary" @onclick="AuthorsExistPrevPage" disabled="@(authorExistPager.Page == 1)">Previous</button>
-                <span>Page @authorExistPager.Page of @authorExistPager.PagesCount</span>
-                <button type="button" class="btn btn-secondary" @onclick="AuthorsExistNextPage" disabled="@(authorExistPager.Page == authorExistPager.PagesCount)">Next</button>
-                <button type="button" class="btn btn-secondary" @onclick="AuthorsExistLastPage" disabled="@(authorExistPager.Page == authorExistPager.PagesCount)">Last Page</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div class="d-flex flex-wrap align-items-center gap-3 mt-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <label for="authorItemsPerPage">Items per page:</label>
+                        <select id="authorItemsPerPage" class="form-select" style="width: auto;" @onchange="AuthorItemsPerPageChanged">
+                            @foreach (var count in ItemsPerPageOptions)
+                            {
+                                <option value="@count" selected="@(authorPager.ItemsPerPage == count)">@count</option>
+                            }
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary" @onclick="AuthorsFirstPage" disabled="@(authorPager.Page == 1)">First Page</button>
+                    <button type="button" class="btn btn-secondary" @onclick="AuthorsPrevPage" disabled="@(authorPager.Page == 1)">Previous</button>
+                    <span>Page @authorPager.Page of @authorPager.PagesCount</span>
+                    <button type="button" class="btn btn-secondary" @onclick="AuthorsNextPage" disabled="@(authorPager.Page == authorPager.PagesCount)">Next</button>
+                    <button type="button" class="btn btn-secondary" @onclick="AuthorsLastPage" disabled="@(authorPager.Page == authorPager.PagesCount)">Last Page</button>
+                </div>
             </div>
+            
 
+            
+            <div class="col-md-12">
+                <h4>Current</h4>
+                <div class="filter-form mb-3">
+                    <input placeholder="First Name" @bind="authorExistFilter.FirstName" class="form-control mb-1" />
+                    <input placeholder="Middle Name" @bind="authorExistFilter.MiddleName" class="form-control mb-1" />
+                    <input placeholder="Last Name" @bind="authorExistFilter.LastName" class="form-control mb-1" />
+                    <input placeholder="Biography" @bind="authorExistFilter.Biography" class="form-control mb-1" />
+                    <select class="form-control mb-1" style="width: auto;" @bind="authorExistFilter.OrderBy">
+                        @foreach (var item in OrderByAuthorOptions)
+                        {
+                            <option value="@item.Key">
+                                @item.Value
+                            </option>
+                        }
+                    </select>
+                    <select class="form-control mb-1" style="width: auto;" @bind="authorExistFilter.OrderDir">
+                        @foreach (var item in OrderDirOptions)
+                        {
+                            <option value="@item.Key">
+                                @item.Value
+                            </option>
+                        }
+                    </select>
+
+                    <button type="button" class="btn btn-primary" @onclick="ApplyExistAuthorFilter">Apply Filter</button>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
+                            <th>Last Name</th>
+                            <th>Biography</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (authorsExistItems == null)
+                        {
+                            <tr><td colspan="6">Loading...</td></tr>
+                        }
+                        else if (!authorsExistItems.Any())
+                        {
+                            <tr><td colspan="6">No authors found.</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var author in authorsExistItems)
+                            {
+                                if (author.IsDeleted)
+                                {
+                                    <tr>
+                                        <td><del>@author.Id</del></td>
+                                        <td><del>@author.FirstName</del></td>
+                                        <td><del>@author.MiddleName</del></td>
+                                        <td><del>@author.LastName</del></td>
+                                        <td><del>@author.Biography</del></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>@author.Id</td>
+                                        <td>@author.FirstName</td>
+                                        <td>@author.MiddleName</td>
+                                        <td>@author.LastName</td>
+                                        <td>@author.Biography</td>
+                                        <td>
+                                            @* @if (authorsToAdd.Contains(author.Id)) *@
+                                            @* { *@
+                                            @*     <button disabled="true" type="button" class="btn btn-sm btn-success me-1" @onclick="() => SelectAuthor(author.Id)">Select</button> *@
+                                            @*     <button type="button" class="btn btn-sm btn-danger" @onclick="() => UnselectAuthor(author.Id)">Remove</button> *@
+                                            @* } *@
+                                            @* else *@
+                                            @* { *@
+                                            @*     <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => SelectAuthor(author.Id)">Select</button> *@
+                                            @*     <button disabled="true" type="button" class="btn btn-sm btn-danger" @onclick="() => UnselectAuthor(author.Id)">Remove</button> *@
+                                            @* } *@
+                                            @if (authorsUpdate.Contains(author.Id))
+                                            {
+                                                <button type="button" class="btn btn-sm btn-danger me-1" @onclick="() => RemoveAuthor(author.Id)">Remove</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => AddAuthor(author.Id)">Add</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div class="d-flex flex-wrap align-items-center gap-3 mt-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <label for="authorItemsPerPage">Items per page:</label>
+                        <select id="authorItemsPerPage" class="form-select" style="width: auto;" @onchange="AuthorExistItemsPerPageChanged">
+                            @foreach (var count in ItemsPerPageOptions)
+                            {
+                                <option value="@count" selected="@(authorExistPager.ItemsPerPage == count)">@count</option>
+                            }
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary" @onclick="AuthorsExistFirstPage" disabled="@(authorExistPager.Page == 1)">First Page</button>
+                    <button type="button" class="btn btn-secondary" @onclick="AuthorsExistPrevPage" disabled="@(authorExistPager.Page == 1)">Previous</button>
+                    <span>Page @authorExistPager.Page of @authorExistPager.PagesCount</span>
+                    <button type="button" class="btn btn-secondary" @onclick="AuthorsExistNextPage" disabled="@(authorExistPager.Page == authorExistPager.PagesCount)">Next</button>
+                    <button type="button" class="btn btn-secondary" @onclick="AuthorsExistLastPage" disabled="@(authorExistPager.Page == authorExistPager.PagesCount)">Last Page</button>
+                </div>
+            </div>
         </div>
 
-        <div style="border: dashed; padding: 10px; margin: 10px">
-            <h4>All Genres</h4>
+        <div class="row">
+            <h4>Genres</h4>
+            <div class="col-md-12">
+                <h4>All Genres</h4>
 
-            <div class="filter-form mb-3">
-                <input placeholder="Name" @bind="genreFilter.Name" class="form-control mb-1" />
-                <input placeholder="Description" @bind="genreFilter.Description" class="form-control mb-1" />
-                <select class="form-control mb-1" style="width: auto;" @bind="genreFilter.OrderBy">
-                    @foreach (var item in OrderByGenreOptions)
-                    {
-                        <option value="@item.Key">
-                            @item.Value
-                        </option>
-                    }
-                </select>
-                <select class="form-control mb-1" style="width: auto;" @bind="genreFilter.OrderDir">
-                    @foreach (var item in OrderDirOptions)
-                    {
-                        <option value="@item.Key">
-                            @item.Value
-                        </option>
-                    }
-                </select>
-
-                <button class="btn btn-primary" @onclick="ApplyGenreFilter">Apply Filter</button>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (genresItems == null)
-                    {
-                        <tr><td colspan="4">Loading...</td></tr>
-                    }
-                    else if (!genresItems.Any())
-                    {
-                        <tr><td colspan="4">No genres found.</td></tr>
-                    }
-                    else
-                    {
-                        @foreach (var genre in genresItems)
+                <div class="filter-form mb-3">
+                    <input placeholder="Name" @bind="genreFilter.Name" class="form-control mb-1" />
+                    <input placeholder="Description" @bind="genreFilter.Description" class="form-control mb-1" />
+                    <select class="form-control mb-1" style="width: auto;" @bind="genreFilter.OrderBy">
+                        @foreach (var item in OrderByGenreOptions)
                         {
-                            if (genre.IsDeleted)
-                            {
-                                <tr>
-                                    <td><del>@genre.Id</del></td>
-                                    <td><del>@genre.Name</del></td>
-                                    <td><del>@genre.Description</del></td>
-                                    <td></td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td>@genre.Id</td>
-                                    <td>@genre.Name</td>
-                                    <td>@genre.Description</td>
-                                    <td>
-                                        @if (genresUpdate.Contains(genre.Id))
-                                        {
-                                            <button type="button" class="btn btn-sm btn-danger me-1" @onclick="() => RemoveGenre(genre.Id)">Remove</button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => AddGenre(genre.Id)">Add</button>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    }
-                </tbody>
-            </table>
-            <div class="d-flex align-items-center gap-3 mt-3">
-                <div class="d-flex align-items-center gap-2">
-                    <label for="itemsPerPage">Items per page:</label>
-                    <select id="itemsPerPage" class="form-select" style="width: auto;" @onchange="GenreItemsPerPageChanged">
-                        @foreach (var count in ItemsPerPageOptions)
-                        {
-                            <option value="@count" selected="@(genrePager.ItemsPerPage == count)">
-                                @count
+                            <option value="@item.Key">
+                                @item.Value
                             </option>
                         }
                     </select>
-                </div>
-                <button class="btn btn-secondary" @onclick="GenresFirstPage" disabled="@((genrePager.Page == 1))">First Page</button>
-                <button class="btn btn-secondary" @onclick="GenresPrevPage" disabled="@(genrePager.Page == 1)">Previous</button>
-                <span>Page @genrePager.Page of @genrePager.PagesCount</span>
-                <button class="btn btn-secondary" @onclick="GenresNextPage" disabled="@(genrePager.Page == genrePager.PagesCount)">Next</button>
-                <button class="btn btn-secondary" @onclick="GenresLastPage" disabled="@((genrePager.Page == genrePager.PagesCount))">Last Page</button>
-            </div>
-
-            <h4>Current connected</h4>
-            <div class="filter-form mb-3">
-                <input placeholder="Name" @bind="genreExistFilter.Name" class="form-control mb-1" />
-                <input placeholder="Description" @bind="genreExistFilter.Description" class="form-control mb-1" />
-                <select class="form-control mb-1" style="width: auto;" @bind="genreExistFilter.OrderBy">
-                    @foreach (var item in OrderByGenreOptions)
-                    {
-                        <option value="@item.Key">
-                            @item.Value
-                        </option>
-                    }
-                </select>
-                <select class="form-control mb-1" style="width: auto;" @bind="genreExistFilter.OrderDir">
-                    @foreach (var item in OrderDirOptions)
-                    {
-                        <option value="@item.Key">
-                            @item.Value
-                        </option>
-                    }
-                </select>
-
-                <button class="btn btn-primary" @onclick="ApplyExistGenreFilter">Apply Filter</button>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (genresExistItems == null)
-                    {
-                        <tr><td colspan="4">Loading...</td></tr>
-                    }
-                    else if (!genresExistItems.Any())
-                    {
-                        <tr><td colspan="4">No genres found.</td></tr>
-                    }
-                    else
-                    {
-                        @foreach (var genre in genresExistItems)
+                    <select class="form-control mb-1" style="width: auto;" @bind="genreFilter.OrderDir">
+                        @foreach (var item in OrderDirOptions)
                         {
-                            if (genre.IsDeleted)
-                            {
-                                <tr>
-                                    <td><del>@genre.Id</del></td>
-                                    <td><del>@genre.Name</del></td>
-                                    <td><del>@genre.Description</del></td>
-                                    <td></td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td>@genre.Id</td>
-                                    <td>@genre.Name</td>
-                                    <td>@genre.Description</td>
-                                    <td>
-                                        @if (genresUpdate.Contains(genre.Id))
-                                        {
-                                            <button type="button" class="btn btn-sm btn-danger me-1" @onclick="() => RemoveGenre(genre.Id)">Remove</button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => AddGenre(genre.Id)">Add</button>
-                                        }
-
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    }
-                </tbody>
-            </table>
-            <div class="d-flex align-items-center gap-3 mt-3">
-                <div class="d-flex align-items-center gap-2">
-                    <label for="itemsPerPage">Items per page:</label>
-                    <select id="itemsPerPage" class="form-select" style="width: auto;" @onchange="GenreExistItemsPerPageChanged">
-                        @foreach (var count in ItemsPerPageOptions)
-                        {
-                            <option value="@count" selected="@(genrePager.ItemsPerPage == count)">
-                                @count
+                            <option value="@item.Key">
+                                @item.Value
                             </option>
                         }
                     </select>
-                </div>
-                <button class="btn btn-secondary" @onclick="GenresExistFirstPage" disabled="@((genreExistPager.Page == 1))">First Page</button>
-                <button class="btn btn-secondary" @onclick="GenresExistPrevPage" disabled="@(genreExistPager.Page == 1)">Previous</button>
-                <span>Page @genreExistPager.Page of @genreExistPager.PagesCount</span>
-                <button class="btn btn-secondary" @onclick="GenresExistNextPage" disabled="@(genreExistPager.Page == genreExistPager.PagesCount)">Next</button>
-                <button class="btn btn-secondary" @onclick="GenresExistLastPage" disabled="@((genreExistPager.Page == genreExistPager.PagesCount))">Last Page</button>
-            </div>
 
+                    <button class="btn btn-primary" @onclick="ApplyGenreFilter">Apply Filter</button>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (genresItems == null)
+                        {
+                            <tr><td colspan="4">Loading...</td></tr>
+                        }
+                        else if (!genresItems.Any())
+                        {
+                            <tr><td colspan="4">No genres found.</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var genre in genresItems)
+                            {
+                                if (genre.IsDeleted)
+                                {
+                                    <tr>
+                                        <td><del>@genre.Id</del></td>
+                                        <td><del>@genre.Name</del></td>
+                                        <td><del>@genre.Description</del></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>@genre.Id</td>
+                                        <td>@genre.Name</td>
+                                        <td>@genre.Description</td>
+                                        <td>
+                                            @if (genresUpdate.Contains(genre.Id))
+                                            {
+                                                <button type="button" class="btn btn-sm btn-danger me-1" @onclick="() => RemoveGenre(genre.Id)">Remove</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => AddGenre(genre.Id)">Add</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div class="d-flex align-items-center gap-3 mt-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <label for="itemsPerPage">Items per page:</label>
+                        <select id="itemsPerPage" class="form-select" style="width: auto;" @onchange="GenreItemsPerPageChanged">
+                            @foreach (var count in ItemsPerPageOptions)
+                            {
+                                <option value="@count" selected="@(genrePager.ItemsPerPage == count)">
+                                    @count
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <button class="btn btn-secondary" @onclick="GenresFirstPage" disabled="@((genrePager.Page == 1))">First Page</button>
+                    <button class="btn btn-secondary" @onclick="GenresPrevPage" disabled="@(genrePager.Page == 1)">Previous</button>
+                    <span>Page @genrePager.Page of @genrePager.PagesCount</span>
+                    <button class="btn btn-secondary" @onclick="GenresNextPage" disabled="@(genrePager.Page == genrePager.PagesCount)">Next</button>
+                    <button class="btn btn-secondary" @onclick="GenresLastPage" disabled="@((genrePager.Page == genrePager.PagesCount))">Last Page</button>
+                </div>
+             </div>
+            <div class="col-md-12">
+                <h4>Current connected</h4>
+                <div class="filter-form mb-3">
+                    <input placeholder="Name" @bind="genreExistFilter.Name" class="form-control mb-1" />
+                    <input placeholder="Description" @bind="genreExistFilter.Description" class="form-control mb-1" />
+                    <select class="form-control mb-1" style="width: auto;" @bind="genreExistFilter.OrderBy">
+                        @foreach (var item in OrderByGenreOptions)
+                        {
+                            <option value="@item.Key">
+                                @item.Value
+                            </option>
+                        }
+                    </select>
+                    <select class="form-control mb-1" style="width: auto;" @bind="genreExistFilter.OrderDir">
+                        @foreach (var item in OrderDirOptions)
+                        {
+                            <option value="@item.Key">
+                                @item.Value
+                            </option>
+                        }
+                    </select>
+
+                    <button class="btn btn-primary" @onclick="ApplyExistGenreFilter">Apply Filter</button>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (genresExistItems == null)
+                        {
+                            <tr><td colspan="4">Loading...</td></tr>
+                        }
+                        else if (!genresExistItems.Any())
+                        {
+                            <tr><td colspan="4">No genres found.</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var genre in genresExistItems)
+                            {
+                                if (genre.IsDeleted)
+                                {
+                                    <tr>
+                                        <td><del>@genre.Id</del></td>
+                                        <td><del>@genre.Name</del></td>
+                                        <td><del>@genre.Description</del></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>@genre.Id</td>
+                                        <td>@genre.Name</td>
+                                        <td>@genre.Description</td>
+                                        <td>
+                                            @if (genresUpdate.Contains(genre.Id))
+                                            {
+                                                <button type="button" class="btn btn-sm btn-danger me-1" @onclick="() => RemoveGenre(genre.Id)">Remove</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => AddGenre(genre.Id)">Add</button>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div class="d-flex align-items-center gap-3 mt-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <label for="itemsPerPage">Items per page:</label>
+                        <select id="itemsPerPage" class="form-select" style="width: auto;" @onchange="GenreExistItemsPerPageChanged">
+                            @foreach (var count in ItemsPerPageOptions)
+                            {
+                                <option value="@count" selected="@(genrePager.ItemsPerPage == count)">
+                                    @count
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <button class="btn btn-secondary" @onclick="GenresExistFirstPage" disabled="@((genreExistPager.Page == 1))">First Page</button>
+                    <button class="btn btn-secondary" @onclick="GenresExistPrevPage" disabled="@(genreExistPager.Page == 1)">Previous</button>
+                    <span>Page @genreExistPager.Page of @genreExistPager.PagesCount</span>
+                    <button class="btn btn-secondary" @onclick="GenresExistNextPage" disabled="@(genreExistPager.Page == genreExistPager.PagesCount)">Next</button>
+                    <button class="btn btn-secondary" @onclick="GenresExistLastPage" disabled="@((genreExistPager.Page == genreExistPager.PagesCount))">Last Page</button>
+                </div>
+            </div>
         </div>
 
-        <div style="border: dashed; padding: 10px; margin: 10px">
-            <h4>All Tags</h4>
+        <div class="row">
+            <h4>Tags</h4>
+            <div class="col-md-12">
+                <h4>All</h4>
 
-            <div class="filter-form mb-3">
-                <input placeholder="Name" @bind="tagFilter.Name" class="form-control mb-1" />
-                <input placeholder="Description" @bind="tagFilter.Description" class="form-control mb-1" />
-                <select class="form-control mb-1" style="width: auto;" @bind="tagFilter.OrderBy">
-                    @foreach (var item in OrderByTagOptions)
-                    {
-                        <option value="@item.Key">
-                            @item.Value
-                        </option>
-                    }
-                </select>
-                <select class="form-control mb-1" style="width: auto;" @bind="tagFilter.OrderDir">
-                    @foreach (var item in OrderDirOptions)
-                    {
-                        <option value="@item.Key">
-                            @item.Value
-                        </option>
-                    }
-                </select>
-
-                <button class="btn btn-primary" @onclick="ApplyTagFilter">Apply Filter</button>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (tagsItems == null)
-                    {
-                        <tr><td colspan="4">Loading...</td></tr>
-                    }
-                    else if (!tagsItems.Any())
-                    {
-                        <tr><td colspan="4">No authors found.</td></tr>
-                    }
-                    else
-                    {
-                        @foreach (var tags in tagsItems)
+                <div class="filter-form mb-3">
+                    <input placeholder="Name" @bind="tagFilter.Name" class="form-control mb-1" />
+                    <input placeholder="Description" @bind="tagFilter.Description" class="form-control mb-1" />
+                    <select class="form-control mb-1" style="width: auto;" @bind="tagFilter.OrderBy">
+                        @foreach (var item in OrderByTagOptions)
                         {
-                            if (tags.IsDeleted)
-                            {
-                                <tr>
-                                    <td><del>@tags.Id</del></td>
-                                    <td><del>@tags.Name</del></td>
-                                    <td><del>@tags.Description</del></td>
-                                    <td></td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td>@tags.Id</td>
-                                    <td>@tags.Name</td>
-                                    <td>@tags.Description</td>
-                                    <td>
-                                        @if (tagsUpdate.Contains(tags.Id))
-                                        {
-                                            <button type="button" class="btn btn-sm btn-danger me-1" @onclick="() => RemoveTag(tags.Id)">Remove</button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => AddTag(tags.Id)">Add</button>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    }
-                </tbody>
-            </table>
-            <div class="d-flex align-items-center gap-3 mt-3">
-                <div class="d-flex align-items-center gap-2">
-                    <label for="itemsPerPage">Items per page:</label>
-                    <select id="itemsPerPage" class="form-select" style="width: auto;" @onchange="TagItemsPerPageChanged">
-                        @foreach (var count in ItemsPerPageOptions)
-                        {
-                            <option value="@count" selected="@(tagPager.ItemsPerPage == count)">
-                                @count
+                            <option value="@item.Key">
+                                @item.Value
                             </option>
                         }
                     </select>
-                </div>
-                <button class="btn btn-secondary" @onclick="TagsFirstPage" disabled="@((tagPager.Page == 1))">First Page</button>
-                <button class="btn btn-secondary" @onclick="TagsPrevPage" disabled="@(tagPager.Page == 1)">Previous</button>
-                <span>Page @tagPager.Page of @tagPager.PagesCount</span>
-                <button class="btn btn-secondary" @onclick="TagsNextPage" disabled="@(tagPager.Page == tagPager.PagesCount)">Next</button>
-                <button class="btn btn-secondary" @onclick="TagsLastPage" disabled="@((tagPager.Page == tagPager.PagesCount))">Last Page</button>
-            </div>
-
-            <h4>Connected</h4>
-            <div class="filter-form mb-3">
-                <input placeholder="Name" @bind="tagExistFilter.Name" class="form-control mb-1" />
-                <input placeholder="Description" @bind="tagExistFilter.Description" class="form-control mb-1" />
-                <select class="form-control mb-1" style="width: auto;" @bind="tagExistFilter.OrderBy">
-                    @foreach (var item in OrderByTagOptions)
-                    {
-                        <option value="@item.Key">
-                            @item.Value
-                        </option>
-                    }
-                </select>
-                <select class="form-control mb-1" style="width: auto;" @bind="tagExistFilter.OrderDir">
-                    @foreach (var item in OrderDirOptions)
-                    {
-                        <option value="@item.Key">
-                            @item.Value
-                        </option>
-                    }
-                </select>
-
-                <button class="btn btn-primary" @onclick="ApplyExistTagFilter">Apply Filter</button>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (tagsExistItems == null)
-                    {
-                        <tr><td colspan="4">Loading...</td></tr>
-                    }
-                    else if (!tagsExistItems.Any())
-                    {
-                        <tr><td colspan="4">No authors found.</td></tr>
-                    }
-                    else
-                    {
-                        @foreach (var tags in tagsExistItems)
+                    <select class="form-control mb-1" style="width: auto;" @bind="tagFilter.OrderDir">
+                        @foreach (var item in OrderDirOptions)
                         {
-                            if (tags.IsDeleted)
-                            {
-                                <tr>
-                                    <td><del>@tags.Id</del></td>
-                                    <td><del>@tags.Name</del></td>
-                                    <td><del>@tags.Description</del></td>
-                                    <td></td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td>@tags.Id</td>
-                                    <td>@tags.Name</td>
-                                    <td>@tags.Description</td>
-                                    <td>
-                                        @if (tagsUpdate.Contains(tags.Id))
-                                        {
-                                            <button type="button" class="btn btn-sm btn-danger me-1" @onclick="() => RemoveTag(tags.Id)">Remove</button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => AddTag(tags.Id)">Add</button>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    }
-                </tbody>
-            </table>
-            <div class="d-flex align-items-center gap-3 mt-3">
-                <div class="d-flex align-items-center gap-2">
-                    <label for="itemsPerPage">Items per page:</label>
-                    <select id="itemsPerPage" class="form-select" style="width: auto;" @onchange="TagExistItemsPerPageChanged">
-                        @foreach (var count in ItemsPerPageOptions)
-                        {
-                            <option value="@count" selected="@(tagExistPager.ItemsPerPage == count)">
-                                @count
+                            <option value="@item.Key">
+                                @item.Value
                             </option>
                         }
                     </select>
+
+                    <button class="btn btn-primary" @onclick="ApplyTagFilter">Apply Filter</button>
                 </div>
-                <button class="btn btn-secondary" @onclick="TagsFirstPage" disabled="@((tagExistPager.Page == 1))">First Page</button>
-                <button class="btn btn-secondary" @onclick="TagsPrevPage" disabled="@(tagExistPager.Page == 1)">Previous</button>
-                <span>Page @tagExistPager.Page of @tagExistPager.PagesCount</span>
-                <button class="btn btn-secondary" @onclick="TagsNextPage" disabled="@(tagExistPager.Page == tagExistPager.PagesCount)">Next</button>
-                <button class="btn btn-secondary" @onclick="TagsLastPage" disabled="@((tagExistPager.Page == tagExistPager.PagesCount))">Last Page</button>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (tagsItems == null)
+                        {
+                            <tr><td colspan="4">Loading...</td></tr>
+                        }
+                        else if (!tagsItems.Any())
+                        {
+                            <tr><td colspan="4">No authors found.</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var tags in tagsItems)
+                            {
+                                if (tags.IsDeleted)
+                                {
+                                    <tr>
+                                        <td><del>@tags.Id</del></td>
+                                        <td><del>@tags.Name</del></td>
+                                        <td><del>@tags.Description</del></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>@tags.Id</td>
+                                        <td>@tags.Name</td>
+                                        <td>@tags.Description</td>
+                                        <td>
+                                            @if (tagsUpdate.Contains(tags.Id))
+                                            {
+                                                <button type="button" class="btn btn-sm btn-danger me-1" @onclick="() => RemoveTag(tags.Id)">Remove</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => AddTag(tags.Id)">Add</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div class="d-flex align-items-center gap-3 mt-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <label for="itemsPerPage">Items per page:</label>
+                        <select id="itemsPerPage" class="form-select" style="width: auto;" @onchange="TagItemsPerPageChanged">
+                            @foreach (var count in ItemsPerPageOptions)
+                            {
+                                <option value="@count" selected="@(tagPager.ItemsPerPage == count)">
+                                    @count
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <button class="btn btn-secondary" @onclick="TagsFirstPage" disabled="@((tagPager.Page == 1))">First Page</button>
+                    <button class="btn btn-secondary" @onclick="TagsPrevPage" disabled="@(tagPager.Page == 1)">Previous</button>
+                    <span>Page @tagPager.Page of @tagPager.PagesCount</span>
+                    <button class="btn btn-secondary" @onclick="TagsNextPage" disabled="@(tagPager.Page == tagPager.PagesCount)">Next</button>
+                    <button class="btn btn-secondary" @onclick="TagsLastPage" disabled="@((tagPager.Page == tagPager.PagesCount))">Last Page</button>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <h4>Connected</h4>
+                <div class="filter-form mb-3">
+                    <input placeholder="Name" @bind="tagExistFilter.Name" class="form-control mb-1" />
+                    <input placeholder="Description" @bind="tagExistFilter.Description" class="form-control mb-1" />
+                    <select class="form-control mb-1" style="width: auto;" @bind="tagExistFilter.OrderBy">
+                        @foreach (var item in OrderByTagOptions)
+                        {
+                            <option value="@item.Key">
+                                @item.Value
+                            </option>
+                        }
+                    </select>
+                    <select class="form-control mb-1" style="width: auto;" @bind="tagExistFilter.OrderDir">
+                        @foreach (var item in OrderDirOptions)
+                        {
+                            <option value="@item.Key">
+                                @item.Value
+                            </option>
+                        }
+                    </select>
+
+                    <button class="btn btn-primary" @onclick="ApplyExistTagFilter">Apply Filter</button>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (tagsExistItems == null)
+                        {
+                            <tr><td colspan="4">Loading...</td></tr>
+                        }
+                        else if (!tagsExistItems.Any())
+                        {
+                            <tr><td colspan="4">No authors found.</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var tags in tagsExistItems)
+                            {
+                                if (tags.IsDeleted)
+                                {
+                                    <tr>
+                                        <td><del>@tags.Id</del></td>
+                                        <td><del>@tags.Name</del></td>
+                                        <td><del>@tags.Description</del></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>@tags.Id</td>
+                                        <td>@tags.Name</td>
+                                        <td>@tags.Description</td>
+                                        <td>
+                                            @if (tagsUpdate.Contains(tags.Id))
+                                            {
+                                                <button type="button" class="btn btn-sm btn-danger me-1" @onclick="() => RemoveTag(tags.Id)">Remove</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-sm btn-success me-1" @onclick="() => AddTag(tags.Id)">Add</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div class="d-flex align-items-center gap-3 mt-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <label for="itemsPerPage">Items per page:</label>
+                        <select id="itemsPerPage" class="form-select" style="width: auto;" @onchange="TagExistItemsPerPageChanged">
+                            @foreach (var count in ItemsPerPageOptions)
+                            {
+                                <option value="@count" selected="@(tagExistPager.ItemsPerPage == count)">
+                                    @count
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <button class="btn btn-secondary" @onclick="TagsFirstPage" disabled="@((tagExistPager.Page == 1))">First Page</button>
+                    <button class="btn btn-secondary" @onclick="TagsPrevPage" disabled="@(tagExistPager.Page == 1)">Previous</button>
+                    <span>Page @tagExistPager.Page of @tagExistPager.PagesCount</span>
+                    <button class="btn btn-secondary" @onclick="TagsNextPage" disabled="@(tagExistPager.Page == tagExistPager.PagesCount)">Next</button>
+                    <button class="btn btn-secondary" @onclick="TagsLastPage" disabled="@((tagExistPager.Page == tagExistPager.PagesCount))">Last Page</button>
+                </div>
             </div>
         </div>
 
@@ -856,9 +869,4 @@ else
         <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
     </EditForm>
 
-
-    @foreach (var item in genresUpdate)
-    {
-        <label>@item</label>
-    }
 }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.Identity.Web;
 using VideoLibraryBlazorFrontend.Shared.CopyrightsModels;
 using static VideoLibraryBlazorFrontend.Components.Pages.Home;
 
@@ -8,20 +9,32 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
     {
         [Inject]
         HttpClient HttpClient { get; set; }
+        [Inject]
+        NavigationManager NavManager { get; set; }
+
 
         private CopyrightsIM Copyright = new CopyrightsIM();
 
         private async Task AddToDataBase() 
         {
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Copyrights", Copyright);
 
-            if (response.IsSuccessStatusCode)
+            try
             {
-                Copyright.Name = null;
-                Copyright.ShortName = null;
-                Copyright.Description = null;
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Copyrights", Copyright);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Copyright.Name = null;
+                    Copyright.ShortName = null;
+                    Copyright.Description = null;
+                }
+                else { }
             }
-            else { }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
     
     }

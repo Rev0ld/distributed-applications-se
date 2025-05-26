@@ -34,22 +34,26 @@ namespace Common.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Biography")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("MiddleName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -71,16 +75,19 @@ namespace Common.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ShortName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -102,7 +109,8 @@ namespace Common.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Extension")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -111,7 +119,8 @@ namespace Common.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -133,13 +142,15 @@ namespace Common.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -257,13 +268,15 @@ namespace Common.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -288,10 +301,12 @@ namespace Common.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("FileId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<int>("FormatId")
                         .HasColumnType("int");
@@ -303,7 +318,8 @@ namespace Common.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -323,13 +339,13 @@ namespace Common.Migrations
             modelBuilder.Entity("Common.Entities.M2MEntities.AuthorVideo", b =>
                 {
                     b.HasOne("Common.Entities.Authors", "Author")
-                        .WithMany()
+                        .WithMany("Videos")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Common.Entities.Videos", "Video")
-                        .WithMany()
+                        .WithMany("Authors")
                         .HasForeignKey("VideoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -342,13 +358,13 @@ namespace Common.Migrations
             modelBuilder.Entity("Common.Entities.M2MEntities.GenreVideo", b =>
                 {
                     b.HasOne("Common.Entities.Genres", "Genre")
-                        .WithMany()
+                        .WithMany("Videos")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Common.Entities.Videos", "Video")
-                        .WithMany()
+                        .WithMany("Genres")
                         .HasForeignKey("VideoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -361,13 +377,13 @@ namespace Common.Migrations
             modelBuilder.Entity("Common.Entities.M2MEntities.TagVideo", b =>
                 {
                     b.HasOne("Common.Entities.Tags", "Tag")
-                        .WithMany()
+                        .WithMany("Videos")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Common.Entities.Videos", "Video")
-                        .WithMany()
+                        .WithMany("Tags")
                         .HasForeignKey("VideoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -394,6 +410,30 @@ namespace Common.Migrations
                     b.Navigation("Copyright");
 
                     b.Navigation("Format");
+                });
+
+            modelBuilder.Entity("Common.Entities.Authors", b =>
+                {
+                    b.Navigation("Videos");
+                });
+
+            modelBuilder.Entity("Common.Entities.Genres", b =>
+                {
+                    b.Navigation("Videos");
+                });
+
+            modelBuilder.Entity("Common.Entities.Tags", b =>
+                {
+                    b.Navigation("Videos");
+                });
+
+            modelBuilder.Entity("Common.Entities.Videos", b =>
+                {
+                    b.Navigation("Authors");
+
+                    b.Navigation("Genres");
+
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

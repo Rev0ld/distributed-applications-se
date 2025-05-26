@@ -129,11 +129,11 @@ OnValidSubmit="AddToDataBase">
                         </select>
                     </div>
 
-                    <button class="btn btn-secondary" @onclick="FormatsFirstPage" disabled="@(formatsPager.Page == 1)">First Page</button>
-                    <button class="btn btn-secondary" @onclick="FormatsPrevPage" disabled="@(formatsPager.Page == 1)">Previous</button>
+                    <button type="button" class="btn btn-secondary" @onclick="FormatsFirstPage" disabled="@(formatsPager.Page == 1)">First Page</button>
+                    <button type="button" class="btn btn-secondary" @onclick="FormatsPrevPage" disabled="@(formatsPager.Page == 1)">Previous</button>
                     <span>Page @formatsPager.Page of @formatsPager.PagesCount</span>
-                    <button class="btn btn-secondary" @onclick="FormatsNextPage" disabled="@(formatsPager.Page == formatsPager.PagesCount)">Next</button>
-                    <button class="btn btn-secondary" @onclick="FormatsLastPage" disabled="@(formatsPager.Page == formatsPager.PagesCount)">Last Page</button>
+                    <button type="button" class="btn btn-secondary" @onclick="FormatsNextPage" disabled="@(formatsPager.Page == formatsPager.PagesCount)">Next</button>
+                    <button type="button" class="btn btn-secondary" @onclick="FormatsLastPage" disabled="@(formatsPager.Page == formatsPager.PagesCount)">Last Page</button>
                 </div>
             </div>
         </div>
@@ -231,11 +231,11 @@ OnValidSubmit="AddToDataBase">
                         </select>
                     </div>
 
-                    <button class="btn btn-secondary" @onclick="CopyrightFirstPage" disabled="@(copyrightPager.Page == 1)">First Page</button>
-                    <button class="btn btn-secondary" @onclick="CopyrightPrevPage" disabled="@(copyrightPager.Page == 1)">Previous</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CopyrightFirstPage" disabled="@(copyrightPager.Page == 1)">First Page</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CopyrightPrevPage" disabled="@(copyrightPager.Page == 1)">Previous</button>
                     <span>Page @copyrightPager.Page of @copyrightPager.PagesCount</span>
-                    <button class="btn btn-secondary" @onclick="CopyrightNextPage" disabled="@(copyrightPager.Page == copyrightPager.PagesCount)">Next</button>
-                    <button class="btn btn-secondary" @onclick="CopyrightLastPage" disabled="@(copyrightPager.Page == copyrightPager.PagesCount)">Last Page</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CopyrightNextPage" disabled="@(copyrightPager.Page == copyrightPager.PagesCount)">Next</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CopyrightLastPage" disabled="@(copyrightPager.Page == copyrightPager.PagesCount)">Last Page</button>
                 </div>
             </div>
         </div>
@@ -344,11 +344,11 @@ OnValidSubmit="AddToDataBase">
                 </select>
             </div>
 
-            <button class="btn btn-secondary" @onclick="AuthorsFirstPage" disabled="@(authorPager.Page == 1)">First Page</button>
-            <button class="btn btn-secondary" @onclick="AuthorsPrevPage" disabled="@(authorPager.Page == 1)">Previous</button>
+            <button type ="button" class="btn btn-secondary" @onclick ="AuthorsFirstPage" disabled="@(authorPager.Page == 1)">First Page</button>
+            <button type="button" class="btn btn-secondary" @onclick="AuthorsPrevPage" disabled="@(authorPager.Page == 1)">Previous</button>
             <span>Page @authorPager.Page of @authorPager.PagesCount</span>
-            <button class="btn btn-secondary" @onclick="AuthorsNextPage" disabled="@(authorPager.Page == authorPager.PagesCount)">Next</button>
-            <button class="btn btn-secondary" @onclick="AuthorsLastPage" disabled="@(authorPager.Page == authorPager.PagesCount)">Last Page</button>
+            <button type="button"class="btn btn-secondary" @onclick="AuthorsNextPage" disabled="@(authorPager.Page == authorPager.PagesCount)">Next</button>
+            <button type="button" class="btn btn-secondary" @onclick="AuthorsLastPage" disabled="@(authorPager.Page == authorPager.PagesCount)">Last Page</button>
         </div>
     </div>
     <div style="border: dashed">
@@ -373,7 +373,7 @@ OnValidSubmit="AddToDataBase">
                 }
             </select>
 
-            <button class="btn btn-primary" @onclick="ApplyGenreFilter">Apply Filter</button>
+            <button type="button" class="btn btn-primary" @onclick="ApplyGenreFilter">Apply Filter</button>
         </div>
 
         <table class="table table-striped">
@@ -448,11 +448,11 @@ OnValidSubmit="AddToDataBase">
                     }
                 </select>
             </div>
-            <button class="btn btn-secondary" @onclick="GenresFirstPage" disabled="@((genrePager.Page == 1))">First Page</button>
-            <button class="btn btn-secondary" @onclick="GenresPrevPage" disabled="@(genrePager.Page == 1)">Previous</button>
+            <button type="button" class="btn btn-secondary" @onclick="GenresFirstPage" disabled="@((genrePager.Page == 1))">First Page</button>
+            <button type="button" class="btn btn-secondary" @onclick="GenresPrevPage" disabled="@(genrePager.Page == 1)">Previous</button>
             <span>Page @genrePager.Page of @genrePager.PagesCount</span>
-            <button class="btn btn-secondary" @onclick="GenresNextPage" disabled="@(genrePager.Page == genrePager.PagesCount)">Next</button>
-            <button class="btn btn-secondary" @onclick="GenresLastPage" disabled="@((genrePager.Page == genrePager.PagesCount))">Last Page</button>
+            <button type="button" class="btn btn-secondary" @onclick="GenresNextPage" disabled="@(genrePager.Page == genrePager.PagesCount)">Next</button>
+            <button type="button" class="btn btn-secondary" @onclick="GenresLastPage" disabled="@((genrePager.Page == genrePager.PagesCount))">Last Page</button>
         </div>
     </div>
     <div style="border: dashed">
@@ -478,7 +478,7 @@ OnValidSubmit="AddToDataBase">
                 }
             </select>
 
-            <button class="btn btn-primary" @onclick="ApplyTagFilter">Apply Filter</button>
+            <button type="button" class="btn btn-primary" @onclick="ApplyTagFilter">Apply Filter</button>
         </div>
 
         <table class="table table-striped">
@@ -552,11 +552,11 @@ OnValidSubmit="AddToDataBase">
                     }
                 </select>
             </div>
-            <button class="btn btn-secondary" @onclick="TagsFirstPage" disabled="@((tagPager.Page == 1))">First Page</button>
-            <button class="btn btn-secondary" @onclick="TagsPrevPage" disabled="@(tagPager.Page == 1)">Previous</button>
+            <button type="button" class="btn btn-secondary" @onclick="TagsFirstPage" disabled="@((tagPager.Page == 1))">First Page</button>
+            <button type="button"class="btn btn-secondary" @onclick="TagsPrevPage" disabled="@(tagPager.Page == 1)">Previous</button>
             <span>Page @tagPager.Page of @tagPager.PagesCount</span>
-            <button class="btn btn-secondary" @onclick="TagsNextPage" disabled="@(tagPager.Page == tagPager.PagesCount)">Next</button>
-            <button class="btn btn-secondary" @onclick="TagsLastPage" disabled="@((tagPager.Page == tagPager.PagesCount))">Last Page</button>
+            <button type="button"class="btn btn-secondary" @onclick="TagsNextPage" disabled="@(tagPager.Page == tagPager.PagesCount)">Next</button>
+            <button type="button" class="btn btn-secondary" @onclick="TagsLastPage" disabled="@((tagPager.Page == tagPager.PagesCount))">Last Page</button>
         </div>
     </div>
 

@@ -2,6 +2,7 @@ using Common.Entities;
 using Common.Entities.M2MEntities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Identity.Web;
 using System.Text;
 using System.Text.Json;
 using VideoLibraryBlazorFrontend.Shared;
@@ -143,16 +144,24 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         private async Task HandleValidSubmit()
         {
-            var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Video/{VideoId}", Video);
-
-
-            var responseUpdateAuthors = await HttpClient.PostAsync($"https://localhost:7209/api/Video/author/update/{VideoId}", new StringContent(JsonSerializer.Serialize(authorsUpdate), Encoding.UTF8, "application/json"));
-            var responseUpdateGenres = await HttpClient.PostAsync($"https://localhost:7209/api/Video/genre/update/{VideoId}", new StringContent(JsonSerializer.Serialize(genresUpdate), Encoding.UTF8, "application/json"));
-            var responseUpdateTags = await HttpClient.PostAsync($"https://localhost:7209/api/Video/tag/update/{VideoId}", new StringContent(JsonSerializer.Serialize(tagsUpdate), Encoding.UTF8, "application/json"));
-            if (response.IsSuccessStatusCode && responseUpdateAuthors.IsSuccessStatusCode && responseUpdateGenres.IsSuccessStatusCode && responseUpdateTags.IsSuccessStatusCode)
+            try
             {
-                await OnInitializedAsync();
+                var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Video/{VideoId}", Video);
+
+
+                var responseUpdateAuthors = await HttpClient.PostAsync($"https://localhost:7209/api/Video/author/update/{VideoId}", new StringContent(JsonSerializer.Serialize(authorsUpdate), Encoding.UTF8, "application/json"));
+                var responseUpdateGenres = await HttpClient.PostAsync($"https://localhost:7209/api/Video/genre/update/{VideoId}", new StringContent(JsonSerializer.Serialize(genresUpdate), Encoding.UTF8, "application/json"));
+                var responseUpdateTags = await HttpClient.PostAsync($"https://localhost:7209/api/Video/tag/update/{VideoId}", new StringContent(JsonSerializer.Serialize(tagsUpdate), Encoding.UTF8, "application/json"));
+                if (response.IsSuccessStatusCode && responseUpdateAuthors.IsSuccessStatusCode && responseUpdateGenres.IsSuccessStatusCode && responseUpdateTags.IsSuccessStatusCode)
+                {
+                    await OnInitializedAsync();
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
 
         private void Cancel()
@@ -164,140 +173,187 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         private async Task LoadFormats()
         {
-            var request = new IndexRequestModel<FormatsFilter>
+            try
             {
-                Pager = formatsPager,
-                Filter = formatsFilter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Formats/get", request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Formats, FormatsFilter>>>();
-                if (result?.Success == true)
+                var request = new IndexRequestModel<FormatsFilter>
                 {
-                    formatsItems = result.Data.Items;
-                    formatsPager = result.Data.Pager;
-                    formatsFilter = result.Data.Filter;
+                    Pager = formatsPager,
+                    Filter = formatsFilter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Formats/get", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Formats, FormatsFilter>>>();
+                    if (result?.Success == true)
+                    {
+                        formatsItems = result.Data.Items;
+                        formatsPager = result.Data.Pager;
+                        formatsFilter = result.Data.Filter;
+                    }
                 }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
         private async Task LoadCopyrights()
         {
-            var request = new IndexRequestModel<CopyrightsFilter>
+            try
             {
-                Pager = copyrightPager,
-                Filter = copyrightFilter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Copyrights/get", request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Copyrights, CopyrightsFilter>>>();
-                if (result?.Success == true)
+                var request = new IndexRequestModel<CopyrightsFilter>
                 {
-                    copyrightItems = result.Data.Items;
-                    copyrightPager = result.Data.Pager;
-                    copyrightFilter = result.Data.Filter;
+                    Pager = copyrightPager,
+                    Filter = copyrightFilter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Copyrights/get", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Copyrights, CopyrightsFilter>>>();
+                    if (result?.Success == true)
+                    {
+                        copyrightItems = result.Data.Items;
+                        copyrightPager = result.Data.Pager;
+                        copyrightFilter = result.Data.Filter;
+                    }
                 }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
 
         }
 
         private async Task LoadAuthors() 
         {
-            var request = new IndexRequestModel<AuthorsFilter>
+            try
             {
-                Pager = authorPager,
-                Filter = authorFilter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Authors/get", request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Authors, AuthorsFilter>>>();
-                if (result?.Success == true)
+                var request = new IndexRequestModel<AuthorsFilter>
                 {
-                    authorsItems = result.Data.Items;
-                    authorPager = result.Data.Pager;
-                    authorFilter = result.Data.Filter;
-                }
-            }
-        }
-        private async Task LoadExistAuthors() 
-        {
-            var request = new IndexRequestModel<AuthorsFilter>
-            {
-                Pager = authorExistPager,
-                Filter = authorExistFilter
-            };
+                    Pager = authorPager,
+                    Filter = authorFilter
+                };
 
-            var response = await HttpClient.PostAsJsonAsync($"https://localhost:7209/api/Video/get/author/{VideoId}", request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Authors, AuthorsFilter>>>();
-                if (result?.Success == true)
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Authors/get", request);
+                if (response.IsSuccessStatusCode)
                 {
-                    authorsExistItems = result.Data.Items;
-                    authorExistPager = result.Data.Pager;
-                    authorExistFilter = result.Data.Filter;
-
-                    foreach (var item in authorsExistItems)
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Authors, AuthorsFilter>>>();
+                    if (result?.Success == true)
                     {
-                        authorsUpdate.Add(item.Id);
+                        authorsItems = result.Data.Items;
+                        authorPager = result.Data.Pager;
+                        authorFilter = result.Data.Filter;
                     }
                 }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
+        }
+        private async Task LoadExistAuthors() 
+        {
+            try
+            {
+                var request = new IndexRequestModel<AuthorsFilter>
+                {
+                    Pager = authorExistPager,
+                    Filter = authorExistFilter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync($"https://localhost:7209/api/Video/get/author/{VideoId}", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Authors, AuthorsFilter>>>();
+                    if (result?.Success == true)
+                    {
+                        authorsExistItems = result.Data.Items;
+                        authorExistPager = result.Data.Pager;
+                        authorExistFilter = result.Data.Filter;
+                    }
+                    var responseAllData = await HttpClient.GetFromJsonAsync<ApiResponse<List<int>>>($"https://localhost:7209/api/Video/author/{VideoId}");
+                    if (responseAllData?.Success == true)
+                    {
+                        authorsUpdate = responseAllData.Data;
+                    }
+                }
+            }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
 
         private async Task LoadGenres() 
         {
-            var request = new IndexRequestModel<GenresFilter>
+            try
             {
-                Pager = genrePager,
-                Filter = genreFilter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Genres/get", request);
-            if (response.IsSuccessStatusCode) 
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Genres, GenresFilter>>>();
-                if (result?.Success == true) 
+                var request = new IndexRequestModel<GenresFilter>
                 {
-                    genresItems = result.Data.Items;
-                    genrePager = result.Data.Pager;
-                    genreFilter = result.Data.Filter;
+                    Pager = genrePager,
+                    Filter = genreFilter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Genres/get", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Genres, GenresFilter>>>();
+                    if (result?.Success == true)
+                    {
+                        genresItems = result.Data.Items;
+                        genrePager = result.Data.Pager;
+                        genreFilter = result.Data.Filter;
+                    }
                 }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
 
         }
         private async Task LoadExistGenres() 
         {
-            var request = new IndexRequestModel<GenresFilter>
+            try
             {
-                Pager = genreExistPager,
-                Filter = genreExistFilter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync($"https://localhost:7209/api/Video/get/genre/{VideoId}", request);
-            if (response.IsSuccessStatusCode) 
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Genres, GenresFilter>>>();
-                if (result?.Success == true) 
+                var request = new IndexRequestModel<GenresFilter>
                 {
-                    genresExistItems = result.Data.Items;
-                    genreExistPager = result.Data.Pager;
-                    genreExistFilter = result.Data.Filter;
+                    Pager = genreExistPager,
+                    Filter = genreExistFilter
+                };
 
-                    foreach (var item in genresExistItems)
+                var response = await HttpClient.PostAsJsonAsync($"https://localhost:7209/api/Video/get/genre/{VideoId}", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Genres, GenresFilter>>>();
+                    if (result?.Success == true)
                     {
-                        genresUpdate.Add(item.Id);
+                        genresExistItems = result.Data.Items;
+                        genreExistPager = result.Data.Pager;
+                        genreExistFilter = result.Data.Filter;
+
+                    }
+                    var responseAllData = await HttpClient.GetFromJsonAsync<ApiResponse<List<int>>>($"https://localhost:7209/api/Video/genre/{VideoId}");
+                    if (responseAllData?.Success == true)
+                    {
+                        genresUpdate = responseAllData.Data;
                     }
 
                 }
-
-
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
 
 
 
@@ -305,52 +361,66 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         private async Task LoadTags()
         {
-            var request = new IndexRequestModel<TagsFilter>
+            try
             {
-                Pager = tagPager,
-                Filter = tagFilter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Tags/get", request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Tags, TagsFilter>>>();
-                if (result?.Success == true)
+                var request = new IndexRequestModel<TagsFilter>
                 {
-                    tagsItems = result.Data.Items;
-                    tagPager = result.Data.Pager;
-                    tagFilter = result.Data.Filter;
+                    Pager = tagPager,
+                    Filter = tagFilter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Tags/get", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Tags, TagsFilter>>>();
+                    if (result?.Success == true)
+                    {
+                        tagsItems = result.Data.Items;
+                        tagPager = result.Data.Pager;
+                        tagFilter = result.Data.Filter;
+                    }
                 }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
 
         }
         private async Task LoadExistTags()
         {
-            var request = new IndexRequestModel<TagsFilter>
+            try
             {
-                Pager = tagExistPager,
-                Filter = tagExistFilter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync($"https://localhost:7209/api/Video/get/Tag/{VideoId}", request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Tags, TagsFilter>>>();
-                if (result?.Success == true)
+                var request = new IndexRequestModel<TagsFilter>
                 {
-                    tagsExistItems = result.Data.Items;
-                    tagExistPager = result.Data.Pager;
-                    tagExistFilter = result.Data.Filter;
+                    Pager = tagExistPager,
+                    Filter = tagExistFilter
+                };
 
-                    foreach (var item in tagsExistItems)
+                var response = await HttpClient.PostAsJsonAsync($"https://localhost:7209/api/Video/get/Tag/{VideoId}", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Tags, TagsFilter>>>();
+                    if (result?.Success == true)
                     {
-                        tagsUpdate.Add(item.Id);
+                        tagsExistItems = result.Data.Items;
+                        tagExistPager = result.Data.Pager;
+                        tagExistFilter = result.Data.Filter;
+                    }
+                    var responseAllData = await HttpClient.GetFromJsonAsync<ApiResponse<List<int>>>($"https://localhost:7209/api/Video/tag/{VideoId}");
+                    if (responseAllData?.Success == true)
+                    {
+                        tagsUpdate = responseAllData.Data;
                     }
 
                 }
-
-
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
 
 
 

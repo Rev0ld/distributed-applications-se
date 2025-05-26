@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.Identity.Web;
 using VideoLibraryBlazorFrontend.Shared;
 using VideoLibraryBlazorFrontend.Shared.FormatsModels;
 
@@ -19,21 +20,38 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            var response = await HttpClient.GetFromJsonAsync<ApiResponse<FormatsIM>>($"https://localhost:7209/api/Formats/{FormatId}");
-            if (response != null && response.Success)
+            try
             {
-                Format = response.Data;
+                var response = await HttpClient.GetFromJsonAsync<ApiResponse<FormatsIM>>($"https://localhost:7209/api/Formats/{FormatId}");
+                if (response != null && response.Success)
+                {
+                    Format = response.Data;
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
 
         private async Task HandleValidSubmit()
         {
-            var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Formats/{FormatId}", Format);
 
-            if (response.IsSuccessStatusCode)
+            try
             {
-                NavManager.NavigateTo("/formats");
+                var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Formats/{FormatId}", Format);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    NavManager.NavigateTo("/formats");
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
 
         }
 

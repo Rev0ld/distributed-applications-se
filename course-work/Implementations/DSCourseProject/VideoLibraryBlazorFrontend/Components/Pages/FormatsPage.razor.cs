@@ -4,6 +4,7 @@ using VideoLibraryBlazorFrontend.Shared.AuthorsModels;
 using VideoLibraryBlazorFrontend.Shared;
 using VideoLibraryBlazorFrontend.Shared.FormatsModels;
 using Microsoft.JSInterop;
+using Microsoft.Identity.Web;
 
 namespace VideoLibraryBlazorFrontend.Components.Pages
 {
@@ -51,29 +52,37 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         private async Task LoadFormats()
         {
-            var request = new IndexRequestModel<FormatsFilter>
+            try
             {
-                Pager = pager,
-                Filter = filter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Formats/get", request);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Formats, FormatsFilter>>>();
-
-                if (result?.Success == true)
+                var request = new IndexRequestModel<FormatsFilter>
                 {
-                    Items = result.Data.Items;
-                    pager = result.Data.Pager;
-                    filter = result.Data.Filter;
+                    Pager = pager,
+                    Filter = filter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Formats/get", request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Formats, FormatsFilter>>>();
+
+                    if (result?.Success == true)
+                    {
+                        Items = result.Data.Items;
+                        pager = result.Data.Pager;
+                        filter = result.Data.Filter;
+                    }
+                }
+                else
+                {
+
                 }
             }
-            else
+            catch (MicrosoftIdentityWebChallengeUserException)
             {
-
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
             }
+            
         }
         private async Task DeleteFormat(int id)
         {
@@ -83,11 +92,19 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             {
                 return;
             }
-            var response = await HttpClient.DeleteAsync($"https://localhost:7209/api/Formats/{id}");
-            if (response.IsSuccessStatusCode)
+            try
             {
-                await LoadFormats();
+                var response = await HttpClient.DeleteAsync($"https://localhost:7209/api/Formats/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    await LoadFormats();
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
         private void NavigateToEdit(int id)
         {

@@ -9,10 +9,10 @@ namespace Common.Entities
 {
     public class Formats : BaseEntity
     {
-        [Length(3, 50)]
+        [StringLength(50, MinimumLength = 3)]
         public string? Type { get; set; }
 
-        [Length(1, 10)]
+        [StringLength(10, MinimumLength = 1)]
         public string? Extension { get; set; }
 
         public bool IsPhysical { get; set; }

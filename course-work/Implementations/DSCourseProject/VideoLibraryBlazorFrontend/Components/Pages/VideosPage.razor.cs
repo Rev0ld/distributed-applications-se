@@ -1,5 +1,6 @@
 using Common.Entities;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Identity.Web;
 using Microsoft.JSInterop;
 using VideoLibraryBlazorFrontend.Shared;
 using VideoLibraryBlazorFrontend.Shared.AuthorsModels;
@@ -48,29 +49,37 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         private async Task LoadVideos()
         {
-            var request = new IndexRequestModel<VideosFilter>
+            try
             {
-                Pager = pager,
-                Filter = filter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Video/get", request);
-            Console.WriteLine(response.Content.ReadAsStringAsync().Result);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Videos, VideosFilter>>>();
-
-                if (result?.Success == true)
+                var request = new IndexRequestModel<VideosFilter>
                 {
-                    Items = result.Data.Items;
-                    pager = result.Data.Pager;
-                    filter = result.Data.Filter;
+                    Pager = pager,
+                    Filter = filter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Video/get", request);
+                Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Videos, VideosFilter>>>();
+
+                    if (result?.Success == true)
+                    {
+                        Items = result.Data.Items;
+                        pager = result.Data.Pager;
+                        filter = result.Data.Filter;
+                    }
+                }
+                else
+                {
+
                 }
             }
-            else
+            catch (MicrosoftIdentityWebChallengeUserException)
             {
-
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
             }
+            
         }
 
         private async Task DeleteVideo(int id)
@@ -81,11 +90,19 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             {
                 return;
             }
-            var response = await HttpClient.DeleteAsync($"https://localhost:7209/api/Video/{id}");
-            if (response.IsSuccessStatusCode)
+            try
             {
-                await LoadVideos();
+                var response = await HttpClient.DeleteAsync($"https://localhost:7209/api/Video/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    await LoadVideos();
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
         private void NavigateToEdit(int id)
         {

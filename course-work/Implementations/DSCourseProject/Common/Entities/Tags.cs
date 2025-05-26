@@ -11,10 +11,10 @@ namespace Common.Entities
 {
     public class Tags : BaseEntity
     {
-        [Length(3,50)]
+        [StringLength(50, MinimumLength = 3)]
         public string? Name { get; set; }
 
-        [Length(3,128)]
+        [StringLength(128, MinimumLength = 3)]
         public string? Description { get; set; }
 
         [JsonIgnore]

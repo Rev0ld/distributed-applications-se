@@ -80,6 +80,7 @@ namespace VideoLibraryAPI.Controllers
 
 
         
+
         [HttpPost("get/author/{videoId}")]
         public IActionResult GetAuthors(int videoId, [FromBody] IndexIM<AuthorVideo, AuthorFilterIM> model)
         {
@@ -138,6 +139,20 @@ namespace VideoLibraryAPI.Controllers
                     }
                 }
                 );
+        }
+
+        [HttpGet("author/{videoId}")]
+        public IActionResult GetAllAuthorsIds(int videoId)
+        {
+            BaseRepository<AuthorVideo> repo = new();
+
+            var authorIds = repo.GetAll(x => x.VideoId == videoId).Select(x => x.AuthorId).ToList();
+
+            return Ok(new
+            {
+                success = true,
+                data = authorIds
+            });
         }
 
         [HttpPost("author/{videoId}/{authorId}")]
@@ -331,6 +346,20 @@ namespace VideoLibraryAPI.Controllers
                 );
         }
 
+        [HttpGet("genre/{videoId}")]
+        public IActionResult GetAllGenresIds(int videoId) 
+        {
+            BaseRepository<GenreVideo> repo = new();
+
+            var genreIds = repo.GetAll(x => x.VideoId == videoId).Select(x => x.GenreId).ToList();
+
+            return Ok(new 
+            {
+                success = true,
+                data = genreIds
+            });
+        }
+
         [HttpPost("genre/{videoId}/{genreId}")]
         public IActionResult AddGenre(int videoId, int genreId)
         {
@@ -519,6 +548,20 @@ namespace VideoLibraryAPI.Controllers
                     }
                 }
                 );
+        }
+
+        [HttpGet("tag/{videoId}")]
+        public IActionResult GetAllTagsIds(int videoId)
+        {
+            BaseRepository<TagVideo> repo = new();
+
+            var tagIds = repo.GetAll(x => x.VideoId == videoId).Select(x => x.TagId).ToList();
+
+            return Ok(new
+            {
+                success = true,
+                data = tagIds
+            });
         }
 
         [HttpPost("tag/{videoId}/{tagId}")]

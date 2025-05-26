@@ -11,16 +11,16 @@ namespace Common.Entities
 {
     public class Authors : BaseEntity
     {
-        [Length(1, 50)]
+        [StringLength(50, MinimumLength = 1)]
         public string? FirstName { get; set; }
 
-        [Length(1, 50)]
+        [StringLength(50, MinimumLength = 1)]
         public string? MiddleName { get; set; }
 
-        [Length(1, 50)]
+        [StringLength(50, MinimumLength = 1)]
         public string? LastName { get; set; }
 
-        [Length(1, 255)]
+        [StringLength(255, MinimumLength = 1)]
         public string? Biography { get; set; }
 
         [JsonIgnore]

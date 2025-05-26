@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.Identity.Web;
 using VideoLibraryBlazorFrontend.Shared.AuthorsModels;
 using VideoLibraryBlazorFrontend.Shared.FormatsModels;
 
@@ -9,19 +10,32 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
         [Inject]
         HttpClient HttpClient { get; set; }
 
-        private Shared.FormatsModels.FormatsIM Format = new Shared.FormatsModels.FormatsIM();
+        [Inject]
+        NavigationManager NavManager { get; set; }
+
+        private FormatsIM Format = new FormatsIM();
+
+
         private async Task AddToDataBase()
         {
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Formats", Format);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                Format.Type = null;
-                Format.Extension = null;
-                Format.IsPhysical = false;
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Formats", Format);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Format.Type = null;
+                    Format.Extension = null;
+                    Format.IsPhysical = false;
+                }
+                else
+                { }
             }
-            else
-            { }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
     }
 }

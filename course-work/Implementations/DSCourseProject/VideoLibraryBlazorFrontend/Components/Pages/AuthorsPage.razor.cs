@@ -1,5 +1,6 @@
 using Common.Entities;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Identity.Web;
 using Microsoft.JSInterop;
 using System.Text.Json.Serialization;
 using VideoLibraryBlazorFrontend.Shared;
@@ -50,29 +51,37 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         private async Task LoadAuthors()
         {
-            var request = new IndexRequestModel<AuthorsFilter>
+            try
             {
-                Pager = pager,
-                Filter = filter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Authors/get", request);
-
-            if (response.IsSuccessStatusCode)
-             {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Authors, AuthorsFilter>>>();
-
-                if (result?.Success == true)
+                var request = new IndexRequestModel<AuthorsFilter>
                 {
-                    Items = result.Data.Items;
-                    pager = result.Data.Pager;
-                    filter = result.Data.Filter;
+                    Pager = pager,
+                    Filter = filter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Authors/get", request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Authors, AuthorsFilter>>>();
+
+                    if (result?.Success == true)
+                    {
+                        Items = result.Data.Items;
+                        pager = result.Data.Pager;
+                        filter = result.Data.Filter;
+                    }
+                }
+                else
+                {
+
                 }
             }
-            else
+            catch (MicrosoftIdentityWebChallengeUserException)
             {
-            
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
             }
+            
         }
 
         private async Task DeleteAuthor(int id) 
@@ -83,11 +92,19 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             {
                 return;
             }
-            var response = await HttpClient.DeleteAsync($"https://localhost:7209/api/Authors/{id}");
-            if (response.IsSuccessStatusCode)
+            try
             {
-                await LoadAuthors();
+                var response = await HttpClient.DeleteAsync($"https://localhost:7209/api/Authors/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    await LoadAuthors();
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
         private void NavigateToEdit(int id)
         {

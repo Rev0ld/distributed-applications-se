@@ -1,5 +1,6 @@
 using Common.Entities;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Identity.Web;
 using Microsoft.JSInterop;
 using VideoLibraryBlazorFrontend.Shared;
 using VideoLibraryBlazorFrontend.Shared.AuthorsModels;
@@ -75,11 +76,19 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
             {
                 return;
             }
-            var response = await HttpClient.DeleteAsync($"https://localhost:7209/api/Copyrights/{id}");
-            if (response.IsSuccessStatusCode)
+            try
             {
-                await LoadCopyrights();
+                var response = await HttpClient.DeleteAsync($"https://localhost:7209/api/Copyrights/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    await LoadCopyrights();
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
         private void NavigateToEdit(int id)
         {

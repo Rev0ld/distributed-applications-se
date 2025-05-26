@@ -3,6 +3,7 @@ using VideoLibraryBlazorFrontend.Shared.AuthorsModels;
 using VideoLibraryBlazorFrontend.Shared;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using VideoLibraryBlazorFrontend.Shared.TagsModels;
+using Microsoft.Identity.Web;
 
 namespace VideoLibraryBlazorFrontend.Components.Pages
 {
@@ -21,21 +22,37 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            var response = await HttpClient.GetFromJsonAsync<ApiResponse<TagsIM>>($"https://localhost:7209/api/Tags/{TagId}");
-            if (response != null && response.Success)
+            try
             {
-                Tag = response.Data;
+                var response = await HttpClient.GetFromJsonAsync<ApiResponse<TagsIM>>($"https://localhost:7209/api/Tags/{TagId}");
+                if (response != null && response.Success)
+                {
+                    Tag = response.Data;
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
 
         private async Task HandleValidSubmit()
         {
-            var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Tags/{TagId}", Tag);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                NavManager.NavigateTo("/tags");
+                var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Tags/{TagId}", Tag);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    NavManager.NavigateTo("/tags");
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
 
         }
 

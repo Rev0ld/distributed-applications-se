@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using VideoLibraryBlazorFrontend.Shared.GenresModels;
 using VideoLibraryBlazorFrontend.Shared.TagsModels;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Identity.Web;
 
 namespace VideoLibraryBlazorFrontend.Components.Pages
 {
@@ -18,6 +19,11 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
     {
         [Inject]
         HttpClient HttpClient { get; set; }
+
+        [Inject]
+        NavigationManager NavManager { get; set; }
+
+
         private EditContext editContext;
         private bool clearVideo = true;
         public int? videoId = -1;
@@ -98,135 +104,151 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         private async Task AddToDataBase()
         {
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Video", Video);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var createdVideo = await response.Content.ReadFromJsonAsync<Videos>();
-                videoId = createdVideo?.Id;
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Video", Video);
 
-                List<int> authorsToRemove = new();
-                List<int> genresToRemove = new();
-                List<int> tagsToRemove = new();
+                if (response.IsSuccessStatusCode)
+                {
+                    var createdVideo = await response.Content.ReadFromJsonAsync<Videos>();
+                    videoId = createdVideo?.Id;
 
-                for (int i = 0; i < authorsToAdd.Count; i++)
-                {
-                    var responseAddAuthors = await HttpClient.PostAsync($"https://localhost:7209/api/Video/author/{videoId}/{authorsToAdd[i]}", null);
-                    if (!responseAddAuthors.IsSuccessStatusCode)
-                    {
-                        var errorContent = await responseAddAuthors.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
-                        clearVideo = false;
-                    }
-                    else
-                    {
-                        authorsToRemove.Add(authorsToAdd[i]);
-                    }
-                }
-                for (int i = 0; i < genreToAdd.Count; i++) 
-                {
-                    var responseAddGenres = await HttpClient.PostAsync($"https://localhost:7209/api/Video/Genre/{videoId}/{genreToAdd[i]}", null);
-                    if (!responseAddGenres.IsSuccessStatusCode)
-                    {
-                        var errorContent = await responseAddGenres.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
-                        clearVideo = false;
-                    }
-                    else
-                    {
-                        genresToRemove.Add(genreToAdd[i]);
-                    }
-                }
-                for (int i = 0; i < tagToAdd.Count; i++)
-                {
-                    var responseAddTag = await HttpClient.PostAsync($"https://localhost:7209/api/Video/Tag/{videoId}/{tagToAdd[i]}", null);
-                    if (!responseAddTag.IsSuccessStatusCode)
-                    {
-                        var errorContent = await responseAddTag.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
-                        clearVideo = false;
-                    }
-                    else
-                    {
-                        tagsToRemove.Add(tagToAdd[i]);
-                    }
-                }
-                foreach (var item in authorsToRemove)
-                {
-                    authorsToAdd.Remove(item);
-                }
-                foreach (var item in genresToRemove)
-                {
-                    genreToAdd.Remove(item);
-                }
-                foreach (var item in tagsToRemove)
-                {
-                    tagToAdd.Remove(item);
-                }
+                    List<int> authorsToRemove = new();
+                    List<int> genresToRemove = new();
+                    List<int> tagsToRemove = new();
 
-                if (clearVideo) 
-                {
-                    Video = new();
-                    videoId = -1;
-                }
-                
+                    for (int i = 0; i < authorsToAdd.Count; i++)
+                    {
+                        var responseAddAuthors = await HttpClient.PostAsync($"https://localhost:7209/api/Video/author/{videoId}/{authorsToAdd[i]}", null);
+                        if (!responseAddAuthors.IsSuccessStatusCode)
+                        {
+                            var errorContent = await responseAddAuthors.Content.ReadAsStringAsync();
+                            Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
+                            clearVideo = false;
+                        }
+                        else
+                        {
+                            authorsToRemove.Add(authorsToAdd[i]);
+                        }
+                    }
+                    for (int i = 0; i < genreToAdd.Count; i++)
+                    {
+                        var responseAddGenres = await HttpClient.PostAsync($"https://localhost:7209/api/Video/Genre/{videoId}/{genreToAdd[i]}", null);
+                        if (!responseAddGenres.IsSuccessStatusCode)
+                        {
+                            var errorContent = await responseAddGenres.Content.ReadAsStringAsync();
+                            Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
+                            clearVideo = false;
+                        }
+                        else
+                        {
+                            genresToRemove.Add(genreToAdd[i]);
+                        }
+                    }
+                    for (int i = 0; i < tagToAdd.Count; i++)
+                    {
+                        var responseAddTag = await HttpClient.PostAsync($"https://localhost:7209/api/Video/Tag/{videoId}/{tagToAdd[i]}", null);
+                        if (!responseAddTag.IsSuccessStatusCode)
+                        {
+                            var errorContent = await responseAddTag.Content.ReadAsStringAsync();
+                            Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
+                            clearVideo = false;
+                        }
+                        else
+                        {
+                            tagsToRemove.Add(tagToAdd[i]);
+                        }
+                    }
+                    foreach (var item in authorsToRemove)
+                    {
+                        authorsToAdd.Remove(item);
+                    }
+                    foreach (var item in genresToRemove)
+                    {
+                        genreToAdd.Remove(item);
+                    }
+                    foreach (var item in tagsToRemove)
+                    {
+                        tagToAdd.Remove(item);
+                    }
 
+                    if (clearVideo)
+                    {
+                        Video = new();
+                        videoId = -1;
+                    }
+
+
+                }
+                else
+                { }
             }
-            else
-            { }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
         private async Task TryAddConnections(int? id) 
         {
-            if (id is not null) 
+            try
             {
-                for (int i = 0; i < authorsToAdd.Count; i++)
+                if (id is not null)
                 {
-                    var responseAddAuthors = await HttpClient.PostAsync($"https://localhost:7209/api/Video/author/{id}/{authorsToAdd[i]}", null);
-                    if (!responseAddAuthors.IsSuccessStatusCode)
+                    for (int i = 0; i < authorsToAdd.Count; i++)
                     {
-                        var errorContent = await responseAddAuthors.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
-                        clearVideo = false;
+                        var responseAddAuthors = await HttpClient.PostAsync($"https://localhost:7209/api/Video/author/{id}/{authorsToAdd[i]}", null);
+                        if (!responseAddAuthors.IsSuccessStatusCode)
+                        {
+                            var errorContent = await responseAddAuthors.Content.ReadAsStringAsync();
+                            Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
+                            clearVideo = false;
+                        }
+                        else
+                        {
+                            authorsToAdd.Remove(authorsToAdd[i]);
+                        }
                     }
-                    else
+                    for (int i = 0; i < genreToAdd.Count; i++)
                     {
-                        authorsToAdd.Remove(authorsToAdd[i]);
+                        var responseAddGenres = await HttpClient.PostAsync($"https://localhost:7209/api/Video/Genre/{id}/{genreToAdd[i]}", null);
+                        if (!responseAddGenres.IsSuccessStatusCode)
+                        {
+                            var errorContent = await responseAddGenres.Content.ReadAsStringAsync();
+                            Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
+                            clearVideo = false;
+                        }
+                        else
+                        {
+                            genreToAdd.Remove(genreToAdd[i]);
+                        }
                     }
-                }
-                for (int i = 0; i < genreToAdd.Count; i++)
-                {
-                    var responseAddGenres = await HttpClient.PostAsync($"https://localhost:7209/api/Video/Genre/{id}/{genreToAdd[i]}", null);
-                    if (!responseAddGenres.IsSuccessStatusCode)
+                    for (int i = 0; i < tagToAdd.Count; i++)
                     {
-                        var errorContent = await responseAddGenres.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
-                        clearVideo = false;
+                        var responseAddTag = await HttpClient.PostAsync($"https://localhost:7209/api/Video/Tag/{id}/{tagToAdd[i]}", null);
+                        if (!responseAddTag.IsSuccessStatusCode)
+                        {
+                            var errorContent = await responseAddTag.Content.ReadAsStringAsync();
+                            Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
+                            clearVideo = false;
+                        }
+                        else
+                        {
+                            tagToAdd.Remove(tagToAdd[i]);
+                        }
                     }
-                    else
+                    if (clearVideo)
                     {
-                        genreToAdd.Remove(genreToAdd[i]);
+                        Video = new();
+                        videoId = -1;
                     }
-                }
-                for (int i = 0; i < tagToAdd.Count; i++)
-                {
-                    var responseAddTag = await HttpClient.PostAsync($"https://localhost:7209/api/Video/Tag/{id}/{tagToAdd[i]}", null);
-                    if (!responseAddTag.IsSuccessStatusCode)
-                    {
-                        var errorContent = await responseAddTag.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Error adding author {authorsToAdd[i]}: {errorContent}");
-                        clearVideo = false;
-                    }
-                    else
-                    {
-                        tagToAdd.Remove(tagToAdd[i]);
-                    }
-                }
-                if (clearVideo)
-                {
-                    Video = new();
-                    videoId = -1;
                 }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
             
         }
 
@@ -243,103 +265,144 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         private async Task LoadFormats()
         {
-            var request = new IndexRequestModel<FormatsFilter>
+            try
             {
-                Pager = formatsPager,
-                Filter = formatsFilter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Formats/get", request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Formats, FormatsFilter>>>();
-                if (result?.Success == true)
+                var request = new IndexRequestModel<FormatsFilter>
                 {
-                    formatsItems = result.Data.Items;
-                    formatsPager = result.Data.Pager;
-                    formatsFilter = result.Data.Filter;
+                    Pager = formatsPager,
+                    Filter = formatsFilter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Formats/get", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Formats, FormatsFilter>>>();
+                    if (result?.Success == true)
+                    {
+                        formatsItems = result.Data.Items;
+                        formatsPager = result.Data.Pager;
+                        formatsFilter = result.Data.Filter;
+                    }
                 }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
         private async Task LoadCopyrights()
         {
-            var request = new IndexRequestModel<CopyrightsFilter>
+            try
             {
-                Pager = copyrightPager,
-                Filter = copyrightFilter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Copyrights/get", request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Copyrights, CopyrightsFilter>>>();
-                if (result?.Success == true)
+                var request = new IndexRequestModel<CopyrightsFilter>
                 {
-                    copyrightItems = result.Data.Items;
-                    copyrightPager = result.Data.Pager;
-                    copyrightFilter = result.Data.Filter;
+                    Pager = copyrightPager,
+                    Filter = copyrightFilter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Copyrights/get", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Copyrights, CopyrightsFilter>>>();
+                    if (result?.Success == true)
+                    {
+                        copyrightItems = result.Data.Items;
+                        copyrightPager = result.Data.Pager;
+                        copyrightFilter = result.Data.Filter;
+                    }
                 }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
         private async Task LoadAuthors()
         {
-            var request = new IndexRequestModel<AuthorsFilter>
+            try
             {
-                Pager = authorPager,
-                Filter = authorFilter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Authors/get", request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Authors, AuthorsFilter>>>();
-                if (result?.Success == true)
+                var request = new IndexRequestModel<AuthorsFilter>
                 {
-                    authorsItems = result.Data.Items;
-                    authorPager = result.Data.Pager;
-                    authorFilter = result.Data.Filter;
+                    Pager = authorPager,
+                    Filter = authorFilter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Authors/get", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Authors, AuthorsFilter>>>();
+                    if (result?.Success == true)
+                    {
+                        authorsItems = result.Data.Items;
+                        authorPager = result.Data.Pager;
+                        authorFilter = result.Data.Filter;
+                    }
                 }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
         private async Task LoadGenres()
         {
-            var request = new IndexRequestModel<GenresFilter>
+            try
             {
-                Pager = genrePager,
-                Filter = genreFilter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Genres/get", request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Genres, GenresFilter>>>();
-                if (result?.Success == true)
+                var request = new IndexRequestModel<GenresFilter>
                 {
-                    genreItems = result.Data.Items;
-                    genrePager = result.Data.Pager;
-                    genreFilter = result.Data.Filter;
+                    Pager = genrePager,
+                    Filter = genreFilter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Genres/get", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Genres, GenresFilter>>>();
+                    if (result?.Success == true)
+                    {
+                        genreItems = result.Data.Items;
+                        genrePager = result.Data.Pager;
+                        genreFilter = result.Data.Filter;
+                    }
                 }
+
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
         private async Task LoadTags()
         {
-            var request = new IndexRequestModel<TagsFilter>
+            try
             {
-                Pager = tagPager,
-                Filter = tagFilter
-            };
-
-            var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Tags/get", request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Tags, TagsFilter>>>();
-                if (result?.Success == true)
+                var request = new IndexRequestModel<TagsFilter>
                 {
-                    tagItems = result.Data.Items;
-                    tagPager = result.Data.Pager;
-                    tagFilter = result.Data.Filter;
+                    Pager = tagPager,
+                    Filter = tagFilter
+                };
+
+                var response = await HttpClient.PostAsJsonAsync("https://localhost:7209/api/Tags/get", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<ApiResponse<IndexResponseModel<Tags, TagsFilter>>>();
+                    if (result?.Success == true)
+                    {
+                        tagItems = result.Data.Items;
+                        tagPager = result.Data.Pager;
+                        tagFilter = result.Data.Filter;
+                    }
                 }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
 
 

@@ -650,11 +650,11 @@ else
                         }
                     </select>
                 </div>
-                <button class="btn btn-secondary" @onclick="GenresExistFirstPage" disabled="@((genrePager.Page == 1))">First Page</button>
-                <button class="btn btn-secondary" @onclick="GenresExistPrevPage" disabled="@(genrePager.Page == 1)">Previous</button>
-                <span>Page @genrePager.Page of @genrePager.PagesCount</span>
-                <button class="btn btn-secondary" @onclick="GenresExistNextPage" disabled="@(genrePager.Page == genrePager.PagesCount)">Next</button>
-                <button class="btn btn-secondary" @onclick="GenresExistLastPage" disabled="@((genrePager.Page == genrePager.PagesCount))">Last Page</button>
+                <button class="btn btn-secondary" @onclick="GenresExistFirstPage" disabled="@((genreExistPager.Page == 1))">First Page</button>
+                <button class="btn btn-secondary" @onclick="GenresExistPrevPage" disabled="@(genreExistPager.Page == 1)">Previous</button>
+                <span>Page @genreExistPager.Page of @genreExistPager.PagesCount</span>
+                <button class="btn btn-secondary" @onclick="GenresExistNextPage" disabled="@(genreExistPager.Page == genreExistPager.PagesCount)">Next</button>
+                <button class="btn btn-secondary" @onclick="GenresExistLastPage" disabled="@((genreExistPager.Page == genreExistPager.PagesCount))">Last Page</button>
             </div>
 
         </div>
@@ -855,4 +855,10 @@ else
         <button type="submit" class="btn btn-primary me-1">Submit</button>
         <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
     </EditForm>
+
+
+    @foreach (var item in genresUpdate)
+    {
+        <label>@item</label>
+    }
 }

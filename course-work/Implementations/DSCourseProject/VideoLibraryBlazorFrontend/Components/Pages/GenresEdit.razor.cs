@@ -4,6 +4,7 @@ using VideoLibraryBlazorFrontend.Shared;
 using VideoLibraryBlazorFrontend.Shared.GenresModels;
 using static VideoLibraryBlazorFrontend.Components.Pages.Home;
 using Common.Entities;
+using Microsoft.Identity.Web;
 
 namespace VideoLibraryBlazorFrontend.Components.Pages
 {
@@ -22,20 +23,36 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            var response = await HttpClient.GetFromJsonAsync<ApiResponse<GenresIM>>($"https://localhost:7209/api/Genres/{GenreId}");
-            if (response != null && response.Success)
+            try
             {
-                Genre = response.Data;
+                var response = await HttpClient.GetFromJsonAsync<ApiResponse<GenresIM>>($"https://localhost:7209/api/Genres/{GenreId}");
+                if (response != null && response.Success)
+                {
+                    Genre = response.Data;
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
         private async Task HandleValidSubmit()
         {
-            var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Genres/{GenreId}", Genre);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                NavManager.NavigateTo("/genres");
+                var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Genres/{GenreId}", Genre);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    NavManager.NavigateTo("/genres");
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
 
         }
 

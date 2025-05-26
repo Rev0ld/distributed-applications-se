@@ -12,10 +12,10 @@ namespace Common.Entities
 {
     public class Videos : BaseEntity
     {
-        [Length(3, 50)]
+        [StringLength(50, MinimumLength = 3)]
         public string? Title { get; set; }
 
-        [Length(36, 36)]
+        [StringLength(36, MinimumLength = 36)]
         public string? FileId { get; set; }
 
         [Range(1, int.MaxValue)]
@@ -25,7 +25,7 @@ namespace Common.Entities
         [Range(1, int.MaxValue)]
         public int? Size { get; set; }
 
-        [Length(3, 255)]
+        [StringLength(255, MinimumLength = 3)]
         public string? Description { get; set; }
 
         public DateTime? YearOfPublishing { get; set; }

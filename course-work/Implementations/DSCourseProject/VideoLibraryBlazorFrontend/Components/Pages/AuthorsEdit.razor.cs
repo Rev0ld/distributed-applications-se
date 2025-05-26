@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.Identity.Web;
 using VideoLibraryBlazorFrontend.Shared;
 using VideoLibraryBlazorFrontend.Shared.AuthorsModels;
 
@@ -19,21 +20,37 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            var response = await HttpClient.GetFromJsonAsync<ApiResponse<AuthorsIM>>($"https://localhost:7209/api/Authors/{AuthorId}");
-            if (response != null && response.Success)
+            try
             {
-                Author = response.Data;
+                var response = await HttpClient.GetFromJsonAsync<ApiResponse<AuthorsIM>>($"https://localhost:7209/api/Authors/{AuthorId}");
+                if (response != null && response.Success)
+                {
+                    Author = response.Data;
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("/login", forceLoad: true);
+            }
+            
         }
 
         private async Task HandleValidSubmit()
         {
-            var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Authors/{AuthorId}", Author);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                NavManager.NavigateTo("/authors");
+                var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Authors/{AuthorId}", Author);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    NavManager.NavigateTo("/authors");
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
             
         }
 

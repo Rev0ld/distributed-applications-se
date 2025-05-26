@@ -4,6 +4,7 @@ using VideoLibraryBlazorFrontend.Shared;
 using VideoLibraryBlazorFrontend.Shared.CopyrightsModels;
 using static VideoLibraryBlazorFrontend.Components.Pages.Home;
 using Common.Entities;
+using Microsoft.Identity.Web;
 
 namespace VideoLibraryBlazorFrontend.Components.Pages
 {
@@ -22,20 +23,36 @@ namespace VideoLibraryBlazorFrontend.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            var response = await HttpClient.GetFromJsonAsync<ApiResponse<CopyrightsIM>>($"https://localhost:7209/api/Copyrights/{CopyrightId}");
-            if (response != null && response.Success)
+            try
             {
-                Copyright = response.Data;
+                var response = await HttpClient.GetFromJsonAsync<ApiResponse<CopyrightsIM>>($"https://localhost:7209/api/Copyrights/{CopyrightId}");
+                if (response != null && response.Success)
+                {
+                    Copyright = response.Data;
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+            
         }
         private async Task HandleValidSubmit()
         {
-            var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Copyrights/{CopyrightId}", Copyright);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                NavManager.NavigateTo("/copyrights");
+                var response = await HttpClient.PutAsJsonAsync($"https://localhost:7209/api/Copyrights/{CopyrightId}", Copyright);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    NavManager.NavigateTo("/copyrights");
+                }
             }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                NavManager.NavigateTo("authentication/login", forceLoad: true);
+            }
+
 
         }
 

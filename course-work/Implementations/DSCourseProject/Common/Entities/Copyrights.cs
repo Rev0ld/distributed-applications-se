@@ -9,13 +9,13 @@ namespace Common.Entities
 {
     public class Copyrights : BaseEntity
     {
-        [Length(3, 50)]
+        [StringLength(50, MinimumLength = 3)]
         public string? Name { get; set; }
 
-        [Length(2, 50)]
+        [StringLength(10, MinimumLength = 2)]
         public string? ShortName { get; set; }
 
-        [Length(3, 50)]
+        [StringLength(50, MinimumLength = 3)]
         public string? Description { get; set; }
 
     }
